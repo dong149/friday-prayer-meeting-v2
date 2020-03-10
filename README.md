@@ -1,5 +1,7 @@
 # Friday-Prayer-Meeting
 
+[금요기도회 바로가기](https://friday-prayer-meeting.firebaseapp.com/)
+
 ## Description
 
 기도제목을 모아서 보여주고, 기독교인들에게 편의를 제공하는 서비스입니다.
