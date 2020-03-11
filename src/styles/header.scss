@@ -1,0 +1,28 @@
+@import "./color.scss";
+@import "./mixin.scss";
+
+@include mobile {
+  .home-main {
+    .home-main-text {
+      font-size: 20px;
+      color: $grey;
+    }
+  }
+}
+@include tablet {
+  .home-main {
+    .home-main-text {
+      font-size: 50px;
+      color: $grey;
+    }
+  }
+}
+
+@include desktop {
+  .home-main {
+    .home-main-text {
+      font-size: 100px;
+      color: $grey;
+    }
+  }
+}

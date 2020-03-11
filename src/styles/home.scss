@@ -1,0 +1,102 @@
+@import "./color.scss";
+@import "./mixin.scss";
+
+@include mobile {
+  .home-logo-wrap {
+    text-align: center;
+    .home-logo {
+      width: 60%;
+      margin-top: 20%;
+    }
+  }
+  .input-wrap {
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 10%;
+    .input-login-text {
+      font-size: 15px;
+      font-weight: 400;
+      margin-bottom: 3px;
+    }
+    .input-login {
+      border: none;
+      background-color: $tadaGrey;
+      width: 100%;
+    }
+  }
+  .input-submit-wrap {
+    margin: 0 auto;
+    width: 60%;
+    text-align: center;
+    .input-submit {
+      background-color: white;
+      border: none;
+      border-radius: 10px;
+      width: 30%;
+      margin-top: 20px;
+      color: $black;
+    }
+  }
+  .login-wrap {
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 20px;
+    text-align: center;
+    .login-kakao {
+      width: 100%;
+    }
+  }
+  .officialContent-wrap {
+    margin-top: 30%;
+    width: 100%;
+    height: 500px;
+    background-color: $indigo;
+  }
+}
+@include tablet {
+  .home-logo-wrap {
+    text-align: center;
+    .home-logo {
+      width: 60%;
+      margin-top: 20%;
+    }
+  }
+  .input-wrap {
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 10%;
+    .input-login-text {
+      font-size: 15px;
+      font-weight: 400;
+      margin-bottom: 3px;
+    }
+    .input-login {
+      background-color: $tadaGrey;
+      width: 100%;
+    }
+  }
+}
+
+@include desktop {
+  .home-logo-wrap {
+    text-align: center;
+    .home-logo {
+      width: 60%;
+      margin-top: 20%;
+    }
+  }
+  .input-wrap {
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 10%;
+    .input-login-text {
+      font-size: 15px;
+      font-weight: 400;
+      margin-bottom: 3px;
+    }
+    .input-login {
+      background-color: $tadaGrey;
+      width: 100%;
+    }
+  }
+}
