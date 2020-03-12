@@ -51,6 +51,7 @@ class Login extends Component {
     alert("로그인 정보가 옳지 않습니다.");
   };
   render() {
+    console.log(process.env.REACT_APP_API_KEY);
     return (
       <div>
         <div className="input-wrap">

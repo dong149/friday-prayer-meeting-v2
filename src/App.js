@@ -1,46 +1,33 @@
 import React, { Component } from "react";
-import withFirebaseAuth from "react-with-firebase-auth";
-import * as firebase from "firebase/app";
-import "firebase/auth";
-import firebaseConfig from "./config";
-import logo from "./logo.svg";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
+import LoginFirebase from "./components/loginFirebase";
+import * as ROUTES from "./routes";
+import Navigation from "./components/navigation";
 import Home from "./pages/home";
-
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-
+import Join from "./components/join";
+import Login from "./components/login";
+import { SignUpForm } from "./components/signUpForm";
 class App extends Component {
   render() {
-    const { user, signOut, signInWithGoogle } = this.props;
-
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          {user ? <p>Hello, {user.displayName}</p> : <p>Please sign in.</p>}
-
-          {user ? (
-            <button onClick={signOut}>Sign out</button>
-          ) : (
-            <button onClick={signInWithGoogle}>Sign in with Google</button>
-          )}
-          <Home />
-        </header>
-      </div>
+      <Router>
+        <div>
+          <Navigation />
+          <Route exact path={ROUTES.LANDING} component={Join} />
+          <Route path={ROUTES.SIGN_UP} component={SignUpForm} />
+          <Route path={ROUTES.SIGN_IN} component={SignUpForm} />
+          <Route path={ROUTES.PASSWORD_FORGET} component={Join} />
+          <Route path={ROUTES.HOME} component={Home} />
+          <Route path={ROUTES.ACCOUNT} component={Home} />
+          {/* <Route path={ROUTES.ADMIN} component={LoginFirebase} /> */}
+        </div>
+      </Router>
     );
   }
 }
 
-const firebaseAppAuth = firebaseApp.auth();
-
-const providers = {
-  googleProvider: new firebase.auth.GoogleAuthProvider()
-};
-
-export default withFirebaseAuth({
-  providers,
-  firebaseAppAuth
-})(App);
+export default App;
 
 // import React from "react";
 
