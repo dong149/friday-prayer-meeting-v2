@@ -15,3 +15,5 @@
 - [ ] 로그인.
 - [ ] 카카오톡 연동 로그인.
 - [ ] 로그아웃.
+
+[참고자료](https://www.robinwieruch.de/complete-firebase-authentication-react-tutorial)

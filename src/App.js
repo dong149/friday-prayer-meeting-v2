@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
 import * as ROUTES from "./routes";
-import Navigation from "./components/navigation";
+import Navigation from "./components/Navigation/navigation";
 import Join from "./components/join";
 import Login from "./components/login";
 import SignUpPage from "./components/SignUp/signUpForm";
@@ -11,6 +11,7 @@ import HomePage from "./components/Home";
 import AccountPage from "./components/Account";
 import AdminPage from "./components/Admin";
 import { withAuthentication } from "./components/Session";
+import WriteForm from "./components/Write";
 const App = () => (
   <Router>
     <div>
@@ -24,6 +25,7 @@ const App = () => (
       <Route exact path={ROUTES.HOME} component={HomePage} />
       <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
       <Route exact path={ROUTES.ADMIN} component={AdminPage} />
+      <Route exact path={ROUTES.WRITE} component={WriteForm} />
     </div>
   </Router>
 );

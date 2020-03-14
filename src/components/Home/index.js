@@ -1,14 +1,23 @@
 import React from "react";
-
-import { withAuthorization } from "../Session";
-
+import "../../styles/home.scss";
+import { SignInForm } from "../SignIn";
+import SignUpPage, { SignUpLink } from "../SignUp/signUpForm";
+import { Router, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
+import * as ROUTES from "../../routes";
 const HomePage = () => (
   <div>
-    <h1>Home Page</h1>
-    <p>The Home Page is accessible by every signed in user.</p>
+    <div className="home-logo-wrap">
+      <img
+        className="home-logo"
+        src="/friday_prayer_meeting.png"
+        alt="HomeLogo"
+      />
+    </div>
+    <SignInForm />
+
+    <div className="officialContent-wrap">여기는 공지사항입니다.</div>
   </div>
 );
 
-const condition = authUser => !!authUser;
-
-export default withAuthorization(condition)(HomePage);
+export default HomePage;

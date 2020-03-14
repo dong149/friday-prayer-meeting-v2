@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import * as ROUTES from "../routes";
-import SignOutButton from "./SignOut";
-import { AuthUserContext } from "./Session";
+import * as ROUTES from "../../routes";
+import SignOutButton from "../SignOut";
+import { AuthUserContext } from "../Session";
 
 const Navigation = () => (
   <div>
@@ -14,10 +14,10 @@ const Navigation = () => (
 const NavigationAuth = () => (
   <ul>
     <li>
-      <Link to={ROUTES.LANDING}>Landing</Link>
+      <Link to={ROUTES.WRITE}>글작성하기</Link>
     </li>
     <li>
-      <Link to={ROUTES.HOME}>Home</Link>
+      <Link to={ROUTES.LANDING}>Landing</Link>
     </li>
     <li>
       <Link to={ROUTES.ACCOUNT}>Account</Link>
@@ -33,6 +33,9 @@ const NavigationAuth = () => (
 
 const NavigationNonAuth = () => (
   <ul>
+    <li>
+      <Link to={ROUTES.HOME}>Home</Link>
+    </li>
     <li>
       <Link to={ROUTES.LANDING}>Landing</Link>
     </li>
