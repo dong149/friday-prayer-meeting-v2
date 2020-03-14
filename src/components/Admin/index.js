@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withFirebase } from "../../Firebase";
+import { withAuthorization, AuthUserContext } from "../Session";
 
 class AdminPage extends Component {
   constructor(props) {
@@ -32,7 +32,15 @@ class AdminPage extends Component {
       <div>
         <h1>Admin</h1>
         {loading && <div>Loading ...</div>}
-        <UserList users={users} />
+        <AuthUserContext.Consumer>
+          {authUser =>
+            authUser.email === "donghoon149@gmail.com" ? (
+              <UserList users={users} />
+            ) : (
+              <h2>관리자 권한이 없습니다.</h2>
+            )
+          }
+        </AuthUserContext.Consumer>
       </div>
     );
   }
@@ -54,4 +62,7 @@ const UserList = ({ users }) => (
     ))}
   </ul>
 );
-export default withFirebase(AdminPage);
+// const condition = authUser =>
+//   !!authUser && authUser.email === "donghoon149@gmail.com";
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(AdminPage);
