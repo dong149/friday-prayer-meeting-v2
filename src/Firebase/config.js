@@ -1,5 +1,6 @@
 import app from "firebase/app";
 import "firebase/auth";
+import "firebase/database";
 const config = {
   apiKey: "AIzaSyAUXV7IKPYzrnPOj213sxwbY-VE46Ouhzo",
   authDomain: "friday-prayer-meeting.firebaseapp.com",
@@ -17,6 +18,7 @@ class Firebase {
   constructor() {
     app.initializeApp(config);
     this.auth = app.auth();
+    this.db = app.database();
   }
   // *** Auth API ***
   doCreateUserWithEmailAndPassword = (email, password) =>
@@ -26,6 +28,10 @@ class Firebase {
   doSignOut = () => this.auth.signOut();
   doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
   doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
+
+  // *** User API ***
+  user = uid => this.db.ref(`users/${uid}`);
+  users = () => this.db.ref("users");
 }
 
 export default Firebase;

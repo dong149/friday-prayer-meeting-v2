@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 
-import * as ROUTES from "../routes";
-import { withFirebase } from "../Firebase";
+import * as ROUTES from "../../routes";
+import { withFirebase } from "../../Firebase";
 const SignUpPage = () => (
   <div>
     <h1>SignUp</h1>
@@ -30,6 +30,13 @@ class SignUpFormBase extends Component {
 
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
+      .then(authUser => {
+        // Create a user in your Firebase realtime database
+        return this.props.firebase.user(authUser.user.uid).set({
+          username,
+          email
+        });
+      })
       .then(authUser => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.HOME);

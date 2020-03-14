@@ -1,33 +1,34 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
-import LoginFirebase from "./components/loginFirebase";
 import * as ROUTES from "./routes";
 import Navigation from "./components/navigation";
-import Home from "./pages/home";
 import Join from "./components/join";
 import Login from "./components/login";
-import { SignUpForm } from "./components/signUpForm";
-class App extends Component {
-  render() {
-    return (
-      <Router>
-        <div>
-          <Navigation />
-          <Route exact path={ROUTES.LANDING} component={Join} />
-          <Route path={ROUTES.SIGN_UP} component={SignUpForm} />
-          <Route path={ROUTES.SIGN_IN} component={SignUpForm} />
-          <Route path={ROUTES.PASSWORD_FORGET} component={Join} />
-          <Route path={ROUTES.HOME} component={Home} />
-          <Route path={ROUTES.ACCOUNT} component={Home} />
-          {/* <Route path={ROUTES.ADMIN} component={LoginFirebase} /> */}
-        </div>
-      </Router>
-    );
-  }
-}
+import SignUpPage from "./components/SignUp/signUpForm";
+import SignInPage from "./components/SignIn";
+import HomePage from "./components/Home";
+import AccountPage from "./components/Account";
+import AdminPage from "./components/Admin";
+import { withAuthentication } from "./components/Session";
+const App = () => (
+  <Router>
+    <div>
+      <Navigation />
+      <hr />
 
-export default App;
+      <Route exact path={ROUTES.LANDING} component={Join} />
+      <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
+      <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
+      <Route exact path={ROUTES.PASSWORD_FORGET} component={Join} />
+      <Route exact path={ROUTES.HOME} component={HomePage} />
+      <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
+      <Route exact path={ROUTES.ADMIN} component={AdminPage} />
+    </div>
+  </Router>
+);
+
+export default withAuthentication(App);
 
 // import React from "react";
 
