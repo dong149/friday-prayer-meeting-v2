@@ -1,0 +1,64 @@
+@import "./color.scss";
+@import "./mixin.scss";
+
+//  https://m.facebook.com/ 여기 참고해서 css 완료하기.
+
+@include mobile {
+  .feed {
+    width: 100%;
+    background-color: #eaebee;
+    height: 100rem;
+  }
+  .content-wrap {
+    width: 100%;
+    display: block;
+    font-size: 14px;
+    line-height: 18px;
+    text-align: left;
+    background-color: white;
+    margin-bottom: 10px;
+    .content-haeader {
+      // .content-profile-wrap {
+      //   // margin-left: 15px;
+      //   background-size: 100%;
+      //   width: 40px;
+      //   height: 40px;
+      //   display: inline-block;
+      //   border-radius: 70%;
+      //   overflow: hidden;
+      //   border: 1px solid rgba(0, 0, 0, 0.1);
+      //   .content-profile {
+      //     width: 100%;
+      //     height: 100%;
+      //     border: 0;
+      //     display: inline-block;
+      //     vertical-align: top;
+      //     object-fit: cover;
+      //   }
+      // }
+      .content-title-wrap {
+        align-items: center;
+        direction: ltr;
+        display: flex;
+        .content-name {
+          font-weight: 600;
+          cursor: pointer;
+          display: inline;
+        }
+        .content-date {
+          font-weight: 400;
+        }
+      }
+    }
+    .content-content {
+    }
+    .content-img {
+      width: 100%;
+    }
+  }
+}
+@include tablet {
+}
+
+@include desktop {
+}

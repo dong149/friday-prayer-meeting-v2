@@ -17,6 +17,9 @@ const NavigationAuth = () => (
       <Link to={ROUTES.WRITE}>글작성하기</Link>
     </li>
     <li>
+      <Link to={ROUTES.FEED}>뉴스피드</Link>
+    </li>
+    <li>
       <Link to={ROUTES.LANDING}>Landing</Link>
     </li>
     <li>

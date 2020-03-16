@@ -11,7 +11,8 @@ import HomePage from "./components/Home";
 import AccountPage from "./components/Account";
 import AdminPage from "./components/Admin";
 import { withAuthentication } from "./components/Session";
-import WriteForm from "./components/Write";
+import WriteForm from "./components/WriteBackup";
+import Feed from "./components/Feed";
 const App = () => (
   <Router>
     <div>
@@ -26,6 +27,7 @@ const App = () => (
       <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
       <Route exact path={ROUTES.ADMIN} component={AdminPage} />
       <Route exact path={ROUTES.WRITE} component={WriteForm} />
+      <Route exact path={ROUTES.FEED} component={Feed} />
     </div>
   </Router>
 );

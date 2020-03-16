@@ -43,9 +43,10 @@ class WriteFormBase extends Component {
   }
 
   onSubmit = event => {
-    const { content, image } = this.state;
+    const { content, image, imageURL } = this.state;
     const uid = this.props.firebase.doFindCurrentUID();
     const name = this.props.firebase.doFindCurrentUserName();
+    // var imageURL;
     if (image !== null) {
       const uploadTask = this.props.firebase.image(image.name).put(image);
       uploadTask.on(
@@ -63,11 +64,14 @@ class WriteFormBase extends Component {
             .getDownloadURL()
             .then(firebaseURL => {
               this.setState({ imageURL: firebaseURL });
+              //   imageURL = firebaseURL;
             });
         }
       );
     }
-    const { imageURL } = this.state;
+    // console.log(imageURL);
+    // const { imageURL } = this.state;
+
     // State의 uid에 저장해줍니다.
     this.setState({ uid: uid, name: name });
     const d = new Date();
@@ -86,8 +90,8 @@ class WriteFormBase extends Component {
         uid: uid,
         content,
         name: name,
-        date: date,
-        imageURL: imageURL
+        date: date
+        // imageURL
       })
       .then(authUser => {
         this.setState({ ...INITIAL_STATE });
@@ -115,6 +119,7 @@ class WriteFormBase extends Component {
       this.setState({ image });
     }
   };
+
   render() {
     const { content, error } = this.state;
     // const x = this.props.firebase;
