@@ -73,7 +73,11 @@ const ContentList = ({ contents }) =>
           </span>
         </div>
         <div className="content-img-wrap">
-          <img className="content-img" src="./ironman.jpg" alt="iron-man" />
+          {content.imageURL ? (
+            <img className="content-img" src={content.imageURL} alt="user" />
+          ) : (
+            <img className="content-img" src="./ironman.jpg" alt="iron-man" />
+          )}
         </div>
       </div>
       <div className="content-footer"></div>

@@ -41,75 +41,89 @@ class WriteFormBase extends Component {
     //   name: name
     // });
   }
+  onSubmit = async event => {
+    try {
+      const { content, image } = this.state;
+      const uid = this.props.firebase.doFindCurrentUID();
+      const name = this.props.firebase.doFindCurrentUserName();
+      this.setState({ uid: uid, name: name });
+      let URL = "";
 
-  onSubmit = event => {
-    const { content, image, imageURL } = this.state;
-    const uid = this.props.firebase.doFindCurrentUID();
-    const name = this.props.firebase.doFindCurrentUserName();
-    // var imageURL;
-    if (image !== null) {
-      const uploadTask = this.props.firebase.image(image.name).put(image);
-      uploadTask.on(
-        "state_changed",
-        snapshot => {
-          console.log(snapshot);
-        },
-        err => {
-          console.log(err);
-        },
-        () => {
+      if (image) {
+        const storageRef = this.props.firebase.image(image.name);
+        storageRef.put(image).then(result => {
           this.props.firebase
             .images()
             .child(image.name)
             .getDownloadURL()
             .then(firebaseURL => {
               this.setState({ imageURL: firebaseURL });
-              //   imageURL = firebaseURL;
+              console.log(firebaseURL);
+              URL = firebaseURL;
+            })
+            .then(result => {
+              const d = new Date();
+              const currentDate =
+                d.getFullYear().toString() +
+                (d.getMonth() + 1).toString() +
+                d.getDate().toString() +
+                d.getHours().toString() +
+                d.getMinutes().toString() +
+                d.getSeconds().toString();
+              this.setState({ date: currentDate });
+              const date = currentDate;
+              this.props.firebase
+                .content(date)
+                .set({
+                  uid: uid,
+                  content,
+                  name: name,
+                  date: date,
+                  imageURL: URL
+                })
+                .then(authUser => {
+                  this.setState({ ...INITIAL_STATE });
+                  this.props.history.push(ROUTES.WRITE);
+                })
+                .catch(error => {
+                  this.setState({ error });
+                });
             });
-        }
-      );
+        });
+      } else {
+        const d = new Date();
+        const currentDate =
+          d.getFullYear().toString() +
+          (d.getMonth() + 1).toString() +
+          d.getDate().toString() +
+          d.getHours().toString() +
+          d.getMinutes().toString() +
+          d.getSeconds().toString();
+        this.setState({ date: currentDate });
+        const date = currentDate;
+        this.props.firebase
+          .content(date)
+          .set({
+            uid: uid,
+            content,
+            name: name,
+            date: date,
+            imageURL: URL
+          })
+          .then(authUser => {
+            this.setState({ ...INITIAL_STATE });
+            this.props.history.push(ROUTES.WRITE);
+          })
+          .catch(error => {
+            this.setState({ error });
+          });
+      }
+    } catch (e) {
+      console.error(e);
     }
-    // console.log(imageURL);
-    // const { imageURL } = this.state;
-
-    // State의 uid에 저장해줍니다.
-    this.setState({ uid: uid, name: name });
-    const d = new Date();
-    const currentDate =
-      d.getFullYear().toString() +
-      (d.getMonth() + 1).toString() +
-      d.getDate().toString() +
-      d.getHours().toString() +
-      d.getMinutes().toString() +
-      d.getSeconds().toString();
-    this.setState({ date: currentDate });
-    const date = currentDate;
-    this.props.firebase
-      .content(date)
-      .set({
-        uid: uid,
-        content,
-        name: name,
-        date: date
-        // imageURL
-      })
-      .then(authUser => {
-        this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.WRITE);
-      })
-      .catch(error => {
-        this.setState({ error });
-      });
     event.preventDefault();
-    //   .then(authUser => {
-    //     this.setState({ ...INITIAL_STATE });
-    //     this.props.history.push(ROUTES.HOME);
-    //   })
-    //   .catch(error => {
-    //     this.setState({ error });
-    //   });
-    // event.preventDefault();
   };
+
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
@@ -144,7 +158,12 @@ class WriteFormBase extends Component {
           onChange={this.onImageChange}
           required={false}
         />
-
+        {/* <img
+          src={this.state.imageURL || "./ironman.jpg"}
+          alt="Uploaded Images"
+          height="300"
+          width="400"
+        /> */}
         <div className="input-submit-wrap">
           <button className="input-submit" disabled={isInvalid} type="submit">
             작성하기
