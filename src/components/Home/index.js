@@ -8,11 +8,7 @@ import * as ROUTES from "../../routes";
 const HomePage = () => (
   <div>
     <div className="home-logo-wrap">
-      <img
-        className="home-logo"
-        src="/friday_prayer_meeting.png"
-        alt="HomeLogo"
-      />
+      <img className="home-logo" src="/churchbook.png" alt="HomeLogo" />
     </div>
     <SignInForm />
 

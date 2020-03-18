@@ -12,6 +12,7 @@ import { withRouter } from "react-router-dom";
 import { withAuthorization } from "../Session";
 
 const INITIAL_STATE = {
+  loading: false,
   uid: "",
   name: "",
   type: "", // 글의 종류
@@ -43,6 +44,7 @@ class WriteFormBase extends Component {
   }
   onSubmit = async event => {
     try {
+      this.setState({ loading: true });
       const { content, image } = this.state;
       const uid = this.props.firebase.doFindCurrentUID();
       const name = this.props.firebase.doFindCurrentUserName();
@@ -82,8 +84,9 @@ class WriteFormBase extends Component {
                   imageURL: URL
                 })
                 .then(authUser => {
+                  console.log("here");
                   this.setState({ ...INITIAL_STATE });
-                  this.props.history.push(ROUTES.WRITE);
+                  this.props.history.push(ROUTES.FEED);
                 })
                 .catch(error => {
                   this.setState({ error });
@@ -111,8 +114,9 @@ class WriteFormBase extends Component {
             imageURL: URL
           })
           .then(authUser => {
+            // console.log("here");
             this.setState({ ...INITIAL_STATE });
-            this.props.history.push(ROUTES.WRITE);
+            this.props.history.push(ROUTES.FEED);
           })
           .catch(error => {
             this.setState({ error });
@@ -135,44 +139,48 @@ class WriteFormBase extends Component {
   };
 
   render() {
-    const { content, error } = this.state;
+    const { content, error, loading } = this.state;
     // const x = this.props.firebase;
     // console.log(x);
     const isInvalid = content === "";
-    return (
-      <form onSubmit={this.onSubmit} className="input-wrap">
-        <p className="input-login-text">글</p>
-        <input
-          className="input-login"
-          type="textarea"
-          value={content}
-          name="content"
-          onChange={this.onChange}
-          required={true}
-        />
-        <input
-          className="input-file"
-          type="file"
-          name="image"
-          accept="image/*"
-          onChange={this.onImageChange}
-          required={false}
-        />
-        {/* <img
+    if (!loading) {
+      return (
+        <form onSubmit={this.onSubmit} className="input-wrap">
+          <p className="input-login-text">글</p>
+          <input
+            className="input-login"
+            type="textarea"
+            value={content}
+            name="content"
+            onChange={this.onChange}
+            required={true}
+          />
+          <input
+            className="input-file"
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={this.onImageChange}
+            required={false}
+          />
+          {/* <img
           src={this.state.imageURL || "./ironman.jpg"}
           alt="Uploaded Images"
           height="300"
           width="400"
         /> */}
-        <div className="input-submit-wrap">
-          <button className="input-submit" disabled={isInvalid} type="submit">
-            작성하기
-          </button>
+          <div className="input-submit-wrap">
+            <button className="input-submit" disabled={isInvalid} type="submit">
+              작성하기
+            </button>
 
-          {error && <p>{error.message}</p>}
-        </div>
-      </form>
-    );
+            {error && <p>{error.message}</p>}
+          </div>
+        </form>
+      );
+    } else {
+      return <span>로딩중...</span>;
+    }
   }
 }
 const authCondition = authUser => !!authUser;

@@ -1,0 +1,56 @@
+@import "./color.scss";
+@import "./mixin.scss";
+
+@include mobile {
+  .navigation {
+    width: 100%;
+
+    .navigation-logo-wrap {
+      display: inline-block;
+      width: 70%;
+      text-align: left;
+      margin-top: 10px;
+      padding-left: 5px;
+      .navigation-logo {
+        width: 70%;
+      }
+    }
+    .navigation-menu-icon-wrap {
+      display: inline-block;
+      width: 30%;
+      padding-right: 20px;
+      text-align: right;
+      .navigation-menu-icon {
+        width: 30%;
+      }
+    }
+  }
+
+  .menu {
+    position: fixed;
+    left: 0;
+    top: 0;
+    transform: translate3d(-100vw, 0, 0);
+    width: 30vw;
+    height: 100vh;
+  }
+  .menu-visible {
+  }
+}
+
+// <div className="navigaion">
+//       <div className="navigation-logo-wrap">
+//         <img className="navigation-logo" src="./churchbook.png" alt="logo" />
+//       </div>
+//       <div className="navigation-menu-icon-wrap">
+//         <img
+//           className="navigation-menu-icon"
+//           src="./icons8-menu.png"
+//           alt="menu-icon"
+//         />
+//       </div>
+@include tablet {
+}
+
+@include desktop {
+}
