@@ -34,10 +34,85 @@
     width: 30vw;
     height: 100vh;
   }
-  .menu-visible {
+}
+#menu-visible {
+  width: 42vw;
+  height: 100%;
+  background-color: #222222;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: transform 0.3s cubic-bezier(0, 0.52, 0, 1);
+  overflow: scroll;
+  z-index: 1000;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  &.hide {
+    transform: translate3d(140vw, 0, 0);
+    overflow: hidden;
+    .menu-visible-header {
+      width: 100%;
+      height: 15vh;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: right;
+      padding-top: 15px;
+      padding-right: 15px;
+      .menu-visible-header-text {
+        font-size: 15px;
+      }
+    }
+    .menu-visible-link-wrap {
+      width: 100%;
+      text-align: right;
+      .menu-visible-link {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-right: 10px;
+        .menu-visible-link-text {
+          color: inherit;
+          text-decoration: inherit;
+          .menu-visible-span {
+            font-size: 20px;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+  &.show {
+    transform: translate3d(60vw, 0, 0);
+    overflow: hidden;
+    .menu-visible-header {
+      width: 100%;
+      height: 15vh;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: right;
+      padding-top: 15px;
+      padding-right: 15px;
+      .menu-visible-header-text {
+        font-size: 15px;
+      }
+    }
+    .menu-visible-link-wrap {
+      width: 100%;
+      text-align: right;
+      .menu-visible-link {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-right: 10px;
+        .menu-visible-link-text {
+          color: inherit;
+          text-decoration: inherit;
+          .menu-visible-span {
+            font-size: 20px;
+            color: white;
+          }
+        }
+      }
+    }
   }
 }
-
 // <div className="navigaion">
 //       <div className="navigation-logo-wrap">
 //         <img className="navigation-logo" src="./churchbook.png" alt="logo" />

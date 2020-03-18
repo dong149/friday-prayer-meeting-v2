@@ -1,0 +1,25 @@
+@import "./color.scss";
+@import "./mixin.scss";
+
+@include mobile {
+  //   .wrap {
+  //     position: relative;
+  //     width: 100%;
+  //   }
+}
+// <div className="navigaion">
+//       <div className="navigation-logo-wrap">
+//         <img className="navigation-logo" src="./churchbook.png" alt="logo" />
+//       </div>
+//       <div className="navigation-menu-icon-wrap">
+//         <img
+//           className="navigation-menu-icon"
+//           src="./icons8-menu.png"
+//           alt="menu-icon"
+//         />
+//       </div>
+@include tablet {
+}
+
+@include desktop {
+}

@@ -21,7 +21,7 @@ class NavigationAuth extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false
+      visible: "hide"
     };
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.toggleMenu = this.toggleMenu.bind(this);
@@ -29,14 +29,19 @@ class NavigationAuth extends Component {
 
   handleMouseDown(e) {
     this.toggleMenu();
-
     console.log("clicked");
     e.stopPropagation();
   }
   toggleMenu() {
-    this.setState({
-      visible: !this.state.visible
-    });
+    if (this.state.visible === "hide") {
+      this.setState({
+        visible: "show"
+      });
+    } else {
+      this.setState({
+        visible: "hide"
+      });
+    }
   }
   render() {
     const { visible } = this.state;
@@ -51,7 +56,7 @@ class NavigationAuth extends Component {
             />
           </div>
           <div className="navigation-menu-icon-wrap">
-            <div onMouseDown={this.props.handleMouseDown}>
+            <div onMouseDown={this.handleMouseDown}>
               <img
                 className="navigation-menu-icon"
                 src="./icons8-menu.png"
@@ -60,59 +65,59 @@ class NavigationAuth extends Component {
             </div>
           </div>
         </div>
-        {!visible ? (
-          <div className="menu">
-            <ul>
-              <li>
-                <Link to={ROUTES.HOME}>Home</Link>
-              </li>
-              <li>
-                <Link to={ROUTES.WRITE}>글작성하기</Link>
-              </li>
-              <li>
-                <Link to={ROUTES.FEED}>뉴스피드</Link>
-              </li>
-              <li>
-                <Link to={ROUTES.LANDING}>Landing</Link>
-              </li>
-              <li>
-                <Link to={ROUTES.ACCOUNT}>Account</Link>
-              </li>
-              <li>
-                <Link to={ROUTES.ADMIN}>Admin</Link>
-              </li>
-              <li>
-                <SignOutButton />
-              </li>
-            </ul>
+        <div
+          id="menu-visible"
+          className={visible}
+          onMouseDown={this.handleMouseDown}
+        >
+          <div
+            className="menu-visible-header"
+            // onMouseDown={this.handleMouseDown}
+          >
+            <span className="menu-visible-header-text">
+              후원 받습니다.
+              <br />
+              예금주 : 류동훈
+              <br />
+              010-4288-3243
+            </span>
           </div>
-        ) : (
-          <div className="menu-visible">
-            <ul>
-              <li>
-                <Link to={ROUTES.HOME}>Home</Link>
-              </li>
-              <li>
-                <Link to={ROUTES.WRITE}>글작성하기</Link>
-              </li>
-              <li>
-                <Link to={ROUTES.FEED}>뉴스피드</Link>
-              </li>
-              <li>
-                <Link to={ROUTES.LANDING}>Landing</Link>
-              </li>
-              <li>
-                <Link to={ROUTES.ACCOUNT}>Account</Link>
-              </li>
-              <li>
-                <Link to={ROUTES.ADMIN}>Admin</Link>
-              </li>
-              <li>
-                <SignOutButton />
-              </li>
-            </ul>
+          <div className="menu-visible-link-wrap" onMouseDown="">
+            <div className="menu-visible-link">
+              <Link to={ROUTES.HOME} className="menu-visible-link-text">
+                <span className="menu-visible-span">Home</span>
+              </Link>
+            </div>
+            <div className="menu-visible-link">
+              <Link to={ROUTES.WRITE} className="menu-visible-link-text">
+                <span className="menu-visible-span">Write</span>
+              </Link>
+            </div>
+            <div className="menu-visible-link">
+              <Link to={ROUTES.FEED} className="menu-visible-link-text">
+                <span className="menu-visible-span">Feed</span>
+              </Link>
+            </div>
+            <div className="menu-visible-link">
+              <Link to={ROUTES.LANDING} className="menu-visible-link-text">
+                <span className="menu-visible-span">Landing</span>
+              </Link>
+            </div>
+            <div className="menu-visible-link">
+              <Link to={ROUTES.ACCOUNT} className="menu-visible-link-text">
+                <span className="menu-visible-span">Account</span>
+              </Link>
+            </div>
+            <div className="menu-visible-link">
+              <Link to={ROUTES.ADMIN} className="menu-visible-link-text">
+                <span className="menu-visible-span">Admin</span>
+              </Link>
+            </div>
+            <div className="menu-visible-link">
+              <SignOutButton />
+            </div>
           </div>
-        )}
+        </div>
       </div>
     );
   }

@@ -13,12 +13,12 @@ import AdminPage from "./components/Admin";
 import { withAuthentication } from "./components/Session";
 import WriteForm from "./components/WriteBackup";
 import Feed from "./components/Feed";
+import "./styles/main.scss";
 const App = () => (
   <Router>
     <div>
       <Navigation />
       <hr />
-
       <Route exact path={ROUTES.LANDING} component={Join} />
       <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
       <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
