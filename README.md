@@ -1,10 +1,10 @@
-# Friday-Prayer-Meeting
+# churchbook
 
 [금요기도회 바로가기](https://friday-prayer-meeting.firebaseapp.com/)
 
 ## Description
 
-기도제목을 모아서 보여주고, 기독교인들에게 편의를 제공하는 서비스입니다.
+자기의 일상을 공유하는 기독교인들만을 위한 SNS Service 입니다.
 
 ## Feature (추후에 계속 추가 계획)
 
