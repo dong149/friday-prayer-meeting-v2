@@ -1,0 +1,48 @@
+@import "./color.scss";
+@import "./mixin.scss";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/bootstrap.scss";
+@include mobile {
+  .form-control {
+    font-size: 40px;
+    width: 100%;
+  }
+  .input-file-preview-wrap {
+    overflow: hidden;
+    .input-file-preview {
+      border: 0;
+      vertical-align: top;
+      height: 100%;
+      min-height: 100%;
+      min-height: 0;
+      margin-top: 0px;
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      // padding-bottom: 100%;
+      width: 100%;
+      display: inline-block;
+    }
+  }
+}
+// <div className="navigaion">
+//       <div className="navigation-logo-wrap">
+//         <img className="navigation-logo" src="./churchbook.png" alt="logo" />
+//       </div>
+//       <div className="navigation-menu-icon-wrap">
+//         <img
+//           className="navigation-menu-icon"
+//           src="./icons8-menu.png"
+//           alt="menu-icon"
+//         />
+//       </div>
+@include tablet {
+  .form-control {
+    width: 100%;
+  }
+}
+
+@include desktop {
+  .form-control {
+    width: 100%;
+  }
+}

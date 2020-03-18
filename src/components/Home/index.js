@@ -12,7 +12,7 @@ const HomePage = () => (
     </div>
     <SignInForm />
 
-    <div className="officialContent-wrap">여기는 공지사항입니다.</div>
+    {/* <div className="officialContent-wrap">여기는 공지사항입니다.</div> */}
   </div>
 );
 

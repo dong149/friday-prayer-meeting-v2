@@ -10,6 +10,7 @@ import { withFirebase } from "../../Firebase";
 import * as ROUTES from "../../routes";
 import { withRouter } from "react-router-dom";
 import { withAuthorization } from "../Session";
+import "../../styles/write.scss";
 
 const INITIAL_STATE = {
   loading: false,
@@ -20,6 +21,7 @@ const INITIAL_STATE = {
   date: "", // 작성 날짜/시간
   image: null,
   imageURL: "",
+  imageFile: null,
   // 댓글 수 , 좋아요 수
   // 해당 글에 달린 댓글
   error: null
@@ -134,7 +136,10 @@ class WriteFormBase extends Component {
   onImageChange = event => {
     if (event.target.files[0]) {
       const image = event.target.files[0];
-      this.setState({ image });
+      this.setState({
+        image,
+        imageFile: URL.createObjectURL(event.target.files[0])
+      });
     }
   };
 
@@ -146,14 +151,15 @@ class WriteFormBase extends Component {
     if (!loading) {
       return (
         <form onSubmit={this.onSubmit} className="input-wrap">
-          <p className="input-login-text">글</p>
-          <input
-            className="input-login"
+          <p className="input-login-text">내용</p>
+          <textarea
+            className="form-control"
             type="textarea"
             value={content}
             name="content"
             onChange={this.onChange}
             required={true}
+            rows="10"
           />
           <input
             className="input-file"
@@ -163,14 +169,23 @@ class WriteFormBase extends Component {
             onChange={this.onImageChange}
             required={false}
           />
-          {/* <img
-          src={this.state.imageURL || "./ironman.jpg"}
-          alt="Uploaded Images"
-          height="300"
-          width="400"
-        /> */}
+          {this.state.imageFile && (
+            <div className="input-file-preview-wrap">
+              <img
+                className="input-file-preview"
+                src={this.state.imageFile}
+                alt="Uploaded Images"
+                height="300"
+                width="400"
+              />
+            </div>
+          )}
           <div className="input-submit-wrap">
-            <button className="input-submit" disabled={isInvalid} type="submit">
+            <button
+              className="btn btn-primary"
+              disabled={isInvalid}
+              type="submit"
+            >
               작성하기
             </button>
 
