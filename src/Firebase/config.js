@@ -44,6 +44,9 @@ class Firebase {
   // *** Images API ***
   image = name => this.storage.ref(`images/${name}`);
   images = () => this.storage.ref(`images`);
+
+  // *** TIME ***
+  doFindCurrentTime = () => this.db.ServerValue.TIMESTAMP;
 }
 
 export default Firebase;

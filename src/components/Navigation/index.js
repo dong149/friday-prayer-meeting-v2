@@ -49,11 +49,13 @@ class NavigationAuth extends Component {
       <div>
         <div className="navigation">
           <div className="navigation-logo-wrap">
-            <img
-              className="navigation-logo"
-              src="./churchbook.png"
-              alt="logo"
-            />
+            <Link to={ROUTES.FEED}>
+              <img
+                className="navigation-logo"
+                src="./churchbook.png"
+                alt="logo"
+              />
+            </Link>
           </div>
           <div className="navigation-menu-icon-wrap">
             <div onMouseDown={this.handleMouseDown}>
@@ -83,11 +85,11 @@ class NavigationAuth extends Component {
             </span>
           </div>
           <div className="menu-visible-link-wrap" onMouseDown="">
-            <div className="menu-visible-link">
+            {/* <div className="menu-visible-link">
               <Link to={ROUTES.HOME} className="menu-visible-link-text">
                 <span className="menu-visible-span">Home</span>
               </Link>
-            </div>
+            </div> */}
             <div className="menu-visible-link">
               <Link to={ROUTES.WRITE} className="menu-visible-link-text">
                 <span className="menu-visible-span">Write</span>
@@ -126,44 +128,89 @@ class NavigationNonAuth extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false
+      visible: "hide"
     };
+    this.handleMouseDown = this.handleMouseDown.bind(this);
+    this.toggleMenu = this.toggleMenu.bind(this);
+  }
+
+  handleMouseDown(e) {
+    this.toggleMenu();
+    console.log("clicked");
+    e.stopPropagation();
   }
   toggleMenu() {
-    this.setState({
-      visible: !this.state.visible
-    });
+    if (this.state.visible === "hide") {
+      this.setState({
+        visible: "show"
+      });
+    } else {
+      this.setState({
+        visible: "hide"
+      });
+    }
   }
   render() {
+    const { visible } = this.state;
     return (
       <div>
         <div className="navigation">
           <div className="navigation-logo-wrap">
-            <img
-              className="navigation-logo"
-              src="./churchbook.png"
-              alt="logo"
-            />
+            <Link to={ROUTES.FEED}>
+              <img
+                className="navigation-logo"
+                src="./churchbook.png"
+                alt="logo"
+              />
+            </Link>
           </div>
           <div className="navigation-menu-icon-wrap">
-            <img
-              className="navigation-menu-icon"
-              src="./icons8-menu.png"
-              alt="menu-icon"
-            />
+            <div onMouseDown={this.handleMouseDown}>
+              <img
+                className="navigation-menu-icon"
+                src="./icons8-menu.png"
+                alt="menu-icon"
+              />
+            </div>
           </div>
         </div>
-        <ul>
-          <li>
-            <Link to={ROUTES.HOME}>Home</Link>
-          </li>
-          <li>
-            <Link to={ROUTES.LANDING}>Landing</Link>
-          </li>
-          <li>
-            <Link to={ROUTES.SIGN_IN}>Sign In</Link>
-          </li>
-        </ul>
+        <div
+          id="menu-visible"
+          className={visible}
+          onMouseDown={this.handleMouseDown}
+        >
+          <div
+            className="menu-visible-header"
+            // onMouseDown={this.handleMouseDown}
+          >
+            <span className="menu-visible-header-text">
+              후원 받습니다.
+              <br />
+              예금주 : 류동훈
+              <br />
+              010-4288-3243
+            </span>
+          </div>
+          <div className="menu-visible-link-wrap" onMouseDown="">
+            {/* <div className="menu-visible-link">
+              <Link to={ROUTES.HOME} className="menu-visible-link-text">
+                <span className="menu-visible-span">Home</span>
+              </Link>
+            </div> */}
+
+            <div className="menu-visible-link">
+              <Link to={ROUTES.HOME} className="menu-visible-link-text">
+                <span className="menu-visible-span">로그인</span>
+              </Link>
+            </div>
+
+            <div className="menu-visible-link">
+              <Link to={ROUTES.SIGN_UP} className="menu-visible-link-text">
+                <span className="menu-visible-span">회원가입</span>
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

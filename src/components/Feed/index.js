@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import * as ROUTES from "../../routes";
 import { withAuthorization, AuthUserContext } from "../Session";
 import "../../styles/feed.scss";
+import { WindMillLoading } from "react-loadingg";
+import _ from "lodash";
+import { format, formatDistanceToNow } from "date-fns";
+import { ko } from "date-fns/locale";
 class FeedBase extends Component {
   constructor(props) {
     super(props);
@@ -18,6 +22,10 @@ class FeedBase extends Component {
         ...contentsObject[key],
         uid: key
       }));
+
+      // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
+      _.reverse(contentsList);
+      // console.log(contentsList);
       this.setState({
         contents: contentsList,
         loading: false
@@ -30,9 +38,12 @@ class FeedBase extends Component {
 
   render() {
     const { contents, loading } = this.state;
-    return (
+    return loading ? (
+      <div>
+        <WindMillLoading size="large" color="#5B5BDC" />
+      </div>
+    ) : (
       <div className="feed">
-        {loading && <div>Loading ...</div>}
         <AuthUserContext.Consumer>
           {authUser => <ContentList contents={contents} />}
         </AuthUserContext.Consumer>
@@ -40,6 +51,41 @@ class FeedBase extends Component {
     );
   }
 }
+// 언제 게시되었는지를 알려주는 함수입니다.
+const handleDate = date => {
+  let dyear = parseInt(date.substring(0, 4));
+  let dmonth = parseInt(date.substring(4, 6)) - 1;
+  let dday = parseInt(date.substring(6, 8));
+  let dhour = parseInt(date.substring(8, 10));
+  let dmin = parseInt(date.substring(10, 12));
+  let dsec = parseInt(date.substring(12, 14));
+  // console.log(dyear);
+  // console.log(dmonth);
+  // console.log(dday);
+  // console.log(dhour);
+  // console.log(dmin);
+  // console.log(dsec);
+  let res = formatDistanceToNow(
+    new Date(dyear, dmonth, dday, dhour, dmin, dsec),
+    { includeSeconds: true, locale: ko }
+  );
+  // console.log(res);
+  // let result =
+  //   year + "년" + month + "월" + day + "일" + hour + "시" + min + "분";
+  let reslen = res.length;
+  if (res[reslen - 1] === "만") {
+    if (res[1] === "초") {
+      res = res.substring(0, 2);
+    } else {
+      res = res.substring(0, 3);
+    }
+  }
+  // if (res === "1분 미만") {
+  //   res = "약 1분";
+  // }
+  let result = res + " 전";
+  return result;
+};
 const ContentList = ({ contents }) =>
   contents.map(content => (
     <div className="content-wrap" key={content.date}>
@@ -60,7 +106,9 @@ const ContentList = ({ contents }) =>
                 <div className="content-name-wrap">
                   <h3 className="content-name">{content.name}</h3>
                   <div className="content-date-wrap">
-                    <span className="content-date">{content.date}</span>
+                    <span className="content-date">
+                      {handleDate(content.date)}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -72,17 +120,41 @@ const ContentList = ({ contents }) =>
             <p className="content-content">{content.content}</p>
           </span>
         </div>
-        <div className="content-img-wrap">
-          {content.imageURL ? (
+        {content.imageURL && (
+          <div className="content-img-wrap">
             <img className="content-img" src={content.imageURL} alt="user" />
-          ) : (
-            <img className="content-img" src="./ironman.jpg" alt="iron-man" />
-          )}
+          </div>
+        )}
+        <div className="content-footer">
+          <div className="content-footer-top-wrap-wrap">
+            <div className="content-footer-top-wrap">
+              <div className="content-footer-top-like">
+                <span className="content-footer-top-like-text">
+                  좋아요 10명
+                </span>
+              </div>
+              <div className="content-footer-top-comment">
+                <span className="content-footer-top-comment-text">
+                  댓글 1개
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="content-footer-bottom-wrap">
+            <div className="content-footer-bottom-like-wrap">
+              <span className="content-footer-bottom-like-text">좋아요</span>
+            </div>
+            <div className="content-footer-bottom-comment-wrap">
+              <span className="content-footer-bottom-comment-text">
+                댓글 달기
+              </span>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="content-footer"></div>
     </div>
   ));
+
 //   <ul>
 //     {contents.map(content => (
 //       <li key={content.date}>

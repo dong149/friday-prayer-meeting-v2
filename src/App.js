@@ -11,7 +11,7 @@ import HomePage from "./components/Home";
 import AccountPage from "./components/Account";
 import AdminPage from "./components/Admin";
 import { withAuthentication } from "./components/Session";
-import WriteForm from "./components/WriteBackup";
+import WriteForm from "./components/Write";
 import Feed from "./components/Feed";
 import "./styles/main.scss";
 const App = () => (
@@ -21,7 +21,7 @@ const App = () => (
       <hr />
       <Route exact path={ROUTES.LANDING} component={Join} />
       <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
-      <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
+      <Route exact path={ROUTES.SIGN_IN} component={HomePage} />
       <Route exact path={ROUTES.PASSWORD_FORGET} component={Join} />
       <Route exact path={ROUTES.HOME} component={HomePage} />
       <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />

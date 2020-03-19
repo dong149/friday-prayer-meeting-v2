@@ -10,8 +10,10 @@ import { withFirebase } from "../../Firebase";
 import * as ROUTES from "../../routes";
 import { withRouter } from "react-router-dom";
 import { withAuthorization } from "../Session";
-
+import "../../styles/write.scss";
+import { format } from "date-fns";
 const INITIAL_STATE = {
+  loading: false,
   uid: "",
   name: "",
   type: "", // 글의 종류
@@ -19,8 +21,9 @@ const INITIAL_STATE = {
   date: "", // 작성 날짜/시간
   image: null,
   imageURL: "",
-  // 댓글 수 , 좋아요 수
-  // 해당 글에 달린 댓글
+  imageFile: null,
+  like: 0, // 좋아요 수
+  comments: [], //댓글
   error: null
 };
 
@@ -41,114 +44,162 @@ class WriteFormBase extends Component {
     //   name: name
     // });
   }
+  onSubmit = async event => {
+    try {
+      this.setState({ loading: true });
+      const { content, image, like, comments } = this.state;
+      const uid = this.props.firebase.doFindCurrentUID();
+      const name = this.props.firebase.doFindCurrentUserName();
+      // const time = "";
+      this.setState({ uid: uid, name: name });
+      let URL = "";
 
-  onSubmit = event => {
-    const { content, image } = this.state;
-    const uid = this.props.firebase.doFindCurrentUID();
-    const name = this.props.firebase.doFindCurrentUserName();
-    if (image !== null) {
-      const uploadTask = this.props.firebase.image(image.name).put(image);
-      uploadTask.on(
-        "state_changed",
-        snapshot => {
-          console.log(snapshot);
-        },
-        err => {
-          console.log(err);
-        },
-        () => {
+      if (image) {
+        const storageRef = this.props.firebase.image(image.name);
+        storageRef.put(image).then(result => {
           this.props.firebase
             .images()
             .child(image.name)
             .getDownloadURL()
             .then(firebaseURL => {
               this.setState({ imageURL: firebaseURL });
+              console.log(firebaseURL);
+              URL = firebaseURL;
+            })
+            .then(result => {
+              // const d = new Date();
+              // const currentDate =
+              //   d.getFullYear().toString() +
+              //   (d.getMonth() + 1).toString() +
+              //   d.getDate().toString() +
+              //   d.getHours().toString() +
+              //   d.getMinutes().toString() +
+              //   d.getSeconds().toString();
+              // this.setState({ date: currentDate });
+              const date = format(new Date(), "yyyyMMddHHmmss");
+              this.props.firebase
+                .content(date)
+                .set({
+                  uid: uid,
+                  content,
+                  name: name,
+                  date: date,
+                  imageURL: URL,
+
+                  like,
+                  comments
+                })
+                .then(authUser => {
+                  console.log("here");
+                  this.setState({ ...INITIAL_STATE });
+                  this.props.history.push(ROUTES.FEED);
+                })
+                .catch(error => {
+                  this.setState({ error });
+                });
             });
-        }
-      );
+        });
+      } else {
+        // const d = new Date();
+        // const currentDate =
+        //   d.getFullYear().toString() +
+        //   (d.getMonth() + 1).toString() +
+        //   d.getDate().toString() +
+        //   d.getHours().toString() +
+        //   d.getMinutes().toString() +
+        //   d.getSeconds().toString();
+        // this.setState({ date: currentDate });
+        const date = format(new Date(), "yyyyMMddHHmmss");
+        this.props.firebase
+          .content(date)
+          .set({
+            uid: uid,
+            content,
+            name: name,
+            date: date,
+            imageURL: URL
+          })
+          .then(authUser => {
+            // console.log("here");
+            this.setState({ ...INITIAL_STATE });
+            this.props.history.push(ROUTES.FEED);
+          })
+          .catch(error => {
+            this.setState({ error });
+          });
+      }
+    } catch (e) {
+      console.error(e);
     }
-    const { imageURL } = this.state;
-    // State의 uid에 저장해줍니다.
-    this.setState({ uid: uid, name: name });
-    const d = new Date();
-    const currentDate =
-      d.getFullYear().toString() +
-      (d.getMonth() + 1).toString() +
-      d.getDate().toString() +
-      d.getHours().toString() +
-      d.getMinutes().toString() +
-      d.getSeconds().toString();
-    this.setState({ date: currentDate });
-    const date = currentDate;
-    this.props.firebase
-      .content(date)
-      .set({
-        uid: uid,
-        content,
-        name: name,
-        date: date,
-        imageURL: imageURL
-      })
-      .then(authUser => {
-        this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.WRITE);
-      })
-      .catch(error => {
-        this.setState({ error });
-      });
     event.preventDefault();
-    //   .then(authUser => {
-    //     this.setState({ ...INITIAL_STATE });
-    //     this.props.history.push(ROUTES.HOME);
-    //   })
-    //   .catch(error => {
-    //     this.setState({ error });
-    //   });
-    // event.preventDefault();
   };
+
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
   onImageChange = event => {
     if (event.target.files[0]) {
       const image = event.target.files[0];
-      this.setState({ image });
+      this.setState({
+        image,
+        imageFile: URL.createObjectURL(event.target.files[0])
+      });
     }
   };
+
   render() {
-    const { content, error } = this.state;
+    const { content, error, loading } = this.state;
     // const x = this.props.firebase;
     // console.log(x);
     const isInvalid = content === "";
-    return (
-      <form onSubmit={this.onSubmit} className="input-wrap">
-        <p className="input-login-text">글</p>
-        <input
-          className="input-login"
-          type="textarea"
-          value={content}
-          name="content"
-          onChange={this.onChange}
-          required={true}
-        />
-        <input
-          className="input-file"
-          type="file"
-          name="image"
-          accept="image/*"
-          onChange={this.onImageChange}
-          required={false}
-        />
+    if (!loading) {
+      return (
+        <form onSubmit={this.onSubmit} className="input-wrap">
+          <p className="input-login-text">내용</p>
+          <textarea
+            className="form-control"
+            type="textarea"
+            value={content}
+            name="content"
+            onChange={this.onChange}
+            required={true}
+            rows="10"
+          />
+          <input
+            className="input-file"
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={this.onImageChange}
+            required={false}
+          />
+          {this.state.imageFile && (
+            <div className="input-file-preview-wrap">
+              <img
+                className="input-file-preview"
+                src={this.state.imageFile}
+                alt="Uploaded Images"
+                height="300"
+                width="400"
+              />
+            </div>
+          )}
+          <div className="input-submit-wrap">
+            <button
+              className="btn btn-primary"
+              disabled={isInvalid}
+              type="submit"
+            >
+              작성하기
+            </button>
 
-        <div className="input-submit-wrap">
-          <button className="input-submit" disabled={isInvalid} type="submit">
-            작성하기
-          </button>
-
-          {error && <p>{error.message}</p>}
-        </div>
-      </form>
-    );
+            {error && <p>{error.message}</p>}
+          </div>
+        </form>
+      );
+    } else {
+      return <span>로딩중...</span>;
+    }
   }
 }
 const authCondition = authUser => !!authUser;
