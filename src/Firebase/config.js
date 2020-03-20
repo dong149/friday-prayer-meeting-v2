@@ -47,6 +47,11 @@ class Firebase {
 
   // *** TIME ***
   doFindCurrentTime = () => this.db.ServerValue.TIMESTAMP;
+
+  // *** COMMENT ***
+  comment = (date, commentDate) =>
+    this.db.ref(`contents/${date}/comments/${commentDate}`);
+  comments = date => this.db.ref(`contents/${date}/comments`);
 }
 
 export default Firebase;

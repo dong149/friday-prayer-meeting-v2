@@ -1,12 +1,22 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import * as ROUTES from "../../routes";
-import { withAuthorization, AuthUserContext } from "../Session";
+import {
+  withAuthorization,
+  AuthUserContext,
+  withAuthentication
+} from "../Session";
 import "../../styles/feed.scss";
 import { WindMillLoading } from "react-loadingg";
 import _ from "lodash";
 import { format, formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
-import ExifOrientationImg from "react-exif-orientation-img";
+import { FirebaseContext } from "../../Firebase";
+const INITIAL_STATE = {
+  loading: false,
+  comments: [],
+  comment: "",
+  error: null
+};
 class FeedBase extends Component {
   constructor(props) {
     super(props);
@@ -87,8 +97,124 @@ const handleDate = date => {
   let result = res + " 전";
   return result;
 };
-const ContentList = ({ contents }) =>
-  contents.map(content => (
+
+// Content 리스트
+const ContentList = ({ contents }) => {
+  const res = contents.map(content => {
+    return <Content content={content} />;
+  });
+  return res;
+};
+
+// Comment (댓글 입력 기능 선택시 확장 영역)
+class CommentFormBase extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      ...INITIAL_STATE
+    };
+  }
+  // 기존에 있는 코멘트들이 보이게 하는 기능
+  componentDidMount() {
+    this.setState({ loading: true });
+    this.props.firebase.comments(this.props.date).on("value", snapshot => {
+      const commentsObject = snapshot.val();
+      const commentsList = Object.keys(commentsObject).map(key => ({
+        ...commentsObject[key],
+        uid: key
+      }));
+
+      // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
+      _.reverse(commentsList);
+      // console.log(contentsList);
+      this.setState({
+        comments: commentsList,
+        loading: false
+      });
+    });
+  }
+
+  onChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+  onSubmit = async event => {
+    try {
+      console.log(this.props);
+      const { comment } = this.state;
+      const uid = this.props.firebase.doFindCurrentUID();
+      const name = this.props.firebase.doFindCurrentUserName();
+      this.setState({ uid: uid, name: name });
+
+      const date = format(new Date(), "yyyyMMddHHmmss");
+      this.props.firebase
+        .comment(this.props.date, date)
+        .set({
+          uid: uid,
+          comment,
+          name: name,
+          date: date
+        })
+        .then(authUser => {
+          // console.log("here");
+          this.setState({ ...INITIAL_STATE });
+          // this.props.history.push(ROUTES.FEED);
+        })
+        .catch(error => {
+          this.setState({ error });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+    event.preventDefault();
+  };
+
+  render() {
+    const { comments, comment, loading, error } = this.state;
+    const isInvalid = comment === "";
+    return (
+      <div>
+        <div>
+          {comments.map(comment => (
+            <div>
+              <span>{comment.name}</span>
+              <span>{comment.comment}</span>
+              <span>{comment.date}</span>
+            </div>
+          ))}
+        </div>
+        <div className="comment-form-wrap">
+          <form onSubmit={this.onSubmit} className="comment-form">
+            <div className="comment-input-wrap">
+              <input
+                className="comment-input"
+                value={comment}
+                type="text"
+                name="comment"
+                onChange={this.onChange}
+                placeholder="댓글을 입력하세요."
+                required={true}
+              />
+            </div>
+            <button
+              className="btn btn-primary"
+              type="submit"
+              disabled={isInvalid}
+            >
+              작성하기
+            </button>
+            {error && <p>{error.message}</p>}
+          </form>
+        </div>
+      </div>
+    );
+  }
+}
+// const CommentList = ({comments})
+
+// Content 한 항목.
+const Content = ({ content }) => {
+  const [commentForm, setCommentForm] = useState(false);
+  return (
     <div className="content-wrap" key={content.date}>
       <div className="content-body-wrap">
         <div className="content-header">
@@ -146,32 +272,34 @@ const ContentList = ({ contents }) =>
               <span className="content-footer-bottom-like-text">좋아요</span>
             </div>
             <div className="content-footer-bottom-comment-wrap">
+              <input
+                className="chk-write"
+                value={commentForm}
+                type="checkbox"
+                onChange={() => setCommentForm(!commentForm)}
+              />
               <span className="content-footer-bottom-comment-text">
                 댓글 달기
               </span>
             </div>
           </div>
+          {/* 댓글 창 */}
+          {commentForm && (
+            <FirebaseContext.Consumer>
+              {firebase => (
+                <CommentFormBase date={content.date} firebase={firebase} />
+              )}
+            </FirebaseContext.Consumer>
+          )}
         </div>
       </div>
     </div>
-  ));
+  );
+};
 
-//   <ul>
-//     {contents.map(content => (
-//       <li key={content.date}>
-//         <span>
-//           <strong>Writer</strong> {content.name}
-//         </span>
-//         <span>
-//           <strong>Date</strong> {content.date}
-//         </span>
-//         <span>
-//           <strong>Content</strong> {content.content}
-//         </span>
-//       </li>
-//     ))}
-//   </ul>
 const authCondition = authUser => !!authUser;
 const Feed = withAuthorization(authCondition)(FeedBase);
+// const CommentForm = withAuthorization(authCondition)(CommentFormBase);
+// withAuthentication(CommentFormBase);
 
 export default Feed;

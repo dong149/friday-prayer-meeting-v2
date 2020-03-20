@@ -85,9 +85,8 @@ class WriteFormBase extends Component {
                   name: name,
                   date: date,
                   imageURL: URL,
-
                   like,
-                  comments
+                  comments: []
                 })
                 .then(authUser => {
                   console.log("here");
@@ -117,6 +116,7 @@ class WriteFormBase extends Component {
             content,
             name: name,
             date: date,
+            comments: [],
             imageURL: URL
           })
           .then(authUser => {
