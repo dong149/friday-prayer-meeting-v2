@@ -36,10 +36,12 @@
 
 ### .scss
 
+- [ ] SIGNUP
 - [ ] desktop/tablet 일 때 scss파일 작성
 
 ## Bug
 
 - [ ] 사진 넣을 때, 사진이 돌아가는 버그.
+- [x] 로그인 되어있는 상태에서 홈으로 돌아가지는 버그
 
 [참고자료](https://www.robinwieruch.de/complete-firebase-authentication-react-tutorial)

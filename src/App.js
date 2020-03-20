@@ -19,7 +19,7 @@ const App = () => (
     <div>
       <Navigation />
       <hr />
-      <Route exact path={ROUTES.LANDING} component={Join} />
+      <Route exact path={ROUTES.LANDING} component={HomePage} />
       <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
       <Route exact path={ROUTES.SIGN_IN} component={HomePage} />
       <Route exact path={ROUTES.PASSWORD_FORGET} component={Join} />

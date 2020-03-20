@@ -6,6 +6,7 @@ import { WindMillLoading } from "react-loadingg";
 import _ from "lodash";
 import { format, formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
+import ExifOrientationImg from "react-exif-orientation-img";
 class FeedBase extends Component {
   constructor(props) {
     super(props);

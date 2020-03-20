@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import * as ROUTES from "../../routes";
 import SignOutButton from "../SignOut";
-import { AuthUserContext } from "../Session";
+import { AuthUserContext, withAuthorization } from "../Session";
 import "../../styles/navigation.scss";
 
 class Navigation extends Component {
@@ -10,7 +10,7 @@ class Navigation extends Component {
     return (
       <div>
         <AuthUserContext.Consumer>
-          {authUser => (authUser ? <NavigationAuth /> : <NavigationNonAuth />)}
+          {authUser => (authUser ? <NavigationAuth /> : <></>)}
         </AuthUserContext.Consumer>
       </div>
     );
@@ -100,11 +100,11 @@ class NavigationAuth extends Component {
                 <span className="menu-visible-span">Feed</span>
               </Link>
             </div>
-            <div className="menu-visible-link">
+            {/* <div className="menu-visible-link">
               <Link to={ROUTES.LANDING} className="menu-visible-link-text">
                 <span className="menu-visible-span">Landing</span>
               </Link>
-            </div>
+            </div> */}
             <div className="menu-visible-link">
               <Link to={ROUTES.ACCOUNT} className="menu-visible-link-text">
                 <span className="menu-visible-span">Account</span>
@@ -215,5 +215,5 @@ class NavigationNonAuth extends Component {
     );
   }
 }
-
+// const NavigationNonAuth = withAuthorization(NavigationNonAuthBase);
 export default Navigation;

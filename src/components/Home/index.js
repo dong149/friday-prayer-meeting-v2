@@ -2,18 +2,27 @@ import React from "react";
 import "../../styles/home.scss";
 import { SignInForm } from "../SignIn";
 import SignUpPage, { SignUpLink } from "../SignUp/signUpForm";
-import { Router, Route } from "react-router-dom";
+import { Router, Route, Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
 import * as ROUTES from "../../routes";
+import { AuthUserContext } from "../Session";
 const HomePage = () => (
-  <div>
-    <div className="home-logo-wrap">
-      <img className="home-logo" src="/churchbook.png" alt="HomeLogo" />
-    </div>
-    <SignInForm />
+  <AuthUserContext.Consumer>
+    {authUser =>
+      authUser ? (
+        <Redirect to={ROUTES.FEED} />
+      ) : (
+        <div>
+          <div className="home-logo-wrap">
+            <img className="home-logo" src="/churchbook.png" alt="HomeLogo" />
+          </div>
+          <SignInForm />
 
-    {/* <div className="officialContent-wrap">여기는 공지사항입니다.</div> */}
-  </div>
+          {/* <div className="officialContent-wrap">여기는 공지사항입니다.</div> */}
+        </div>
+      )
+    }
+  </AuthUserContext.Consumer>
 );
 
 export default HomePage;
