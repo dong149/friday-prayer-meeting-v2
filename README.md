@@ -43,5 +43,7 @@
 
 - [ ] 사진 넣을 때, 사진이 돌아가는 버그.
 - [x] 로그인 되어있는 상태에서 홈으로 돌아가지는 버그
+- [ ] 버튼으로 설정한 구글 로그인 버튼 같은 것들이 디자인이 이상하게 나옴.
+- [ ] 댓글을 올리면 실시간으로 값이 변하지 않음. ComponentDidMount()함수 변경이 필요함.
 
 [참고자료](https://www.robinwieruch.de/complete-firebase-authentication-react-tutorial)
