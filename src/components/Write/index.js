@@ -67,15 +67,6 @@ class WriteFormBase extends Component {
               URL = firebaseURL;
             })
             .then(result => {
-              // const d = new Date();
-              // const currentDate =
-              //   d.getFullYear().toString() +
-              //   (d.getMonth() + 1).toString() +
-              //   d.getDate().toString() +
-              //   d.getHours().toString() +
-              //   d.getMinutes().toString() +
-              //   d.getSeconds().toString();
-              // this.setState({ date: currentDate });
               const date = format(new Date(), "yyyyMMddHHmmss");
               this.props.firebase
                 .content(date)

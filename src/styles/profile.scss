@@ -1,0 +1,19 @@
+@import "./color.scss";
+@import "./mixin.scss";
+
+@include mobile {
+  .input-wrap {
+    width: 80%;
+    .profile-image-wrap {
+      .profile-image {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+}
+@include tablet {
+}
+
+@include desktop {
+}

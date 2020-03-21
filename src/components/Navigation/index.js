@@ -106,8 +106,8 @@ class NavigationAuth extends Component {
               </Link>
             </div> */}
             <div className="menu-visible-link">
-              <Link to={ROUTES.ACCOUNT} className="menu-visible-link-text">
-                <span className="menu-visible-span">Account</span>
+              <Link to={ROUTES.PROFILE} className="menu-visible-link-text">
+                <span className="menu-visible-span">프로필</span>
               </Link>
             </div>
             <div className="menu-visible-link">

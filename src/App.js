@@ -8,7 +8,7 @@ import Login from "./components/login";
 import SignUpPage from "./components/SignUp/signUpForm";
 import SignInPage from "./components/SignIn";
 import HomePage from "./components/Home";
-import AccountPage from "./components/Account";
+import ProfilePage from "./components/Profile";
 import AdminPage from "./components/Admin";
 import { withAuthentication } from "./components/Session";
 import WriteForm from "./components/Write";
@@ -24,7 +24,7 @@ const App = () => (
       <Route exact path={ROUTES.SIGN_IN} component={HomePage} />
       <Route exact path={ROUTES.PASSWORD_FORGET} component={Join} />
       <Route exact path={ROUTES.HOME} component={HomePage} />
-      <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
+      <Route exact path={ROUTES.PROFILE} component={ProfilePage} />
       <Route exact path={ROUTES.ADMIN} component={AdminPage} />
       <Route exact path={ROUTES.WRITE} component={WriteForm} />
       <Route exact path={ROUTES.FEED} component={Feed} />

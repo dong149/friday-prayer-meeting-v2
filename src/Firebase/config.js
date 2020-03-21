@@ -33,9 +33,12 @@ class Firebase {
   doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
   doFindCurrentUID = () => this.auth.currentUser.uid;
   doFindCurrentUserName = () => this.auth.currentUser.displayName;
+  doUpdateUserProfile = URL =>
+    this.auth.currentUser.updateProfile({ photoURL: URL });
   // *** User API ***
   user = uid => this.db.ref(`users/${uid}`);
   users = () => this.db.ref("users");
+  userPhoto = uid => this.db.ref(`users/${uid}/photoURL`);
 
   // *** Contents API ***
   content = date => this.db.ref(`contents/${date}`);

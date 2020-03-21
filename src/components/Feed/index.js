@@ -30,8 +30,7 @@ class FeedBase extends Component {
     this.props.firebase.contents().on("value", snapshot => {
       const contentsObject = snapshot.val();
       const contentsList = Object.keys(contentsObject).map(key => ({
-        ...contentsObject[key],
-        uid: key
+        ...contentsObject[key]
       }));
 
       // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
@@ -70,19 +69,12 @@ const handleDate = date => {
   let dhour = parseInt(date.substring(8, 10));
   let dmin = parseInt(date.substring(10, 12));
   let dsec = parseInt(date.substring(12, 14));
-  // console.log(dyear);
-  // console.log(dmonth);
-  // console.log(dday);
-  // console.log(dhour);
-  // console.log(dmin);
-  // console.log(dsec);
+
   let res = formatDistanceToNow(
     new Date(dyear, dmonth, dday, dhour, dmin, dsec),
     { includeSeconds: true, locale: ko }
   );
-  // console.log(res);
-  // let result =
-  //   year + "년" + month + "월" + day + "일" + hour + "시" + min + "분";
+
   let reslen = res.length;
   if (res[reslen - 1] === "만") {
     if (res[1] === "초") {
@@ -101,6 +93,7 @@ const handleDate = date => {
 // Content 리스트
 const ContentList = ({ contents }) => {
   const res = contents.map(content => {
+    console.log(content);
     return <Content content={content} />;
   });
   return res;
@@ -119,18 +112,19 @@ class CommentFormBase extends Component {
     this.setState({ loading: true });
     this.props.firebase.comments(this.props.date).on("value", snapshot => {
       const commentsObject = snapshot.val();
-      const commentsList = Object.keys(commentsObject).map(key => ({
-        ...commentsObject[key],
-        uid: key
-      }));
+      if (commentsObject) {
+        const commentsList = Object.keys(commentsObject).map(key => ({
+          ...commentsObject[key]
+        }));
 
-      // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
-      _.reverse(commentsList);
-      // console.log(contentsList);
-      this.setState({
-        comments: commentsList,
-        loading: false
-      });
+        // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
+        _.reverse(commentsList);
+        console.log(commentsList);
+        this.setState({
+          comments: commentsList,
+          loading: false
+        });
+      }
     });
   }
 
@@ -139,7 +133,6 @@ class CommentFormBase extends Component {
   };
   onSubmit = async event => {
     try {
-      console.log(this.props);
       const { comment } = this.state;
       const uid = this.props.firebase.doFindCurrentUID();
       const name = this.props.firebase.doFindCurrentUserName();
@@ -214,17 +207,28 @@ class CommentFormBase extends Component {
 // Content 한 항목.
 const Content = ({ content }) => {
   const [commentForm, setCommentForm] = useState(false);
+  let commentSize = 0;
+  if (content.comments) {
+    const commentObject = Object.keys(content.comments);
+    commentSize = commentObject.length;
+  }
+
   return (
     <div className="content-wrap" key={content.date}>
       <div className="content-body-wrap">
         <div className="content-header">
           <div className="content-profile-wrap-wrap">
             <div className="content-profile-wrap">
-              <img
+              <FirebaseContext.Consumer>
+                {firebase => (
+                  <ContentProfile firebase={firebase} uid={content.uid} />
+                )}
+              </FirebaseContext.Consumer>
+              {/* <img
                 className="content-profile"
                 src="./ironman.jpg"
                 alt="iron-man"
-              />
+              /> */}
             </div>
           </div>
           <div className="content-title-wrap-wrap-wrap">
@@ -262,7 +266,7 @@ const Content = ({ content }) => {
               </div>
               <div className="content-footer-top-comment">
                 <span className="content-footer-top-comment-text">
-                  댓글 1개
+                  댓글 {commentSize}개
                 </span>
               </div>
             </div>
@@ -297,7 +301,32 @@ const Content = ({ content }) => {
   );
 };
 
+class ContentProfile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { imageURL: "" };
+  }
+  componentDidMount() {
+    this.props.firebase.userPhoto(this.props.uid).once("value", snapshot => {
+      const imageURL = snapshot.val();
+      this.setState({
+        imageURL
+      });
+    });
+  }
+  render() {
+    const { imageURL } = this.state;
+    return (
+      <>
+        <img className="content-profile" src={imageURL} alt="iron-man" />
+      </>
+    );
+  }
+}
+
 const authCondition = authUser => !!authUser;
+
+withAuthentication(ContentProfile);
 const Feed = withAuthorization(authCondition)(FeedBase);
 // const CommentForm = withAuthorization(authCondition)(CommentFormBase);
 // withAuthentication(CommentFormBase);
