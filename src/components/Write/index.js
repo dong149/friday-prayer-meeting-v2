@@ -107,6 +107,7 @@ class WriteFormBase extends Component {
             content,
             name: name,
             date: date,
+            like,
             comments: [],
             imageURL: URL
           })

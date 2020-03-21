@@ -62,7 +62,7 @@ class FeedBase extends Component {
   }
 }
 // 언제 게시되었는지를 알려주는 함수입니다.
-const handleDate = date => {
+export const handleDate = date => {
   let dyear = parseInt(date.substring(0, 4));
   let dmonth = parseInt(date.substring(4, 6)) - 1;
   let dday = parseInt(date.substring(6, 8));
@@ -94,7 +94,11 @@ const handleDate = date => {
 const ContentList = ({ contents }) => {
   const res = contents.map(content => {
     console.log(content);
-    return <Content content={content} />;
+    return (
+      <FirebaseContext>
+        {firebase => <Content content={content} firebase={firebase} />}
+      </FirebaseContext>
+    );
   });
   return res;
 };
@@ -205,101 +209,203 @@ class CommentFormBase extends Component {
 // const CommentList = ({comments})
 
 // Content 한 항목.
-const Content = ({ content }) => {
-  const [commentForm, setCommentForm] = useState(false);
-  let commentSize = 0;
-  if (content.comments) {
-    const commentObject = Object.keys(content.comments);
-    commentSize = commentObject.length;
+class Content extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      content: {},
+      commentForm: false,
+      commentSize: 0,
+      liked: false
+    };
   }
+  // handleDate = date => {
+  //   let newdate = date + "";
+  //   let dyear = newdate.substring(0, 4);
+  //   let dmonth = (parseInt(newdate.substring(4, 6)) - 1).toString();
+  //   let dday = newdate.substring(6, 8);
+  //   let dhour = newdate.substring(8, 10);
+  //   let dmin = newdate.substring(10, 12);
+  //   let dsec = newdate.substring(12, 14);
 
-  return (
-    <div className="content-wrap" key={content.date}>
-      <div className="content-body-wrap">
-        <div className="content-header">
-          <div className="content-profile-wrap-wrap">
-            <div className="content-profile-wrap">
-              <FirebaseContext.Consumer>
-                {firebase => (
-                  <ContentProfile firebase={firebase} uid={content.uid} />
-                )}
-              </FirebaseContext.Consumer>
-              {/* <img
+  //   let res = formatDistanceToNow(
+  //     new Date(dyear, dmonth, dday, dhour, dmin, dsec),
+  //     { includeSeconds: true, locale: ko }
+  //   );
+
+  //   let reslen = res.length;
+  //   if (res[reslen - 1] === "만") {
+  //     if (res[1] === "초") {
+  //       res = res.substring(0, 2);
+  //     } else {
+  //       res = res.substring(0, 3);
+  //     }
+  //   }
+  //   // if (res === "1분 미만") {
+  //   //   res = "약 1분";
+  //   // }
+  //   let result = res + " 전";
+  //   return result;
+  // };
+  componentDidMount() {
+    if (this.props.content.comments) {
+      const commentObject = Object.keys(this.props.content.comments);
+      this.setState({ commentSize: commentObject.length });
+    }
+    this.setState({ content: this.props.content });
+
+    this.props.firebase
+      .likeList(this.props.content.date, this.props.firebase.doFindCurrentUID())
+      .on("value", snapshot => {
+        // console.log(snapshot && snapshot.exists());
+        if (snapshot.val()) {
+          this.setState({
+            liked: true
+          });
+        } else {
+          this.setState({
+            liked: false
+          });
+        }
+      });
+  }
+  setCommentForm = commentForm => {
+    this.setState({ commentForm: commentForm });
+  };
+  setLike = () => {
+    const newLike = this.props.content.like + 1;
+    this.props.firebase
+      .content(this.props.content.date)
+      .update({
+        like: newLike
+      })
+      .then(() => {
+        this.props.firebase
+          .likeList(
+            this.props.content.date,
+            this.props.firebase.doFindCurrentUID()
+          )
+          .update({
+            // 나중에 감정표현 집어넣으려면 여기서 종류 넣어서 만들면 됨.
+            uid: this.props.firebase.doFindCurrentUID()
+          });
+      });
+  };
+  render() {
+    console.log(this.props);
+    const { commentForm, commentSize, liked } = this.state;
+    return (
+      <div className="content-wrap" key={this.props.content.date}>
+        <div className="content-body-wrap">
+          <div className="content-header">
+            <div className="content-profile-wrap-wrap">
+              <div className="content-profile-wrap">
+                <FirebaseContext.Consumer>
+                  {firebase => (
+                    <ContentProfile
+                      firebase={firebase}
+                      uid={this.props.content.uid}
+                    />
+                  )}
+                </FirebaseContext.Consumer>
+                {/* <img
                 className="content-profile"
                 src="./ironman.jpg"
                 alt="iron-man"
               /> */}
+              </div>
             </div>
-          </div>
-          <div className="content-title-wrap-wrap-wrap">
-            <div className="content-title-wrap-wrap">
-              <div className="content-title-wrap">
-                <div className="content-name-wrap">
-                  <h3 className="content-name">{content.name}</h3>
-                  <div className="content-date-wrap">
-                    <span className="content-date">
-                      {handleDate(content.date)}
-                    </span>
+            <div className="content-title-wrap-wrap-wrap">
+              <div className="content-title-wrap-wrap">
+                <div className="content-title-wrap">
+                  <div className="content-name-wrap">
+                    <h3 className="content-name">{this.props.content.name}</h3>
+                    <div className="content-date-wrap">
+                      <span className="content-date">
+                        {handleDate(this.props.content.date)}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="content-content-wrap">
-          <span>
-            <p className="content-content">{content.content}</p>
-          </span>
-        </div>
-        {content.imageURL && (
-          <div className="content-img-wrap">
-            <img className="content-img" src={content.imageURL} alt="user" />
+          <div className="content-content-wrap">
+            <span>
+              <p className="content-content">{this.props.content.content}</p>
+            </span>
           </div>
-        )}
-        <div className="content-footer">
-          <div className="content-footer-top-wrap-wrap">
-            <div className="content-footer-top-wrap">
-              <div className="content-footer-top-like">
-                <span className="content-footer-top-like-text">
-                  좋아요 10명
-                </span>
-              </div>
-              <div className="content-footer-top-comment">
-                <span className="content-footer-top-comment-text">
-                  댓글 {commentSize}개
-                </span>
+          {this.props.content.imageURL && (
+            <div className="content-img-wrap">
+              <img
+                className="content-img"
+                src={this.props.content.imageURL}
+                alt="user"
+              />
+            </div>
+          )}
+          <div className="content-footer">
+            <div className="content-footer-top-wrap-wrap">
+              <div className="content-footer-top-wrap">
+                <div className="content-footer-top-like">
+                  <span className="content-footer-top-like-text">
+                    좋아요 {this.props.content.like}명
+                  </span>
+                </div>
+                <div className="content-footer-top-comment">
+                  <span className="content-footer-top-comment-text">
+                    댓글 {commentSize}개
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="content-footer-bottom-wrap">
-            <div className="content-footer-bottom-like-wrap">
-              <span className="content-footer-bottom-like-text">좋아요</span>
-            </div>
-            <div className="content-footer-bottom-comment-wrap">
-              <input
+            <div className="content-footer-bottom-wrap">
+              <div className="content-footer-bottom-like-wrap">
+                {liked ? (
+                  <button onClick="">
+                    <span className="content-footer-bottom-like-text">
+                      눌렀어요
+                    </span>
+                  </button>
+                ) : (
+                  <button onClick={() => this.setLike()}>
+                    <span className="content-footer-bottom-like-text">
+                      좋아요
+                    </span>
+                  </button>
+                )}
+              </div>
+              <div className="content-footer-bottom-comment-wrap">
+                <button onClick={() => this.setCommentForm(!commentForm)}>
+                  {/* <input
                 className="chk-write"
                 value={commentForm}
                 type="checkbox"
                 onChange={() => setCommentForm(!commentForm)}
-              />
-              <span className="content-footer-bottom-comment-text">
-                댓글 달기
-              </span>
+              /> */}
+                  <span className="content-footer-bottom-comment-text">
+                    댓글 달기
+                  </span>
+                </button>
+              </div>
             </div>
+            {/* 댓글 창 */}
+            {commentForm && (
+              <FirebaseContext.Consumer>
+                {firebase => (
+                  <CommentFormBase
+                    date={this.props.content.date}
+                    firebase={firebase}
+                  />
+                )}
+              </FirebaseContext.Consumer>
+            )}
           </div>
-          {/* 댓글 창 */}
-          {commentForm && (
-            <FirebaseContext.Consumer>
-              {firebase => (
-                <CommentFormBase date={content.date} firebase={firebase} />
-              )}
-            </FirebaseContext.Consumer>
-          )}
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 class ContentProfile extends Component {
   constructor(props) {

@@ -34,7 +34,7 @@ class Firebase {
   doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
   doFindCurrentUID = () => this.auth.currentUser.uid;
   doFindCurrentUserName = () => this.auth.currentUser.displayName;
-
+  doInfoCurrentUser = () => this.auth.currentUser;
   // *** Auth Google ***
   doSignInWithGoogle = () => this.auth.signInWithPopup(this.googleProvider);
 
@@ -61,6 +61,9 @@ class Firebase {
   comment = (date, commentDate) =>
     this.db.ref(`contents/${date}/comments/${commentDate}`);
   comments = date => this.db.ref(`contents/${date}/comments`);
+
+  // *** Like ***
+  likeList = (date, uid) => this.db.ref(`contents/${date}/likelist/${uid}`);
 }
 
 export default Firebase;

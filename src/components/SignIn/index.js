@@ -32,7 +32,8 @@ class SignInGoogleBase extends Component {
         return this.props.firebase.user(socialAuthUser.user.uid).set({
           username: socialAuthUser.user.displayName,
           email: socialAuthUser.user.email,
-          photoURL: "./defaultProfile.png"
+          photoURL: socialAuthUser.user.photoURL
+          // photoURL: "./defaultProfile.png"
         });
       })
       .then(() => {
