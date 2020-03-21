@@ -59,7 +59,7 @@ class ProfilePage extends Component {
                   });
                   console.log("here");
                   this.setState({ ...INITIAL_STATE });
-                  this.props.history.push(ROUTES.PROFILE);
+                  this.props.history.push(ROUTES.FEED);
                   alert("성공적으로 변경되었습니다");
                 })
                 .catch(error => {
@@ -106,20 +106,26 @@ class ProfilePage extends Component {
       });
     }
   };
+  componentDidMount() {
+    this.props.firebase
+      .userPhoto(this.props.firebase.doFindCurrentUID())
+      .on("value", snapshot => {
+        const imageURL = snapshot.val();
+        this.setState({
+          imageURL
+        });
+      });
+  }
   render() {
-    const { profileImageFile } = this.state;
+    const { profileImageFile, imageURL } = this.state;
     const isInvalid = profileImageFile === "";
     console.log(this.props.firebase.auth.currentUser);
     return (
       <div>
         <form onSubmit={this.onSubmit} className="input-wrap">
           <div className="profile-image-wrap">
-            {this.props.firebase.auth.currentUser.photoURL ? (
-              <img
-                className="profile-image"
-                src={this.props.firebase.auth.currentUser.photoURL}
-                alt="profile"
-              />
+            {imageURL ? (
+              <img className="profile-image" src={imageURL} alt="profile" />
             ) : (
               <img
                 className="profile-image"

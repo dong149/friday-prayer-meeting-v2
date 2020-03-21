@@ -19,6 +19,53 @@ const INITIAL_STATE = {
   password: "",
   error: null
 };
+class SignInGoogleBase extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { error: null };
+  }
+
+  onSubmit = event => {
+    this.props.firebase
+      .doSignInWithGoogle()
+      .then(socialAuthUser => {
+        return this.props.firebase.user(socialAuthUser.user.uid).set({
+          username: socialAuthUser.user.displayName,
+          email: socialAuthUser.user.email,
+          photoURL: "./defaultProfile.png"
+        });
+      })
+      .then(() => {
+        this.setState({ error: null });
+        this.props.history.push(ROUTES.FEED);
+      })
+      .catch(error => {
+        this.setState({ error });
+        console.log(error);
+      });
+    event.preventDefault();
+  };
+
+  render() {
+    const { error } = this.state;
+    return (
+      <form onSubmit={this.onSubmit}>
+        <div className="login-btn-wrap">
+          <div className="google-btn-wrap">
+            <button type="submit">
+              <img
+                className="google-btn"
+                src="/google_login-btn.png"
+                alt="login-kakao"
+              />
+            </button>
+            {error && <p>{error.message}</p>}
+          </div>
+        </div>
+      </form>
+    );
+  }
+}
 
 class SignInFormBase extends Component {
   constructor(props) {
@@ -76,22 +123,7 @@ class SignInFormBase extends Component {
             {error && <p>{error.message}</p>}
           </div>
         </form>
-        <div className="login-btn-wrap">
-          <div className="google-btn-wrap">
-            <img
-              className="google-btn"
-              src="/google_login-btn.png"
-              alt="login-kakao"
-            />
-          </div>
-          <div className="kakao-btn-wrap">
-            <img
-              className="kakao-btn"
-              src="/kakao_login-btn-large.png"
-              alt="login-kakao"
-            />
-          </div>
-        </div>
+        {/* <SignInGoogleBase /> */}
         <div className="signin-question-wrap">
           <span className="signin-question">
             아직 회원이 아니신가요?
@@ -126,6 +158,7 @@ class SignInFormBase extends Component {
 }
 
 const SignInForm = compose(withRouter, withFirebase)(SignInFormBase);
-
+const SignInGoogleForm = compose(withRouter, withFirebase)(SignInGoogleBase);
 export default SignInPage;
 export { SignInForm };
+export { SignInGoogleForm };

@@ -22,6 +22,7 @@ class Firebase {
     this.auth = app.auth();
     this.db = app.database();
     this.storage = app.storage();
+    this.googleProvider = new app.auth.GoogleAuthProvider();
   }
   // *** Auth API ***
   doCreateUserWithEmailAndPassword = (email, password) =>
@@ -33,8 +34,13 @@ class Firebase {
   doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
   doFindCurrentUID = () => this.auth.currentUser.uid;
   doFindCurrentUserName = () => this.auth.currentUser.displayName;
+
+  // *** Auth Google ***
+  doSignInWithGoogle = () => this.auth.signInWithPopup(this.googleProvider);
+
   doUpdateUserProfile = URL =>
     this.auth.currentUser.updateProfile({ photoURL: URL });
+
   // *** User API ***
   user = uid => this.db.ref(`users/${uid}`);
   users = () => this.db.ref("users");
