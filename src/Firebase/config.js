@@ -45,6 +45,7 @@ class Firebase {
   user = uid => this.db.ref(`users/${uid}`);
   users = () => this.db.ref("users");
   userPhoto = uid => this.db.ref(`users/${uid}/photoURL`);
+  userChurch = uid => this.db.ref(`users/${uid}/church`);
 
   // *** Contents API ***
   content = date => this.db.ref(`contents/${date}`);

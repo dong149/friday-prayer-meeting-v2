@@ -1,0 +1,42 @@
+@import "./color.scss";
+@import "./mixin.scss";
+
+@include mobile {
+  .choose-church-intro-wrap {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 30%;
+    margin-bottom: 25px;
+    text-align: center;
+    .choose-church-intro {
+      font-size: 25px;
+    }
+  }
+  .church-profile-wrap {
+    margin: 0 auto;
+    width: 60%;
+    text-align: center;
+    .church-profile-image {
+      width: 100%;
+    }
+    .church-profile-name-wrap {
+      margin-top: 10px;
+      text-align: center;
+      .church-profile-name {
+        font-size: 25px;
+        font-weight: bold;
+      }
+    }
+    .church-profile-address-wrap {
+      text-align: center;
+      .church-profile-address {
+        font-size: 13px;
+      }
+    }
+  }
+}
+@include tablet {
+}
+
+@include desktop {
+}

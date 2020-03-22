@@ -14,10 +14,14 @@ import { withAuthentication } from "./components/Session";
 import WriteForm from "./components/Write";
 import Feed from "./components/Feed";
 import "./styles/main.scss";
+import ChooseChurchPage from "./components/ChooseChurch";
+import { FirebaseContext } from "./Firebase";
 const App = () => (
   <Router>
     <div>
-      <Navigation />
+      <FirebaseContext>
+        {firebase => <Navigation firebase={firebase} />}
+      </FirebaseContext>
       <hr />
       <Route exact path={ROUTES.LANDING} component={HomePage} />
       <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
@@ -28,6 +32,7 @@ const App = () => (
       <Route exact path={ROUTES.ADMIN} component={AdminPage} />
       <Route exact path={ROUTES.WRITE} component={WriteForm} />
       <Route exact path={ROUTES.FEED} component={Feed} />
+      <Route exact path={ROUTES.CHOOSE_CHURCH} component={ChooseChurchPage} />
     </div>
   </Router>
 );

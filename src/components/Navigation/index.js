@@ -1,16 +1,24 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import * as ROUTES from "../../routes";
 import SignOutButton from "../SignOut";
 import { AuthUserContext, withAuthorization } from "../Session";
 import "../../styles/navigation.scss";
+import { withFirebase } from "../../Firebase";
 
 class Navigation extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
   render() {
     return (
       <div>
         <AuthUserContext.Consumer>
-          {authUser => (authUser ? <NavigationAuth /> : <></>)}
+          {authUser =>
+            authUser ? <NavigationAuth firebase={this.props.firebase} /> : <></>
+          }
         </AuthUserContext.Consumer>
       </div>
     );
@@ -21,12 +29,23 @@ class NavigationAuth extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: "hide"
+      visible: "hide",
+      churchImg: ""
     };
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.toggleMenu = this.toggleMenu.bind(this);
   }
-
+  componentDidMount() {
+    this.props.firebase
+      .userChurch(this.props.firebase.doFindCurrentUID())
+      .on("value", snapshot => {
+        if (snapshot.val()) {
+          this.setState({
+            churchImg: `./${snapshot.val()}.png`
+          });
+        }
+      });
+  }
   handleMouseDown(e) {
     this.toggleMenu();
     console.log("clicked");
@@ -44,17 +63,22 @@ class NavigationAuth extends Component {
     }
   }
   render() {
-    const { visible } = this.state;
+    console.log(this.props);
+    const { visible, churchImg } = this.state;
     return (
       <div>
         <div className="navigation">
           <div className="navigation-logo-wrap">
             <Link to={ROUTES.FEED}>
-              <img
-                className="navigation-logo"
-                src="./churchbook.png"
-                alt="logo"
-              />
+              {churchImg ? (
+                <img className="navigation-logo" src={churchImg} alt="logo" />
+              ) : (
+                <img
+                  className="navigation-logo"
+                  src="./churchbook.png"
+                  alt="logo"
+                />
+              )}
             </Link>
           </div>
           <div className="navigation-menu-icon-wrap">

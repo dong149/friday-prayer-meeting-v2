@@ -32,13 +32,14 @@ class SignInGoogleBase extends Component {
         return this.props.firebase.user(socialAuthUser.user.uid).set({
           username: socialAuthUser.user.displayName,
           email: socialAuthUser.user.email,
-          photoURL: socialAuthUser.user.photoURL
+          photoURL: socialAuthUser.user.photoURL,
+          church: socialAuthUser.user.church
           // photoURL: "./defaultProfile.png"
         });
       })
       .then(() => {
         this.setState({ error: null });
-        this.props.history.push(ROUTES.FEED);
+        this.props.history.push(ROUTES.CHOOSE_CHURCH);
       })
       .catch(error => {
         this.setState({ error });
@@ -81,7 +82,7 @@ class SignInFormBase extends Component {
       .then(() => {
         console.log("post check");
         this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.FEED);
+        this.props.history.push(ROUTES.CHOOSE_CHURCH);
       })
       .catch(error => {
         this.setState({ error });

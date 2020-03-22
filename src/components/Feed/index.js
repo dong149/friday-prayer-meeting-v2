@@ -1,4 +1,5 @@
 import React, { Component, useState } from "react";
+import Modal from "react-modal";
 import * as ROUTES from "../../routes";
 import {
   withAuthorization,
@@ -26,6 +27,14 @@ class FeedBase extends Component {
     };
   }
   componentDidMount() {
+    this.props.firebase
+      .userChurch(this.props.firebase.doFindCurrentUID())
+      .on("value", snapshot => {
+        if (!snapshot.val()) {
+          this.props.history.push(ROUTES.CHOOSE_CHURCH);
+        }
+      });
+
     this.setState({ loading: true });
     this.props.firebase.contents().on("value", snapshot => {
       const contentsObject = snapshot.val();
@@ -216,37 +225,10 @@ class Content extends Component {
       content: {},
       commentForm: false,
       commentSize: 0,
-      liked: false
+      liked: false,
+      imgModalOpen: false
     };
   }
-  // handleDate = date => {
-  //   let newdate = date + "";
-  //   let dyear = newdate.substring(0, 4);
-  //   let dmonth = (parseInt(newdate.substring(4, 6)) - 1).toString();
-  //   let dday = newdate.substring(6, 8);
-  //   let dhour = newdate.substring(8, 10);
-  //   let dmin = newdate.substring(10, 12);
-  //   let dsec = newdate.substring(12, 14);
-
-  //   let res = formatDistanceToNow(
-  //     new Date(dyear, dmonth, dday, dhour, dmin, dsec),
-  //     { includeSeconds: true, locale: ko }
-  //   );
-
-  //   let reslen = res.length;
-  //   if (res[reslen - 1] === "만") {
-  //     if (res[1] === "초") {
-  //       res = res.substring(0, 2);
-  //     } else {
-  //       res = res.substring(0, 3);
-  //     }
-  //   }
-  //   // if (res === "1분 미만") {
-  //   //   res = "약 1분";
-  //   // }
-  //   let result = res + " 전";
-  //   return result;
-  // };
   componentDidMount() {
     if (this.props.content.comments) {
       const commentObject = Object.keys(this.props.content.comments);
@@ -291,9 +273,24 @@ class Content extends Component {
           });
       });
   };
+  handleImgModal = () => {
+    this.setState({
+      imgModalOpen: true
+    });
+  };
+  closeImgModal = () => {
+    console.log("closeModal");
+    this.setState({
+      imgModalOpen: false
+    });
+  };
+  // customStyles = {
+  //   content: {
+  //     width: 80
+  //   }
+  // };
   render() {
-    console.log(this.props);
-    const { commentForm, commentSize, liked } = this.state;
+    const { commentForm, commentSize, liked, imgModalOpen } = this.state;
     return (
       <div className="content-wrap" key={this.props.content.date}>
         <div className="content-body-wrap">
@@ -336,12 +333,40 @@ class Content extends Component {
             </span>
           </div>
           {this.props.content.imageURL && (
-            <div className="content-img-wrap">
-              <img
-                className="content-img"
-                src={this.props.content.imageURL}
-                alt="user"
-              />
+            <div>
+              <div
+                className="content-img-wrap"
+                onClick={() => this.handleImgModal()}
+              >
+                <img
+                  className="content-img"
+                  src={this.props.content.imageURL}
+                  alt="user"
+                />
+              </div>
+              <Modal
+                className="imgModal"
+                isOpen={imgModalOpen}
+                onRequestClose={() => this.closeImgModal()}
+                // onAfterOpen={afterOpenModal}
+                // onRequestClose={() => this.closeImgModal()}
+                // style={this.customStyles}
+                ariaHideApp={false}
+                contentLabel="Example Modal"
+              >
+                <div>
+                  <div>
+                    <div onClick={() => this.closeImgModal()}>Close Modal</div>
+                  </div>
+                  <div className="modal-img-wrap">
+                    <img
+                      className="modal-img"
+                      src={this.props.content.imageURL}
+                      alt="user"
+                    />
+                  </div>
+                </div>
+              </Modal>
             </div>
           )}
           <div className="content-footer">
@@ -362,31 +387,25 @@ class Content extends Component {
             <div className="content-footer-bottom-wrap">
               <div className="content-footer-bottom-like-wrap">
                 {liked ? (
-                  <button onClick="">
+                  <div onClick="">
                     <span className="content-footer-bottom-like-text">
                       눌렀어요
                     </span>
-                  </button>
+                  </div>
                 ) : (
-                  <button onClick={() => this.setLike()}>
+                  <div onClick={() => this.setLike()}>
                     <span className="content-footer-bottom-like-text">
                       좋아요
                     </span>
-                  </button>
+                  </div>
                 )}
               </div>
               <div className="content-footer-bottom-comment-wrap">
-                <button onClick={() => this.setCommentForm(!commentForm)}>
-                  {/* <input
-                className="chk-write"
-                value={commentForm}
-                type="checkbox"
-                onChange={() => setCommentForm(!commentForm)}
-              /> */}
+                <div onClick={() => this.setCommentForm(!commentForm)}>
                   <span className="content-footer-bottom-comment-text">
                     댓글 달기
                   </span>
-                </button>
+                </div>
               </div>
             </div>
             {/* 댓글 창 */}
