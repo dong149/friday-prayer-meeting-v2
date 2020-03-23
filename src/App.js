@@ -13,6 +13,7 @@ import AdminPage from "./components/Admin";
 import { withAuthentication } from "./components/Session";
 import WriteForm from "./components/Write";
 import Feed from "./components/Feed";
+import FridayPrayer from "./components/FridayPrayer";
 import "./styles/main.scss";
 import ChooseChurchPage from "./components/ChooseChurch";
 import { FirebaseContext } from "./Firebase";
@@ -23,16 +24,22 @@ const App = () => (
         {firebase => <Navigation firebase={firebase} />}
       </FirebaseContext>
       <hr />
+      {/* nonAuth */}
       <Route exact path={ROUTES.LANDING} component={HomePage} />
       <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
       <Route exact path={ROUTES.SIGN_IN} component={HomePage} />
       <Route exact path={ROUTES.PASSWORD_FORGET} component={Join} />
       <Route exact path={ROUTES.HOME} component={HomePage} />
+
+      {/* onAuth */}
       <Route exact path={ROUTES.PROFILE} component={ProfilePage} />
       <Route exact path={ROUTES.ADMIN} component={AdminPage} />
       <Route exact path={ROUTES.WRITE} component={WriteForm} />
       <Route exact path={ROUTES.FEED} component={Feed} />
       <Route exact path={ROUTES.CHOOSE_CHURCH} component={ChooseChurchPage} />
+
+      {/* 창대교회 금요기도회 기능 */}
+      <Route exact path={ROUTES.FRIDAY_PRAYER} component={FridayPrayer} />
     </div>
   </Router>
 );

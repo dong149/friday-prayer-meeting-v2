@@ -104,7 +104,7 @@ class ChooseChurchPage extends Component {
         </div>
         <div
           className="church-profile-wrap"
-          onClick={() => this.handleSubmit("IlsanChangDae")}
+          onClick={() => this.handleSubmit("ilsanchangdae")}
         >
           <img
             className="church-profile-image"

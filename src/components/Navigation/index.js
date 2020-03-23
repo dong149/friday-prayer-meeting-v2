@@ -30,7 +30,8 @@ class NavigationAuth extends Component {
     super(props);
     this.state = {
       visible: "hide",
-      churchImg: ""
+      churchImg: "",
+      church: ""
     };
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.toggleMenu = this.toggleMenu.bind(this);
@@ -41,7 +42,8 @@ class NavigationAuth extends Component {
       .on("value", snapshot => {
         if (snapshot.val()) {
           this.setState({
-            churchImg: `./${snapshot.val()}.png`
+            churchImg: `./${snapshot.val()}.png`,
+            church: snapshot.val()
           });
         }
       });
@@ -64,7 +66,7 @@ class NavigationAuth extends Component {
   }
   render() {
     console.log(this.props);
-    const { visible, churchImg } = this.state;
+    const { visible, churchImg, church } = this.state;
     return (
       <div>
         <div className="navigation">
@@ -101,27 +103,36 @@ class NavigationAuth extends Component {
             // onMouseDown={this.handleMouseDown}
           >
             <span className="menu-visible-header-text">
-              후원 받습니다.
+              후원 감사합니다:)
               <br />
               예금주 : 류동훈
               <br />
-              010-4288-3243
+              신한
+              <br />
+              110157486449
             </span>
           </div>
           <div className="menu-visible-link-wrap" onMouseDown="">
-            {/* <div className="menu-visible-link">
-              <Link to={ROUTES.HOME} className="menu-visible-link-text">
-                <span className="menu-visible-span">Home</span>
-              </Link>
-            </div> */}
+            {church === "ilsanchangdae" ? (
+              <div className="menu-visible-link">
+                <Link
+                  to={ROUTES.FRIDAY_PRAYER}
+                  className="menu-visible-link-text"
+                >
+                  <span className="menu-visible-span">금요기도회</span>
+                </Link>
+              </div>
+            ) : (
+              <></>
+            )}
             <div className="menu-visible-link">
               <Link to={ROUTES.WRITE} className="menu-visible-link-text">
-                <span className="menu-visible-span">Write</span>
+                <span className="menu-visible-span">글작성하기</span>
               </Link>
             </div>
             <div className="menu-visible-link">
               <Link to={ROUTES.FEED} className="menu-visible-link-text">
-                <span className="menu-visible-span">Feed</span>
+                <span className="menu-visible-span">뉴스피드</span>
               </Link>
             </div>
             {/* <div className="menu-visible-link">
@@ -136,7 +147,7 @@ class NavigationAuth extends Component {
             </div>
             <div className="menu-visible-link">
               <Link to={ROUTES.ADMIN} className="menu-visible-link-text">
-                <span className="menu-visible-span">Admin</span>
+                <span className="menu-visible-span">관리자</span>
               </Link>
             </div>
             <div className="menu-visible-link">

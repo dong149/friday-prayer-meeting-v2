@@ -53,6 +53,12 @@ class Firebase {
   content = date => this.db.ref(`contents/${date}`);
   contents = () => this.db.ref(`contents`);
 
+  // IlsanChangDae FridayContent
+  contentFridayPrayer = (church, date) =>
+    this.db.ref(`${church}/contents/fridayprayer/${date}`);
+  contentFridayPrayers = church =>
+    this.db.ref(`${church}/contents/fridayprayer`);
+
   // *** Images API ***
   image = name => this.storage.ref(`images/${name}`);
   images = () => this.storage.ref(`images`);

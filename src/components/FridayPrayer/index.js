@@ -6,24 +6,26 @@ import {
   AuthUserContext,
   withAuthentication
 } from "../Session";
-import "../../styles/feed.scss";
+import "../../styles/fridayprayer.scss";
 import { WindMillLoading } from "react-loadingg";
 import _ from "lodash";
 import { format, formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { FirebaseContext } from "../../Firebase";
+import Fullscreen from "react-full-screen";
 const INITIAL_STATE = {
   loading: false,
   comments: [],
   comment: "",
   error: null
 };
-class FeedBase extends Component {
+class FridayPrayerBase extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: false,
-      contents: []
+      contents: [],
+      isFull: false
     };
   }
   componentDidMount() {
@@ -46,34 +48,46 @@ class FeedBase extends Component {
             });
         }
       });
+    let church = "";
     this.setState({ loading: true });
-    this.props.firebase.contents().on("value", snapshot => {
-      if (!snapshot.val()) {
-        this.setState({
-          contents: [],
-          loading: false
-        });
-        alert("비어있습니다. 작성해주세요.");
-        return;
-      }
-      const contentsObject = snapshot.val();
-      const contentsList = Object.keys(contentsObject).map(key => ({
-        ...contentsObject[key]
-      }));
+    this.props.firebase
+      .userChurch(this.props.firebase.doFindCurrentUID())
+      .once("value", snapshot => {
+        church = snapshot.val();
+      })
+      .then(() => {
+        this.props.firebase
+          .contentFridayPrayers(church)
+          .on("value", snapshot => {
+            if (!snapshot.val()) {
+              this.setState({
+                contents: [],
+                loading: false
+              });
+              alert("비어있습니다. 작성해주세요.");
+              return;
+            }
+            const contentsObject = snapshot.val();
+            const contentsList = Object.keys(contentsObject).map(key => ({
+              ...contentsObject[key]
+            }));
 
-      // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
-      _.reverse(contentsList);
-      // console.log(contentsList);
-      this.setState({
-        contents: contentsList,
-        loading: false
+            // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
+            _.reverse(contentsList);
+            // console.log(contentsList);
+            this.setState({
+              contents: contentsList,
+              loading: false
+            });
+          });
       });
-    });
   }
   componentWillUnmount() {
     this.props.firebase.contents().off();
   }
-
+  goFull = () => {
+    this.setState({ isFull: true });
+  };
   render() {
     const { contents, loading } = this.state;
     return loading ? (
@@ -82,13 +96,114 @@ class FeedBase extends Component {
       </div>
     ) : (
       <div className="feed">
+        <div className="friday-prayer-img-wrap">
+          <img
+            className="friday-prayer-img"
+            src="./fridayprayer.png"
+            alt="fridayprayer"
+          />
+        </div>
+        <FridayInputForm firebase={this.props.firebase} />
         <AuthUserContext.Consumer>
           {authUser => <ContentList contents={contents} />}
         </AuthUserContext.Consumer>
+        <div className="App">
+          <button onClick={this.goFull}>Go Fullscreen</button>
+
+          <Fullscreen
+            enabled={this.state.isFull}
+            onChange={isFull => this.setState({ isFull })}
+          >
+            <img src="./defaultProfile.png" alt="test" />
+            <span className="test">1.행복하도록.</span>
+            <span className="test">2.연애하도록.</span>
+
+            <div className="full-screenable-node">
+              Hi! This may cover the entire monitor.
+            </div>
+          </Fullscreen>
+        </div>
       </div>
     );
   }
 }
+const INITIAL_STATE_INPUT = {
+  prayContent: "",
+  loading: false,
+  name: "",
+  uid: ""
+};
+class FridayInputForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      ...INITIAL_STATE_INPUT
+    };
+  }
+  onSubmit = async () => {
+    try {
+      this.setState({ loading: true });
+      const { prayContent } = this.state;
+      const uid = this.props.firebase.doFindCurrentUID();
+      const name = this.props.firebase.doFindCurrentUserName();
+      const date = format(new Date(), "yyyyMMddHHmmss");
+      let church;
+      this.props.firebase
+        .userChurch(uid)
+        .once("value", snapshot => {
+          church = snapshot.val();
+        })
+        .then(() => {
+          console.log(church);
+          this.props.firebase.contentFridayPrayer(church, date).set({
+            church: church,
+            name: name,
+            uid: uid,
+            date: date,
+            content: prayContent,
+            like: 0,
+            comments: []
+          });
+        })
+        .then(() => {
+          alert("성공적으로 제출되었습니다");
+          this.setState({
+            ...INITIAL_STATE_INPUT
+          });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  onChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+  render() {
+    return (
+      <div className="pray-form-wrap">
+        <div className="pray-content-wrap">
+          <textarea
+            className="form-control"
+            name="prayContent"
+            required={true}
+            onChange={this.onChange}
+            rows="5"
+            placeholder="기도제목을 번호로 나눠서 작성해주세요.&#13;&#10;ex)&#13;&#10;1.가족 건강하도록. .&#13;&#10;2.코로나가 하루빨리 해결되도록.&#13;&#10;3.지혜와 체력주시도록."
+          ></textarea>
+        </div>
+        <div className="pray-content-btn-wrap">
+          <div
+            className="btn btn-success pray-content-btn"
+            onClick={() => this.onSubmit()}
+          >
+            제출하기
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
 // 언제 게시되었는지를 알려주는 함수입니다.
 export const handleDate = date => {
   let dyear = parseInt(date.substring(0, 4));
@@ -471,8 +586,8 @@ class ContentProfile extends Component {
 const authCondition = authUser => !!authUser;
 
 withAuthentication(ContentProfile);
-const Feed = withAuthorization(authCondition)(FeedBase);
+const FridayPrayer = withAuthorization(authCondition)(FridayPrayerBase);
 // const CommentForm = withAuthorization(authCondition)(CommentFormBase);
 // withAuthentication(CommentFormBase);
 
-export default Feed;
+export default FridayPrayer;

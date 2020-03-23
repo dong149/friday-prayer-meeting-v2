@@ -8,3 +8,7 @@ export const PASSWORD_FORGET = "/pw-forget";
 export const WRITE = "/write";
 export const FEED = "/feed";
 export const CHOOSE_CHURCH = "/choose-church";
+
+// 창대교회 금요기도회 기능
+
+export const FRIDAY_PRAYER = "/friday-prayer";
