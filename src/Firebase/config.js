@@ -23,6 +23,7 @@ class Firebase {
     this.db = app.database();
     this.storage = app.storage();
     this.googleProvider = new app.auth.GoogleAuthProvider();
+    this.facebookProvider = new app.auth.FacebookAuthProvider();
   }
   // *** Auth API ***
   doCreateUserWithEmailAndPassword = (email, password) =>
@@ -37,6 +38,7 @@ class Firebase {
   doInfoCurrentUser = () => this.auth.currentUser;
   // *** Auth Google ***
   doSignInWithGoogle = () => this.auth.signInWithPopup(this.googleProvider);
+  doSignInWithFacebook = () => this.auth.signInWithPopup(this.facebookProvider);
 
   doUpdateUserProfile = URL =>
     this.auth.currentUser.updateProfile({ photoURL: URL });

@@ -1,6 +1,6 @@
 import React from "react";
 import "../../styles/home.scss";
-import { SignInForm, SignInGoogleForm } from "../SignIn";
+import { SignInForm, SignInGoogleForm, SignInFacebookForm } from "../SignIn";
 import SignUpPage, { SignUpLink } from "../SignUp/signUpForm";
 import { Router, Route, Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -18,6 +18,7 @@ const HomePage = () => (
           </div>
           <SignInForm />
           <SignInGoogleForm />
+          {/* <SignInFacebookForm /> */}
 
           {/* <div className="officialContent-wrap">여기는 공지사항입니다.</div> */}
         </div>

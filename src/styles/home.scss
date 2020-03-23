@@ -77,6 +77,14 @@
       margin-top: 20%;
     }
   }
+  .signin-question-wrap {
+    margin: 0 auto;
+    width: 60%;
+    text-align: center;
+    .signin-question {
+      font-size: 15px;
+    }
+  }
   .input-wrap {
     width: 60%;
     margin: 0 auto;
@@ -87,9 +95,46 @@
       margin-bottom: 3px;
     }
     .input-login {
+      border: none;
       background-color: $tadaGrey;
       width: 100%;
     }
+  }
+  .input-submit-wrap {
+    margin: 0 auto;
+    width: 60%;
+    text-align: center;
+    .input-submit {
+      background-color: white;
+      border: none;
+      border-radius: 10px;
+      width: 50%;
+      margin-top: 20px;
+      color: $black;
+    }
+  }
+  .login-btn-wrap {
+    margin: 0 auto;
+    width: 60%;
+    margin-top: 20px;
+    text-align: center;
+    .google-btn-wrap {
+      .google-btn {
+        width: 100%;
+      }
+    }
+    .kakao-btn-wrap {
+      margin-top: 10px;
+      .kakao-btn {
+        width: 97%;
+      }
+    }
+  }
+  .officialContent-wrap {
+    margin-top: 30%;
+    width: 100%;
+    height: 500px;
+    background-color: $indigo;
   }
 }
 
@@ -101,6 +146,14 @@
       margin-top: 20%;
     }
   }
+  .signin-question-wrap {
+    margin: 0 auto;
+    width: 60%;
+    text-align: center;
+    .signin-question {
+      font-size: 15px;
+    }
+  }
   .input-wrap {
     width: 60%;
     margin: 0 auto;
@@ -111,8 +164,45 @@
       margin-bottom: 3px;
     }
     .input-login {
+      border: none;
       background-color: $tadaGrey;
       width: 100%;
     }
+  }
+  .input-submit-wrap {
+    margin: 0 auto;
+    width: 60%;
+    text-align: center;
+    .input-submit {
+      background-color: white;
+      border: none;
+      border-radius: 10px;
+      width: 50%;
+      margin-top: 20px;
+      color: $black;
+    }
+  }
+  .login-btn-wrap {
+    margin: 0 auto;
+    width: 60%;
+    margin-top: 20px;
+    text-align: center;
+    .google-btn-wrap {
+      .google-btn {
+        width: 100%;
+      }
+    }
+    .kakao-btn-wrap {
+      margin-top: 10px;
+      .kakao-btn {
+        width: 97%;
+      }
+    }
+  }
+  .officialContent-wrap {
+    margin-top: 30%;
+    width: 100%;
+    height: 500px;
+    background-color: $indigo;
   }
 }

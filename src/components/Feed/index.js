@@ -34,7 +34,18 @@ class FeedBase extends Component {
           this.props.history.push(ROUTES.CHOOSE_CHURCH);
         }
       });
-
+    this.props.firebase
+      .userPhoto(this.props.firebase.doFindCurrentUID())
+      .once("value", snapshot => {
+        const photoURL = snapshot.val();
+        if (!photoURL) {
+          this.props.firebase
+            .user(this.props.firebase.doFindCurrentUID())
+            .update({
+              photoURL: "./defaultProfile.png"
+            });
+        }
+      });
     this.setState({ loading: true });
     this.props.firebase.contents().on("value", snapshot => {
       const contentsObject = snapshot.val();

@@ -6,6 +6,7 @@ import * as ROUTES from "../../routes";
 import SignUpPage, { SignUpLink } from "../SignUp/signUpForm";
 import { Router, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Script from "react-load-script";
 const SignInPage = () => (
   <div>
     <h1>SignIn</h1>
@@ -25,7 +26,7 @@ class SignInGoogleBase extends Component {
     this.state = { error: null };
   }
 
-  onSubmit = event => {
+  onSubmit = () => {
     this.props.firebase
       .doSignInWithGoogle()
       .then(socialAuthUser => {
@@ -34,7 +35,6 @@ class SignInGoogleBase extends Component {
           email: socialAuthUser.user.email,
           photoURL: socialAuthUser.user.photoURL,
           church: socialAuthUser.user.church
-          // photoURL: "./defaultProfile.png"
         });
       })
       .then(() => {
@@ -45,26 +45,82 @@ class SignInGoogleBase extends Component {
         this.setState({ error });
         console.log(error);
       });
-    event.preventDefault();
+    // event.preventDefault();
   };
 
   render() {
     const { error } = this.state;
     return (
-      <form onSubmit={this.onSubmit}>
+      <div className="login-btn-wrap">
+        <div className="google-btn-wrap" onClick={() => this.onSubmit()}>
+          <img
+            className="google-btn"
+            src="/google_login-btn.png"
+            alt="login-kakao"
+          />
+
+          {error && <p>{error.message}</p>}
+        </div>
+      </div>
+    );
+  }
+}
+class SignInFacebookBase extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { error: null };
+  }
+
+  onSubmit = () => {
+    this.props.firebase
+      .doSignInFacebookGoogle()
+      .then(socialAuthUser => {
+        console.log(socialAuthUser);
+        return this.props.firebase.user(socialAuthUser.user.uid).set({
+          username: socialAuthUser.user.displayName,
+          email: socialAuthUser.user.email,
+          photoURL: socialAuthUser.user.photoURL,
+          church: socialAuthUser.user.church
+        });
+      })
+      .then(() => {
+        this.setState({ error: null });
+        this.props.history.push(ROUTES.CHOOSE_CHURCH);
+      })
+      .catch(error => {
+        this.setState({ error });
+        console.log(error);
+      });
+    // event.preventDefault();
+  };
+
+  render() {
+    const { error } = this.state;
+    return (
+      <>
         <div className="login-btn-wrap">
           <div className="google-btn-wrap">
-            <button type="submit">
-              <img
-                className="google-btn"
-                src="/google_login-btn.png"
-                alt="login-kakao"
-              />
-            </button>
+            <div
+              onClick={() => this.onSubmit()}
+              class="fb-login-button"
+              data-width=""
+              data-size="large"
+              data-button-type="continue_with"
+              data-layout="default"
+              data-auto-logout-link="false"
+              data-use-continue-as="false"
+            ></div>
             {error && <p>{error.message}</p>}
           </div>
         </div>
-      </form>
+        <div id="fb-root"></div>
+        <Script
+          async
+          defer
+          crossorigin="anonymous"
+          url="https://connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v6.0&appId=145309246846494&autoLogAppEvents=1"
+        />
+      </>
     );
   }
 }
@@ -161,6 +217,11 @@ class SignInFormBase extends Component {
 
 const SignInForm = compose(withRouter, withFirebase)(SignInFormBase);
 const SignInGoogleForm = compose(withRouter, withFirebase)(SignInGoogleBase);
+const SignInFacebookForm = compose(
+  withRouter,
+  withFirebase
+)(SignInFacebookBase);
 export default SignInPage;
 export { SignInForm };
 export { SignInGoogleForm };
+export { SignInFacebookForm };
