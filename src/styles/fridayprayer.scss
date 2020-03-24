@@ -20,7 +20,34 @@
     margin-inline-start: 0px;
     margin-inline-end: 0px;
   }
+  // .fullsceen-wrap {
+  //   .fullscreen {
+  //     .fullscreen-content-wrap {
+  //       .fullscreen-content-name {
+  //         font-size: 50px;
+  //         color: white;
+  //         font-weight: bold;
+  //       }
+  //       .fullscreen-content-content {
+  //         font-size: 40px;
+  //         color: white;
+  //       }
+  //     }
+  //   }
+  // }
+  .fullscreen-content-wrap {
+    text-align: center;
 
+    .fullscreen-content-name {
+      font-size: 50px;
+      color: white;
+      font-weight: bold;
+    }
+    .fullscreen-content-content {
+      font-size: 40px;
+      color: white;
+    }
+  }
   .feed {
     width: 100%;
     background-color: #eaebee;
@@ -52,6 +79,7 @@
         }
       }
     }
+
     .content-wrap {
       margin: 0 0 8px;
       position: relative;
@@ -136,6 +164,7 @@
           padding: 0 10px;
 
           .content-content {
+            white-space: pre-line;
             margin-bottom: 0;
             margin: 0;
             padding: 0;
@@ -225,58 +254,40 @@
             }
           }
         }
-        // <div className="content-footer-bottom-wrap">
-        //       <div className="content-footer-bottom-like-wrap">
-        //         <span className="content-footer-bottom-like-text">좋아요</span>
-        //       </div>
-        //       <div className="content-footer-bottom-comment-wrap">
-        //         <span className="content-footer-bottom-comment-text">
-        //           댓글 달기
-        //         </span>
-        //       </div>
-        //     </div>
-        // <div className="content-footer">
-        //   <div className="content-footer-top-wrap-wrap">
-        //     <div className="content-footer-top-wrap">
-        //       <div className="content-footer-top-like">
-        //         <span className="content-footer-top-like-text">좋아요 10명</span>
-        //       </div>
-        //       <div className="content-footer-top-comment">
-        //         <span className="content-footer-top-comment-text">댓글 1개</span>
-        //       </div>
-        //     </div>
-        //   </div>
-        //   <div className="content-footer-bottom-wrap"></div>
-        // </div>
-      }
-    }
-  }
-  .imgModal {
-    position: absolute;
-    top: 40px;
-    left: 40px;
-    right: 40px;
-    bottom: 40px;
-    background-color: $tadaGrey;
-    vertical-align: middle;
-    text-align: center;
-    .modal-img-wrap {
-      margin: 0 auto;
-      text-align: center;
-      width: 100%;
-      .modal-img {
-        width: 100%;
-        // background-size: 100% 100%;
       }
     }
   }
 }
 @include tablet {
+  .fullscreen-content-wrap {
+    text-align: center;
+
+    .fullscreen-content-name {
+      font-size: 50px;
+      color: white;
+      font-weight: bold;
+    }
+    .fullscreen-content-content {
+      font-size: 40px;
+      color: white;
+    }
+  }
 }
 
 @include desktop {
-  .test {
-    font-size: 50px;
-    color: white;
+  .fullscreen-content-wrap {
+    text-align: center;
+
+    .fullscreen-content-name {
+      font-size: 80px;
+      color: white;
+      font-weight: bold;
+    }
+    .fullscreen-content-content {
+      margin-top: 30px;
+      font-size: 40px;
+      color: white;
+      white-space: pre-line;
+    }
   }
 }

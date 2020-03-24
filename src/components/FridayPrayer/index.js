@@ -13,12 +13,18 @@ import { format, formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { FirebaseContext } from "../../Firebase";
 import Fullscreen from "react-full-screen";
+import AwesomeSlider from "react-awesome-slider";
+import AwesomeSliderStyles from "react-awesome-slider/src/styles";
+import withAutoplay from "react-awesome-slider/dist/autoplay";
+// import "react-awesome-slider/dist/styles.css";
+
 const INITIAL_STATE = {
   loading: false,
   comments: [],
   comment: "",
   error: null
 };
+const AutoplaySlider = withAutoplay(AwesomeSlider);
 class FridayPrayerBase extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +34,7 @@ class FridayPrayerBase extends Component {
       isFull: false
     };
   }
+
   componentDidMount() {
     this.props.firebase
       .userChurch(this.props.firebase.doFindCurrentUID())
@@ -107,31 +114,118 @@ class FridayPrayerBase extends Component {
         <AuthUserContext.Consumer>
           {authUser => <ContentList contents={contents} />}
         </AuthUserContext.Consumer>
-        <div className="App">
+
+        <div className="fullscreen-wrap">
           <button onClick={this.goFull}>Go Fullscreen</button>
 
           <Fullscreen
+            className="fullscreen"
             enabled={this.state.isFull}
             onChange={isFull => this.setState({ isFull })}
           >
-            <img src="./defaultProfile.png" alt="test" />
-            <span className="test">1.행복하도록.</span>
-            <span className="test">2.연애하도록.</span>
-
-            <div className="full-screenable-node">
-              Hi! This may cover the entire monitor.
-            </div>
+            <AutoplaySlider
+              // cssModule={}
+              // className="fullscreen-slide"
+              play={true}
+              cancelOnInteraction={false} // should stop playing on user interaction
+              interval={1500}
+            >
+              {contents.map(content => (
+                <div className="fullscreen-content-wrap" style={{}}>
+                  {content.name && (
+                    <div
+                      className="fullscreen-content-name"
+                      // style={{ fontSize: "50px", color: "white" }}
+                    >
+                      {content.name}
+                    </div>
+                  )}
+                  <div className="fullscreen-content-content">
+                    {content.content}
+                  </div>
+                </div>
+              ))}
+            </AutoplaySlider>
+            <AutoplaySlider
+              // cssModule={}
+              // className="fullscreen-slide"
+              play={true}
+              cancelOnInteraction={false} // should stop playing on user interaction
+              interval={5000}
+            >
+              <div>아아</div>
+              <div>오오</div>
+              <div>이이</div>
+            </AutoplaySlider>
           </Fullscreen>
         </div>
       </div>
     );
   }
 }
+// class SlidePrayContent extends Component{
+//   constructor(props){
+//     super(props);
+//     this.state=({
+
+//     })
+//   }
+//   render(){
+
+//     return();
+//   }
+
+// }
+// const SlidePrayContentList = ({ contents }) => {
+//   // const res = contents.map(content => {
+//     return (
+//       // <FirebaseContext>
+//       //   {firebase => <SlidePrayContent content={content} firebase={firebase} />}
+//       // </FirebaseContext>
+//       <AutoplaySlider
+//         cssModule={AwesomeSliderStyles}
+//         play={true}
+//         cancelOnInteraction={false} // should stop playing on user interaction
+//         interval={1000}
+//       >
+//         {contents.map(content=>{
+//         <SlidePrayContent content={content} />
+//         })}
+//       </AutoplaySlider>
+//     );
+//   // });
+//   // return res;
+// };
+
+// class SlidePrayContent extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       content: {},
+//       commentForm: false,
+//       commentSize: 0,
+//       liked: false,
+//       imgModalOpen: false,
+//       contentOpen: false
+//     };
+//   }
+//   componentDidMount() {
+//     this.setState({ content: this.props.content });
+//   }
+//   render() {
+//     const { content } = this.state;
+//     console.log(content.content);
+
+//     return <div className="test">{this.props.content.content}</div>;
+//   }
+// }
+
 const INITIAL_STATE_INPUT = {
   prayContent: "",
   loading: false,
   name: "",
-  uid: ""
+  uid: "",
+  prayFormOpen: false
 };
 class FridayInputForm extends Component {
   constructor(props) {
@@ -141,9 +235,13 @@ class FridayInputForm extends Component {
     };
   }
   onSubmit = async () => {
+    const { prayContent } = this.state;
+    if (prayContent === "") {
+      alert("글을 작성해주세요.");
+      return;
+    }
     try {
       this.setState({ loading: true });
-      const { prayContent } = this.state;
       const uid = this.props.firebase.doFindCurrentUID();
       const name = this.props.firebase.doFindCurrentUserName();
       const date = format(new Date(), "yyyyMMddHHmmss");
@@ -178,27 +276,65 @@ class FridayInputForm extends Component {
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
+  handleprayFormOpen = () => {
+    const { prayFormOpen } = this.state;
+    this.setState({
+      prayFormOpen: !prayFormOpen
+    });
+  };
   render() {
+    const { prayContent, prayFormOpen } = this.state;
     return (
-      <div className="pray-form-wrap">
-        <div className="pray-content-wrap">
-          <textarea
-            className="form-control"
-            name="prayContent"
-            required={true}
-            onChange={this.onChange}
-            rows="5"
-            placeholder="기도제목을 번호로 나눠서 작성해주세요.&#13;&#10;ex)&#13;&#10;1.가족 건강하도록. .&#13;&#10;2.코로나가 하루빨리 해결되도록.&#13;&#10;3.지혜와 체력주시도록."
-          ></textarea>
-        </div>
-        <div className="pray-content-btn-wrap">
+      <div>
+        {prayFormOpen ? (
+          <div className="pray-form-wrap">
+            <div className="pray-content-wrap">
+              <textarea
+                className="form-control"
+                name="prayContent"
+                required={true}
+                value={prayContent}
+                onChange={this.onChange}
+                rows="5"
+                placeholder="기도제목을 번호로 나눠서 작성해주세요.&#13;&#10;ex)&#13;&#10;1.가족 건강하도록. .&#13;&#10;2.코로나가 하루빨리 해결되도록.&#13;&#10;3.지혜와 체력주시도록."
+              ></textarea>
+            </div>
+            <div className="pray-content-btn-wrap">
+              <div
+                className="btn btn-success pray-content-btn"
+                onClick={() => this.onSubmit()}
+              >
+                제출하기
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="pray-content-btn-wrap">
+            <div
+              className="btn btn-danger pray-content-btn"
+              onClick={() => this.handleprayFormOpen()}
+            >
+              작성하기
+            </div>
+          </div>
+        )}
+        {prayFormOpen ? (
           <div
             className="btn btn-success pray-content-btn"
-            onClick={() => this.onSubmit()}
+            onClick={() => this.handleprayFormOpen()}
           >
-            제출하기
+            슬라이드쇼
           </div>
-        </div>
+        ) : (
+          <div className="pray-content-btn-wrap">
+            <div
+              className="btn btn-danger pray-content-btn"
+              onClick={() => this.handleprayFormOpen()}
+            >
+              슬라이드쇼
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -360,7 +496,8 @@ class Content extends Component {
       commentForm: false,
       commentSize: 0,
       liked: false,
-      imgModalOpen: false
+      imgModalOpen: false,
+      contentOpen: false
     };
   }
   componentDidMount() {
@@ -418,34 +555,23 @@ class Content extends Component {
       imgModalOpen: false
     });
   };
-  // customStyles = {
-  //   content: {
-  //     width: 80
-  //   }
-  // };
+
+  handleContentOpen = () => {
+    const { contentOpen } = this.state;
+    this.setState({
+      contentOpen: !contentOpen
+    });
+  };
   render() {
-    const { commentForm, commentSize, liked, imgModalOpen } = this.state;
+    const { contentOpen } = this.state;
     return (
       <div className="content-wrap" key={this.props.content.date}>
         <div className="content-body-wrap">
-          <div className="content-header">
-            <div className="content-profile-wrap-wrap">
-              <div className="content-profile-wrap">
-                <FirebaseContext.Consumer>
-                  {firebase => (
-                    <ContentProfile
-                      firebase={firebase}
-                      uid={this.props.content.uid}
-                    />
-                  )}
-                </FirebaseContext.Consumer>
-                {/* <img
-                className="content-profile"
-                src="./ironman.jpg"
-                alt="iron-man"
-              /> */}
-              </div>
-            </div>
+          <div
+            className="content-header"
+            onClick={() => this.handleContentOpen()}
+          >
+            <div className="content-profile-wrap-wrap"></div>
             <div className="content-title-wrap-wrap-wrap">
               <div className="content-title-wrap-wrap">
                 <div className="content-title-wrap">
@@ -461,131 +587,23 @@ class Content extends Component {
               </div>
             </div>
           </div>
-          <div className="content-content-wrap">
-            <span>
-              <p className="content-content">{this.props.content.content}</p>
-            </span>
-          </div>
-          {this.props.content.imageURL && (
-            <div>
-              <div
-                className="content-img-wrap"
-                onClick={() => this.handleImgModal()}
-              >
-                <img
-                  className="content-img"
-                  src={this.props.content.imageURL}
-                  alt="user"
-                />
+          {contentOpen && (
+            <div
+              className="content-content-wrap"
+              onClick={() => this.handleContentOpen()}
+            >
+              <div className="content-content">
+                {this.props.content.content}
               </div>
-              <Modal
-                className="imgModal"
-                isOpen={imgModalOpen}
-                onRequestClose={() => this.closeImgModal()}
-                // onAfterOpen={afterOpenModal}
-                // onRequestClose={() => this.closeImgModal()}
-                // style={this.customStyles}
-                ariaHideApp={false}
-                contentLabel="Example Modal"
-              >
-                <div>
-                  <div>
-                    <div onClick={() => this.closeImgModal()}>Close Modal</div>
-                  </div>
-                  <div className="modal-img-wrap">
-                    <img
-                      className="modal-img"
-                      src={this.props.content.imageURL}
-                      alt="user"
-                    />
-                  </div>
-                </div>
-              </Modal>
             </div>
           )}
-          <div className="content-footer">
-            <div className="content-footer-top-wrap-wrap">
-              <div className="content-footer-top-wrap">
-                <div className="content-footer-top-like">
-                  <span className="content-footer-top-like-text">
-                    좋아요 {this.props.content.like}명
-                  </span>
-                </div>
-                <div className="content-footer-top-comment">
-                  <span className="content-footer-top-comment-text">
-                    댓글 {commentSize}개
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="content-footer-bottom-wrap">
-              <div className="content-footer-bottom-like-wrap">
-                {liked ? (
-                  <div onClick="">
-                    <span className="content-footer-bottom-like-text">
-                      눌렀어요
-                    </span>
-                  </div>
-                ) : (
-                  <div onClick={() => this.setLike()}>
-                    <span className="content-footer-bottom-like-text">
-                      좋아요
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div className="content-footer-bottom-comment-wrap">
-                <div onClick={() => this.setCommentForm(!commentForm)}>
-                  <span className="content-footer-bottom-comment-text">
-                    댓글 달기
-                  </span>
-                </div>
-              </div>
-            </div>
-            {/* 댓글 창 */}
-            {commentForm && (
-              <FirebaseContext.Consumer>
-                {firebase => (
-                  <CommentFormBase
-                    date={this.props.content.date}
-                    firebase={firebase}
-                  />
-                )}
-              </FirebaseContext.Consumer>
-            )}
-          </div>
         </div>
       </div>
     );
   }
 }
 
-class ContentProfile extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { imageURL: "" };
-  }
-  componentDidMount() {
-    this.props.firebase.userPhoto(this.props.uid).once("value", snapshot => {
-      const imageURL = snapshot.val();
-      this.setState({
-        imageURL
-      });
-    });
-  }
-  render() {
-    const { imageURL } = this.state;
-    return (
-      <>
-        <img className="content-profile" src={imageURL} alt="iron-man" />
-      </>
-    );
-  }
-}
-
 const authCondition = authUser => !!authUser;
-
-withAuthentication(ContentProfile);
 const FridayPrayer = withAuthorization(authCondition)(FridayPrayerBase);
 // const CommentForm = withAuthorization(authCondition)(CommentFormBase);
 // withAuthentication(CommentFormBase);

@@ -16,6 +16,7 @@
     "lodash": "^4.17.15",
     "node-sass": "^4.13.1",
     "react": "^16.13.0",
+    "react-awesome-slider": "^4.1.0",
     "react-dom": "^16.13.0",
     "react-exif-orientation-img": "^0.1.5",
     "react-full-screen": "^0.2.4",
