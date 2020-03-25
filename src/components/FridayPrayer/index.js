@@ -31,7 +31,8 @@ class FridayPrayerBase extends Component {
     this.state = {
       loading: false,
       contents: [],
-      isFull: false
+      isFull: false,
+      prayFormOpen: false
     };
   }
 
@@ -95,8 +96,14 @@ class FridayPrayerBase extends Component {
   goFull = () => {
     this.setState({ isFull: true });
   };
+  handleprayFormOpen = () => {
+    const { prayFormOpen } = this.state;
+    this.setState({
+      prayFormOpen: !prayFormOpen
+    });
+  };
   render() {
-    const { contents, loading } = this.state;
+    const { contents, loading, prayFormOpen } = this.state;
     return loading ? (
       <div>
         <WindMillLoading size="large" color="#5B5BDC" />
@@ -110,25 +117,19 @@ class FridayPrayerBase extends Component {
             alt="fridayprayer"
           />
         </div>
-        <FridayInputForm firebase={this.props.firebase} />
-        <AuthUserContext.Consumer>
-          {authUser => <ContentList contents={contents} />}
-        </AuthUserContext.Consumer>
-
         <div className="fullscreen-wrap">
-          <button onClick={this.goFull}>Go Fullscreen</button>
-
           <Fullscreen
             className="fullscreen"
             enabled={this.state.isFull}
             onChange={isFull => this.setState({ isFull })}
           >
             <AutoplaySlider
+              className="auto-play-slider"
               // cssModule={}
               // className="fullscreen-slide"
               play={true}
               cancelOnInteraction={false} // should stop playing on user interaction
-              interval={1500}
+              interval={3000}
             >
               {contents.map(content => (
                 <div className="fullscreen-content-wrap" style={{}}>
@@ -146,79 +147,30 @@ class FridayPrayerBase extends Component {
                 </div>
               ))}
             </AutoplaySlider>
-            <AutoplaySlider
-              // cssModule={}
-              // className="fullscreen-slide"
-              play={true}
-              cancelOnInteraction={false} // should stop playing on user interaction
-              interval={5000}
-            >
-              <div>아아</div>
-              <div>오오</div>
-              <div>이이</div>
-            </AutoplaySlider>
           </Fullscreen>
         </div>
+        <div className="btn-wrap">
+          <div
+            className="write-btn-wrap"
+            onClick={() => this.handleprayFormOpen()}
+          >
+            <span className="write-btn">작성하기</span>
+          </div>
+          <div className="fullscreen-btn-wrap" onClick={this.goFull}>
+            <span className="fullscreen-btn">전체화면</span>
+          </div>
+        </div>
+        <FridayInputForm
+          firebase={this.props.firebase}
+          prayFormOpen={prayFormOpen}
+        />
+        <AuthUserContext.Consumer>
+          {authUser => <ContentList contents={contents} />}
+        </AuthUserContext.Consumer>
       </div>
     );
   }
 }
-// class SlidePrayContent extends Component{
-//   constructor(props){
-//     super(props);
-//     this.state=({
-
-//     })
-//   }
-//   render(){
-
-//     return();
-//   }
-
-// }
-// const SlidePrayContentList = ({ contents }) => {
-//   // const res = contents.map(content => {
-//     return (
-//       // <FirebaseContext>
-//       //   {firebase => <SlidePrayContent content={content} firebase={firebase} />}
-//       // </FirebaseContext>
-//       <AutoplaySlider
-//         cssModule={AwesomeSliderStyles}
-//         play={true}
-//         cancelOnInteraction={false} // should stop playing on user interaction
-//         interval={1000}
-//       >
-//         {contents.map(content=>{
-//         <SlidePrayContent content={content} />
-//         })}
-//       </AutoplaySlider>
-//     );
-//   // });
-//   // return res;
-// };
-
-// class SlidePrayContent extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       content: {},
-//       commentForm: false,
-//       commentSize: 0,
-//       liked: false,
-//       imgModalOpen: false,
-//       contentOpen: false
-//     };
-//   }
-//   componentDidMount() {
-//     this.setState({ content: this.props.content });
-//   }
-//   render() {
-//     const { content } = this.state;
-//     console.log(content.content);
-
-//     return <div className="test">{this.props.content.content}</div>;
-//   }
-// }
 
 const INITIAL_STATE_INPUT = {
   prayContent: "",
@@ -276,17 +228,11 @@ class FridayInputForm extends Component {
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
-  handleprayFormOpen = () => {
-    const { prayFormOpen } = this.state;
-    this.setState({
-      prayFormOpen: !prayFormOpen
-    });
-  };
   render() {
-    const { prayContent, prayFormOpen } = this.state;
+    const { prayContent } = this.state;
     return (
       <div>
-        {prayFormOpen ? (
+        {this.props.prayFormOpen && (
           <div className="pray-form-wrap">
             <div className="pray-content-wrap">
               <textarea
@@ -306,32 +252,6 @@ class FridayInputForm extends Component {
               >
                 제출하기
               </div>
-            </div>
-          </div>
-        ) : (
-          <div className="pray-content-btn-wrap">
-            <div
-              className="btn btn-danger pray-content-btn"
-              onClick={() => this.handleprayFormOpen()}
-            >
-              작성하기
-            </div>
-          </div>
-        )}
-        {prayFormOpen ? (
-          <div
-            className="btn btn-success pray-content-btn"
-            onClick={() => this.handleprayFormOpen()}
-          >
-            슬라이드쇼
-          </div>
-        ) : (
-          <div className="pray-content-btn-wrap">
-            <div
-              className="btn btn-danger pray-content-btn"
-              onClick={() => this.handleprayFormOpen()}
-            >
-              슬라이드쇼
             </div>
           </div>
         )}
@@ -381,112 +301,6 @@ const ContentList = ({ contents }) => {
   });
   return res;
 };
-
-// Comment (댓글 입력 기능 선택시 확장 영역)
-class CommentFormBase extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ...INITIAL_STATE
-    };
-  }
-  // 기존에 있는 코멘트들이 보이게 하는 기능
-  componentDidMount() {
-    this.setState({ loading: true });
-    this.props.firebase.comments(this.props.date).on("value", snapshot => {
-      const commentsObject = snapshot.val();
-      if (commentsObject) {
-        const commentsList = Object.keys(commentsObject).map(key => ({
-          ...commentsObject[key]
-        }));
-
-        // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
-        _.reverse(commentsList);
-        console.log(commentsList);
-        this.setState({
-          comments: commentsList,
-          loading: false
-        });
-      }
-    });
-  }
-
-  onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-  onSubmit = async event => {
-    try {
-      const { comment } = this.state;
-      const uid = this.props.firebase.doFindCurrentUID();
-      const name = this.props.firebase.doFindCurrentUserName();
-      this.setState({ uid: uid, name: name });
-
-      const date = format(new Date(), "yyyyMMddHHmmss");
-      this.props.firebase
-        .comment(this.props.date, date)
-        .set({
-          uid: uid,
-          comment,
-          name: name,
-          date: date
-        })
-        .then(authUser => {
-          // console.log("here");
-          this.setState({ ...INITIAL_STATE });
-          // this.props.history.push(ROUTES.FEED);
-        })
-        .catch(error => {
-          this.setState({ error });
-        });
-    } catch (error) {
-      console.log(error);
-    }
-    event.preventDefault();
-  };
-
-  render() {
-    const { comments, comment, loading, error } = this.state;
-    const isInvalid = comment === "";
-    return (
-      <div>
-        <div>
-          {comments.map(comment => (
-            <div>
-              <span>{comment.name}</span>
-              <span>{comment.comment}</span>
-              <span>{comment.date}</span>
-            </div>
-          ))}
-        </div>
-        <div className="comment-form-wrap">
-          <form onSubmit={this.onSubmit} className="comment-form">
-            <div className="comment-input-wrap">
-              <input
-                className="comment-input"
-                value={comment}
-                type="text"
-                name="comment"
-                onChange={this.onChange}
-                placeholder="댓글을 입력하세요."
-                required={true}
-              />
-            </div>
-            <button
-              className="btn btn-primary"
-              type="submit"
-              disabled={isInvalid}
-            >
-              작성하기
-            </button>
-            {error && <p>{error.message}</p>}
-          </form>
-        </div>
-      </div>
-    );
-  }
-}
-// const CommentList = ({comments})
-
 // Content 한 항목.
 class Content extends Component {
   constructor(props) {
@@ -497,7 +311,8 @@ class Content extends Component {
       commentSize: 0,
       liked: false,
       imgModalOpen: false,
-      contentOpen: false
+      contentOpen: false,
+      username: ""
     };
   }
   componentDidMount() {
@@ -506,11 +321,25 @@ class Content extends Component {
       this.setState({ commentSize: commentObject.length });
     }
     this.setState({ content: this.props.content });
-
+    this.props.firebase.user(this.props.content.uid).once("value", snapshot => {
+      if (snapshot.val()) {
+        const prevName = snapshot.val().username;
+        if (prevName !== this.props.content.username) {
+          this.props.firebase
+            .contentFridayPrayer(
+              this.props.content.church,
+              this.props.content.date
+            )
+            .update({
+              name: prevName
+            });
+        }
+        this.setState({ username: snapshot.val().username });
+      }
+    });
     this.props.firebase
       .likeList(this.props.content.date, this.props.firebase.doFindCurrentUID())
       .on("value", snapshot => {
-        // console.log(snapshot && snapshot.exists());
         if (snapshot.val()) {
           this.setState({
             liked: true
@@ -563,7 +392,7 @@ class Content extends Component {
     });
   };
   render() {
-    const { contentOpen } = this.state;
+    const { contentOpen, username } = this.state;
     return (
       <div className="content-wrap" key={this.props.content.date}>
         <div className="content-body-wrap">
@@ -576,7 +405,7 @@ class Content extends Component {
               <div className="content-title-wrap-wrap">
                 <div className="content-title-wrap">
                   <div className="content-name-wrap">
-                    <h3 className="content-name">{this.props.content.name}</h3>
+                    <h3 className="content-name">{username}</h3>
                     <div className="content-date-wrap">
                       <span className="content-date">
                         {handleDate(this.props.content.date)}

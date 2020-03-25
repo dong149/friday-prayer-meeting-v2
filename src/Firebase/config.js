@@ -35,6 +35,7 @@ class Firebase {
   doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
   doFindCurrentUID = () => this.auth.currentUser.uid;
   doFindCurrentUserName = () => this.auth.currentUser.displayName;
+  doFindCurrentUserPhotoURL = () => this.auth.currentUser.photoURL;
   doInfoCurrentUser = () => this.auth.currentUser;
   // *** Auth Google ***
   doSignInWithGoogle = () => this.auth.signInWithPopup(this.googleProvider);
@@ -43,6 +44,8 @@ class Firebase {
   doUpdateUserProfile = URL =>
     this.auth.currentUser.updateProfile({ photoURL: URL });
 
+  doUpdateUserDisplayName = name =>
+    this.auth.currentUser.updateProfile({ displayName: name });
   // *** User API ***
   user = uid => this.db.ref(`users/${uid}`);
   users = () => this.db.ref("users");

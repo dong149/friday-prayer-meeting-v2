@@ -30,7 +30,7 @@ class ProfilePage extends Component {
   onSubmit = async event => {
     try {
       this.setState({ loading: true });
-      const { image } = this.state;
+      const { image, name } = this.state;
 
       // 현재 접속중인  user 의 id
       const uid = this.props.firebase.doFindCurrentUID();
@@ -47,52 +47,63 @@ class ProfilePage extends Component {
             .getDownloadURL()
             .then(firebaseURL => {
               this.setState({ imageURL: firebaseURL });
-              console.log(firebaseURL);
               URL = firebaseURL;
             })
             .then(result => {
               this.props.firebase
                 .doUpdateUserProfile(URL)
                 .then(authUser => {
-                  this.props.firebase.user(uid).update({
-                    photoURL: URL
-                  });
-                  console.log("here");
+                  if (name) {
+                    this.props.firebase.doUpdateUserDisplayName({
+                      username: name
+                    });
+                  }
+                })
+                .then(() => {
+                  if (name) {
+                    this.props.firebase.user(uid).update({
+                      photoURL: URL,
+                      username: name
+                    });
+                  } else {
+                    this.props.firebase.user(uid).update({
+                      photoURL: URL
+                    });
+                  }
                   this.setState({ ...INITIAL_STATE });
                   this.props.history.push(ROUTES.FEED);
-                  alert("성공적으로 변경되었습니다");
+                  alert("프로필 사진과 이름이 성공적으로 변경되었습니다");
                 })
                 .catch(error => {
                   this.setState({ error });
                 });
             });
         });
+      } else {
+        // .then(authUser => {
+        //   authUser.user.updateProfile({
+        //     displayName: username,
+        //     photoURL: "./defaultProfile.png"
+        //   });
+        //   // Create a user in your Firebase realtime database
+        //   return this.props.firebase.user(authUser.user.uid).set({
+        //     username,
+        //     email,
+        //     photoURL: "./defaultProfile.png"
+        //   });
+        if (name) {
+          this.props.firebase.doUpdateUserDisplayName(name).then(authUser => {
+            this.props.firebase.user(uid).update({
+              username: name
+            });
+            this.props.history.push(ROUTES.FEED);
+            alert("이름이 성공적으로 변경되었습니다.");
+          });
+        }
       }
-      // else {
-      //   const date = format(new Date(), "yyyyMMddHHmmss");
-      //   this.props.firebase
-      //     .user(date)
-      //     .set({
-      //       uid: uid,
-      //       content,
-      //       name: name,
-      //       date: date,
-      //       comments: [],
-      //       imageURL: URL
-      //     })
-      //     .then(authUser => {
-      //       // console.log("here");
-      //       this.setState({ ...INITIAL_STATE });
-      //       this.props.history.push(ROUTES.FEED);
-      //     })
-      //     .catch(error => {
-      //       this.setState({ error });
-      //     });
-      // }
     } catch (e) {
       console.error(e);
     }
-    event.preventDefault();
   };
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
@@ -117,12 +128,12 @@ class ProfilePage extends Component {
       });
   }
   render() {
-    const { profileImageFile, imageURL } = this.state;
-    const isInvalid = profileImageFile === "";
+    const { profileImageFile, imageURL, name } = this.state;
+    // const isInvalid = profileImageFile === "" && name === "";
     console.log(this.props.firebase.auth.currentUser);
     return (
       <div>
-        <form onSubmit={this.onSubmit} className="input-wrap">
+        <div className="input-wrap">
           <div className="profile-image-wrap">
             {imageURL ? (
               <img className="profile-image" src={imageURL} alt="profile" />
@@ -143,21 +154,22 @@ class ProfilePage extends Component {
             />
           </div>
           <div className="profile-userName-wrap">
-            <span className=" profile-userName">
-              {this.props.firebase.doFindCurrentUserName()}
-            </span>
+            <span>이름</span>
+            <input
+              className="profile-userName"
+              name="name"
+              type="text"
+              placeholder={this.props.firebase.doFindCurrentUserName()}
+              onChange={this.onChange}
+            />
           </div>
-          <button
-            className="btn btn-primary"
-            disabled={isInvalid}
-            type="submit"
-          >
+          <button className="btn btn-primary" onClick={() => this.onSubmit()}>
             수정하기
           </button>
           <button className="btn btn-danger" disabled="" type="submit">
             계정 삭제하기
           </button>
-        </form>
+        </div>
       </div>
     );
   }

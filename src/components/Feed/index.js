@@ -269,6 +269,16 @@ class Content extends Component {
           });
         }
       });
+    this.props.firebase.user(this.props.content.uid).once("value", snapshot => {
+      if (snapshot.val()) {
+        const prevName = snapshot.val().username;
+        if (prevName !== this.props.content.username) {
+          this.props.firebase.content(this.props.content.date).update({
+            name: prevName
+          });
+        }
+      }
+    });
   }
   setCommentForm = commentForm => {
     this.setState({ commentForm: commentForm });
