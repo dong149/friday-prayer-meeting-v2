@@ -20,9 +20,9 @@ import { FirebaseContext } from "./Firebase";
 const App = () => (
   <Router>
     <div>
-      <FirebaseContext>
+      <FirebaseContext.Consumer>
         {firebase => <Navigation firebase={firebase} />}
-      </FirebaseContext>
+      </FirebaseContext.Consumer>
       <hr />
       {/* nonAuth */}
       <Route exact path={ROUTES.LANDING} component={HomePage} />

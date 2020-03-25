@@ -5,7 +5,7 @@ import SignOutButton from "../SignOut";
 import { AuthUserContext, withAuthorization } from "../Session";
 import "../../styles/navigation.scss";
 import { withFirebase } from "../../Firebase";
-
+import classnames from "classnames";
 class Navigation extends Component {
   constructor(props) {
     super(props);
@@ -31,7 +31,9 @@ class NavigationAuth extends Component {
     this.state = {
       visible: "hide",
       churchImg: "",
-      church: ""
+      church: "",
+      prevScrollpos: window.pageYOffset,
+      navbarVisible: "show"
     };
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.toggleMenu = this.toggleMenu.bind(this);
@@ -47,11 +49,15 @@ class NavigationAuth extends Component {
           });
         }
       });
+
+    window.addEventListener("scroll", this.handleScroll);
   }
-  handleMouseDown(e) {
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
+  }
+
+  handleMouseDown() {
     this.toggleMenu();
-    console.log("clicked");
-    e.stopPropagation();
   }
   toggleMenu() {
     if (this.state.visible === "hide") {
@@ -64,12 +70,38 @@ class NavigationAuth extends Component {
       });
     }
   }
+
+  handleScroll = () => {
+    const { prevScrollpos } = this.state;
+    const currentScrollPos = window.pageYOffset;
+    let visible = "show";
+    if (currentScrollPos <= 0) {
+      visible = "show";
+    } else {
+      if (prevScrollpos > currentScrollPos) {
+        visible = "hide";
+      }
+    }
+
+    if (visible === "hide") {
+      this.setState({
+        prevScrollpos: currentScrollPos,
+        navbarVisible: "hide"
+      });
+    } else {
+      this.setState({
+        prevScrollpos: currentScrollPos,
+        navbarVisible: "show"
+      });
+    }
+  };
   render() {
-    console.log(this.props);
-    const { visible, churchImg, church } = this.state;
+    const { visible, churchImg, church, navbarVisible } = this.state;
+
     return (
       <div>
-        <div className="navigation">
+        {/* <div className="test">아아아</div> */}
+        <div id="navigation" className={navbarVisible}>
           <div className="navigation-logo-wrap">
             <Link to={ROUTES.FEED}>
               {churchImg ? (
@@ -83,8 +115,9 @@ class NavigationAuth extends Component {
               )}
             </Link>
           </div>
+
           <div className="navigation-menu-icon-wrap">
-            <div onMouseDown={this.handleMouseDown}>
+            <div onClick={() => this.handleMouseDown()}>
               <img
                 className="navigation-menu-icon"
                 src="./icons8-menu.png"
@@ -93,10 +126,11 @@ class NavigationAuth extends Component {
             </div>
           </div>
         </div>
+
         <div
           id="menu-visible"
           className={visible}
-          onMouseDown={this.handleMouseDown}
+          onClick={() => this.handleMouseDown()}
         >
           <div
             className="menu-visible-header"
@@ -112,7 +146,7 @@ class NavigationAuth extends Component {
               110157486449
             </span>
           </div>
-          <div className="menu-visible-link-wrap" onMouseDown="">
+          <div className="menu-visible-link-wrap">
             {church === "ilsanchangdae" ? (
               <div className="menu-visible-link">
                 <Link

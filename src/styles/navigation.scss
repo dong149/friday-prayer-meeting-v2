@@ -2,9 +2,73 @@
 @import "./mixin.scss";
 
 @include mobile {
-  .navigation {
+  body {
+    padding-top: 50px;
+  }
+  #navigation {
+    z-index: 30;
     width: 100%;
+    transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    position: fixed;
+    top: 0;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.8);
+    // background-color: white;
+    &.hide {
+      transform: translate3d(0, -50vh, 0);
+      overflow: hidden;
+      .navigation-logo-wrap {
+        display: inline-block;
+        width: 70%;
+        text-align: left;
+        margin-top: 10px;
+        padding-left: 5px;
+        .navigation-logo {
+          width: 70%;
+        }
+      }
+      .navigation-menu-icon-wrap {
+        display: inline-block;
+        width: 30%;
+        padding-right: 20px;
+        text-align: right;
+        .navigation-menu-icon {
+          width: 30%;
+        }
+      }
+    }
+    &.show {
+      transform: translate3d(0, 0, 0);
+      overflow: hidden;
+      .navigation-logo-wrap {
+        display: inline-block;
+        width: 70%;
+        text-align: left;
+        margin-top: 10px;
+        padding-left: 5px;
+        .navigation-logo {
+          width: 70%;
+        }
+      }
+      .navigation-menu-icon-wrap {
+        display: inline-block;
+        width: 30%;
+        padding-right: 20px;
+        text-align: right;
+        .navigation-menu-icon {
+          width: 30%;
+        }
+      }
+    }
+  }
+  .navigation--hidden {
+    z-index: 1;
+    width: 100%;
+    position: fixed;
+    top: -60px;
+    height: 60px;
 
+    background-color: rgba(255, 255, 255, 0.6);
     .navigation-logo-wrap {
       display: inline-block;
       width: 70%;
@@ -42,7 +106,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  transition: transform 0.3s cubic-bezier(0, 0.52, 0, 1);
+  transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
   overflow: scroll;
   z-index: 1000;
   // border-right: 1px solid rgba(255, 255, 255, 0.1);
