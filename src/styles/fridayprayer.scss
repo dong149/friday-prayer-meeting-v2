@@ -5,45 +5,79 @@
 //  https://m.facebook.com/ 여기 참고해서 css 완료하기.
 
 @include mobile {
-  h3 {
-    display: block;
-    font-size: 1.17em;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    font-weight: bold;
-  }
-  p {
-    display: block;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-  }
+  .fullscreen-content {
+    position: absolute;
+    height: 100%;
+    width: 100%;
 
-  .fullscreen-content-wrap {
-    text-align: center;
-
-    .fullscreen-content-name {
-      font-size: 50px;
-      color: white;
-      font-weight: bold;
+    .fullscreen-img-wrap {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      .fullscreen-img {
+        width: 100%;
+        width: 100%;
+      }
     }
-    .fullscreen-content-content {
-      font-size: 40px;
-      color: white;
+    .fullscreen-content-wrap {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      background-color: rgba(0, 0, 0, 0.9);
+      text-align: center;
+      .fullscreen-content-name-wrap {
+        margin-top: 10%;
+        width: 100%;
+        .fullscreen-content-name {
+          font-family: $spoqa-han-sans;
+          font-size: 30px;
+          color: white;
+          font-weight: bold;
+        }
+      }
+      .fullscreen-content-content-wrap-long {
+        width: 100%;
+        padding-left: 10%;
+        padding-right: 10%;
+        text-align: left;
+        margin-top: 30px;
+        .fullscreen-content-content-long {
+          white-space: pre-line;
+          font-family: $spoqa-han-sans;
+          font-weight: normal;
+          font-size: 13px;
+          color: white;
+          line-height: 1.3rem;
+        }
+      }
+      .fullscreen-content-content-wrap {
+        width: 100%;
+        padding-left: 10%;
+        padding-right: 10%;
+        text-align: center;
+        margin-top: 30px;
+        .fullscreen-content-content {
+          white-space: pre-line;
+          font-family: $spoqa-han-sans;
+          font-weight: normal;
+          font-size: 24px;
+          color: white;
+        }
+      }
     }
   }
   .feed {
     width: 100%;
-    background-color: #eaebee;
+    background-color: #ffffff;
 
     // 금요기도회 로고 이미지
     .friday-prayer-img-wrap {
       margin: 0 auto;
       text-align: center;
-      width: 100%;
+      width: 80%;
       background-color: white;
       margin-bottom: 30px;
       .friday-prayer-img {
@@ -72,6 +106,8 @@
         display: inline-block;
         width: 50%;
         text-align: center;
+        padding-top: 20px;
+        margin-bottom: 40px;
         .fullscreen-btn {
           font-family: $black-han-sans;
           font-size: 30px;
@@ -96,180 +132,59 @@
         }
       }
     }
-
-    .content-wrap {
-      margin: 0 0 8px;
-      position: relative;
+    .praycontent {
+      box-shadow: 0 30px 60px 12px rgba(0, 0, 33, 0.05),
+        0 4px 24px 0 rgba(0, 0, 33, 0.05), 0 0 1px 0 rgba(0, 0, 33, 0.09);
+      background-color: white;
+      width: 95%;
       display: block;
-      font-size: 14px;
-      line-height: 18px;
-      background-color: #eaebee;
-      background: #ffffff;
-      border-bottom: 1px solid transparent;
-      margin-top: -1px;
+      margin: 0 auto;
+      margin-bottom: 15px;
+      margin-top: 15px;
+      .praycontent-wrap {
+        height: 60px;
+        line-height: 60px;
 
-      // ** contents body part **
-      .content-body-wrap {
-        // *** contents header part ***
-        .content-header {
-          font-size: 13px;
-          line-height: 17px;
-          margin: 0 0 12px;
-          padding: 10px 10px 0;
-          display: flex;
-          align-items: flex-start;
-          .content-profile-wrap-wrap {
-            padding-right: 8px;
-            .content-profile-wrap {
-              position: relative;
-              .content-profile {
-                background-repeat: no-repeat center;
-                border-radius: 50%;
-                background-size: 100% 100%;
-                width: 40px;
-                height: 40px;
-                border: 0;
-                display: inline-block;
-                vertical-align: top;
-              }
-            }
-          }
-          .content-title-wrap-wrap-wrap {
-            flex: 1;
-            min-width: 0;
-            width: 0;
-            align-items: center;
-            display: flex;
-            .content-title-wrap-wrap {
-              width: 100%;
-              .content-title-wrap {
-                align-items: center;
-                direction: ltr;
-                display: flex;
-                .content-name-wrap {
-                  flex: 1;
-                  min-width: 0;
-                  width: 0;
-                  .content-name {
-                    font-size: 14px;
-                    line-height: 17px;
-                    padding: 0;
-                    font-weight: bold;
-                    color: #1d2129;
-                    margin: 0;
-                  }
-                  .content-date-wrap {
-                    color: #90949c;
-                    font-size: 12px;
-                    line-height: 16px;
-                    position: relative;
-                    margin-top: -0.3333em;
-                    top: 0.3333em;
-                    .content-date {
-                      font-weight: 400;
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-        // *** content-content ***
-        .content-content-wrap {
-          position: relative;
-          margin: 8px 0;
-          padding: 0 10px;
-
-          .content-content {
-            white-space: pre-line;
-            margin-bottom: 0;
-            margin: 0;
-            padding: 0;
-            font-size: 14px;
-          }
-        }
-        // *** contents img part ***
-        .content-img-wrap {
-          display: block;
-          max-width: 375px;
-          max-height: 375px;
-          overflow: hidden;
-          position: relative;
-          margin: 0 auto;
-          text-align: center;
-          height: auto;
-          border: 0;
-          background: #f2f2f2;
-
-          // margin: 8px 0;
-          // padding: 0 10px;
-          .content-img {
-            // height: auto;
-            border: 0;
-            vertical-align: top;
-            height: 100%;
-            min-height: 100%;
-            min-height: 0;
-            margin-top: 0px;
-            background-repeat: no-repeat;
-            background-size: 100% 100%;
-            // padding-bottom: 100%;
-            width: 100%;
+        .praycontent-header-wrap {
+          .praycontent-header-profile-wrap {
+            padding-left: 15px;
             display: inline-block;
+            .praycontent-header-profile {
+              background-repeat: no-repeat center;
+              background-color: #eaebee;
+              border-radius: 50%;
+              background-size: 100% 100%;
+              width: 40px;
+              height: 40px;
+              border: 0;
+            }
+          }
+          .praycontent-header-name-wrap {
+            padding-left: 10px;
+            display: inline-block;
+            .praycontent-header-name {
+              font-size: 18px;
+              font-family: $spoqa-han-sans;
+              font-weight: normal;
+            }
+          }
+          .praycontent-header-date-wrap {
+            padding-right: 10px;
+            float: right;
+            .praycontent-header-date {
+              font-size: 16px;
+              font-family: $spoqa-han-sans;
+              font-weight: lighter;
+            }
           }
         }
-        // *** content-footer part ***
-        .content-footer {
-          .content-footer-top-wrap-wrap {
-            margin: 10px;
-            font-size: 14px;
-            .content-footer-top-wrap {
-              color: #616770;
-              .content-footer-top-like {
-                display: inline-block;
-                .content-footer-top-like-text {
-                }
-              }
-              .content-footer-top-comment {
-                display: inline-block;
-                float: right;
-                .content-footer-top-comment-text {
-                }
-              }
-            }
-          }
-          .content-footer-bottom-wrap {
-            background: none;
-            color: #616770;
-            text-align: center;
-
-            .content-footer-bottom-like-wrap {
-              border-top: 1px solid #eaebee;
-              display: inline-block;
-              width: 50%;
-              margin: -6px -8px -8px -8px;
-              padding: 6px 8px 8px 8px;
-              text-align: center;
-              font-weight: bold;
-              font-size: 12px;
-
-              .content-footer-bottom-like-text {
-              }
-            }
-            .content-footer-bottom-comment-wrap {
-              border-top: 1px solid #eaebee;
-              width: 50%;
-              margin: -6px -8px -8px -8px;
-              display: inline-block;
-              padding: 6px 8px 8px 8px;
-              text-align: center;
-              font-weight: bold;
-              font-size: 12px;
-
-              .content-footer-bottom-like-comment {
-              }
-            }
-          }
+      }
+      .praycontent-content-wrap {
+        .praycontent-content {
+          font-size: 16px;
+          font-family: $spoqa-han-sans;
+          font-weight: lighter;
+          white-space: pre-line;
         }
       }
     }

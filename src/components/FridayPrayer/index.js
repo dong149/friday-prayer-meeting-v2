@@ -32,7 +32,8 @@ class FridayPrayerBase extends Component {
       loading: false,
       contents: [],
       isFull: false,
-      prayFormOpen: false
+      prayFormOpen: false,
+      photoURL: ""
     };
   }
 
@@ -55,6 +56,7 @@ class FridayPrayerBase extends Component {
               photoURL: "./defaultProfile.png"
             });
         }
+        this.setState({ photoURL: photoURL });
       });
     let church = "";
     this.setState({ loading: true });
@@ -103,7 +105,7 @@ class FridayPrayerBase extends Component {
     });
   };
   render() {
-    const { contents, loading, prayFormOpen } = this.state;
+    const { contents, loading, prayFormOpen, photoURL } = this.state;
     return loading ? (
       <div>
         <WindMillLoading size="large" color="#5B5BDC" />
@@ -132,17 +134,38 @@ class FridayPrayerBase extends Component {
               interval={3000}
             >
               {contents.map(content => (
-                <div className="fullscreen-content-wrap" style={{}}>
-                  {content.name && (
-                    <div
-                      className="fullscreen-content-name"
-                      // style={{ fontSize: "50px", color: "white" }}
-                    >
-                      {content.name}
-                    </div>
-                  )}
-                  <div className="fullscreen-content-content">
-                    {content.content}
+                <div className="fullscreen-content">
+                  <div className="fullscreen-img-wrap">
+                    <img
+                      className="fullscreen-img"
+                      src={photoURL}
+                      alt="profile"
+                    />
+                  </div>
+                  <div className="fullscreen-content-wrap">
+                    {content.name && (
+                      <div className="fullscreen-content-name-wrap">
+                        <div
+                          className="fullscreen-content-name"
+                          // style={{ fontSize: "50px", color: "white" }}
+                        >
+                          {content.name}
+                        </div>
+                      </div>
+                    )}
+                    {content.content.length > 20 ? (
+                      <div className="fullscreen-content-content-wrap-long">
+                        <div className="fullscreen-content-content-long">
+                          {content.content}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="fullscreen-content-content-wrap">
+                        <div className="fullscreen-content-content">
+                          {content.content}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -351,28 +374,7 @@ class Content extends Component {
         }
       });
   }
-  setCommentForm = commentForm => {
-    this.setState({ commentForm: commentForm });
-  };
-  setLike = () => {
-    const newLike = this.props.content.like + 1;
-    this.props.firebase
-      .content(this.props.content.date)
-      .update({
-        like: newLike
-      })
-      .then(() => {
-        this.props.firebase
-          .likeList(
-            this.props.content.date,
-            this.props.firebase.doFindCurrentUID()
-          )
-          .update({
-            // 나중에 감정표현 집어넣으려면 여기서 종류 넣어서 만들면 됨.
-            uid: this.props.firebase.doFindCurrentUID()
-          });
-      });
-  };
+
   handleImgModal = () => {
     this.setState({
       imgModalOpen: true
@@ -394,40 +396,63 @@ class Content extends Component {
   render() {
     const { contentOpen, username } = this.state;
     return (
-      <div className="content-wrap" key={this.props.content.date}>
-        <div className="content-body-wrap">
-          <div
-            className="content-header"
-            onClick={() => this.handleContentOpen()}
-          >
-            <div className="content-profile-wrap-wrap"></div>
-            <div className="content-title-wrap-wrap-wrap">
-              <div className="content-title-wrap-wrap">
-                <div className="content-title-wrap">
-                  <div className="content-name-wrap">
-                    <h3 className="content-name">{username}</h3>
-                    <div className="content-date-wrap">
-                      <span className="content-date">
-                        {handleDate(this.props.content.date)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+      <div className="praycontent" onClick={() => this.handleContentOpen()}>
+        <div className="praycontent-wrap">
+          <div className="praycontent-header-wrap">
+            <div className="praycontent-header-profile-wrap">
+              <FirebaseContext.Consumer>
+                {firebase => (
+                  <ContentProfile
+                    firebase={firebase}
+                    uid={this.props.content.uid}
+                  />
+                )}
+              </FirebaseContext.Consumer>
+            </div>
+            <div className="praycontent-header-name-wrap">
+              <span className="praycontent-header-name">{username}</span>
+            </div>
+            <div className="praycontent-header-date-wrap">
+              <span className="praycontent-header-date">
+                {handleDate(this.props.content.date)}
+              </span>
             </div>
           </div>
-          {contentOpen && (
-            <div
-              className="content-content-wrap"
-              onClick={() => this.handleContentOpen()}
-            >
-              <div className="content-content">
-                {this.props.content.content}
-              </div>
-            </div>
-          )}
         </div>
+        {contentOpen && (
+          <div className="praycontent-content-wrap">
+            <span className="praycontent-content">
+              {this.props.content.content}
+            </span>
+          </div>
+        )}
       </div>
+    );
+  }
+}
+class ContentProfile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { imageURL: "" };
+  }
+  componentDidMount() {
+    this.props.firebase.userPhoto(this.props.uid).once("value", snapshot => {
+      const imageURL = snapshot.val();
+      this.setState({
+        imageURL
+      });
+    });
+  }
+  render() {
+    const { imageURL } = this.state;
+    return (
+      <>
+        <img
+          className="praycontent-header-profile"
+          src={imageURL}
+          alt="iron-man"
+        />
+      </>
     );
   }
 }
