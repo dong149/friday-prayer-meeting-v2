@@ -185,10 +185,13 @@ class FridayPrayerBase extends Component {
         </div>
         <FridayInputForm
           firebase={this.props.firebase}
+          history={this.props.history}
           prayFormOpen={prayFormOpen}
         />
         <AuthUserContext.Consumer>
-          {authUser => <ContentList contents={contents} />}
+          {authUser => (
+            <ContentList contents={contents} history={this.props.history} />
+          )}
         </AuthUserContext.Consumer>
       </div>
     );
@@ -240,6 +243,7 @@ class FridayInputForm extends Component {
         })
         .then(() => {
           alert("성공적으로 제출되었습니다");
+          this.props.history.push(ROUTES.FRIDAY_PRAYER);
           this.setState({
             ...INITIAL_STATE_INPUT
           });
@@ -313,12 +317,14 @@ export const handleDate = date => {
 };
 
 // Content 리스트
-const ContentList = ({ contents }) => {
+const ContentList = ({ contents, history }) => {
   const res = contents.map(content => {
     console.log(content);
     return (
       <FirebaseContext>
-        {firebase => <Content content={content} firebase={firebase} />}
+        {firebase => (
+          <Content content={content} firebase={firebase} history={history} />
+        )}
       </FirebaseContext>
     );
   });
@@ -335,44 +341,53 @@ class Content extends Component {
       liked: false,
       imgModalOpen: false,
       contentOpen: false,
-      username: ""
+      username: "",
+      currentUID: ""
     };
   }
   componentDidMount() {
-    if (this.props.content.comments) {
-      const commentObject = Object.keys(this.props.content.comments);
-      this.setState({ commentSize: commentObject.length });
-    }
-    this.setState({ content: this.props.content });
-    this.props.firebase.user(this.props.content.uid).once("value", snapshot => {
-      if (snapshot.val()) {
-        const prevName = snapshot.val().username;
-        if (prevName !== this.props.content.username) {
-          this.props.firebase
-            .contentFridayPrayer(
-              this.props.content.church,
-              this.props.content.date
-            )
-            .update({
-              name: prevName
-            });
-        }
-        this.setState({ username: snapshot.val().username });
+    if (this.props.firebase) {
+      if (this.props.content.comments) {
+        const commentObject = Object.keys(this.props.content.comments);
+        this.setState({ commentSize: commentObject.length });
       }
-    });
-    this.props.firebase
-      .likeList(this.props.content.date, this.props.firebase.doFindCurrentUID())
-      .on("value", snapshot => {
-        if (snapshot.val()) {
-          this.setState({
-            liked: true
-          });
-        } else {
-          this.setState({
-            liked: false
-          });
-        }
-      });
+      this.setState({ content: this.props.content });
+      this.props.firebase
+        .user(this.props.content.uid)
+        .once("value", snapshot => {
+          if (snapshot.val()) {
+            const prevName = snapshot.val().username;
+            if (prevName !== this.props.content.username) {
+              this.props.firebase
+                .contentFridayPrayer(
+                  this.props.content.church,
+                  this.props.content.date
+                )
+                .update({
+                  name: prevName
+                });
+            }
+            this.setState({ username: snapshot.val().username });
+          }
+        });
+      this.props.firebase
+        .likeList(
+          this.props.content.date,
+          this.props.firebase.doFindCurrentUID()
+        )
+        .on("value", snapshot => {
+          if (snapshot.val()) {
+            this.setState({
+              liked: true
+            });
+          } else {
+            this.setState({
+              liked: false
+            });
+          }
+        });
+      this.setState({ currentUID: this.props.firebase.doFindCurrentUID() });
+    }
   }
 
   handleImgModal = () => {
@@ -393,8 +408,25 @@ class Content extends Component {
       contentOpen: !contentOpen
     });
   };
+
+  handleContentModify = () => {
+    // this.props.firebase.contentFridayPrayer(this.props.content.church,this.props.content.date)
+    // .update({
+    // })
+    //구현해야함.
+  };
+  handleContentDelete = () => {
+    this.props.firebase
+      .contentFridayPrayer(this.props.content.church, this.props.content.date)
+      .remove()
+      .then(() => {
+        alert("성공적으로 삭제되었습니다.");
+        // this.props.history.push(ROUTES.FRIDAY_PRAYER);
+      });
+  };
+
   render() {
-    const { contentOpen, username } = this.state;
+    const { contentOpen, username, currentUID } = this.state;
     return (
       <div className="praycontent" onClick={() => this.handleContentOpen()}>
         <div className="praycontent-wrap">
@@ -420,10 +452,32 @@ class Content extends Component {
           </div>
         </div>
         {contentOpen && (
-          <div className="praycontent-content-wrap">
-            <span className="praycontent-content">
-              {this.props.content.content}
-            </span>
+          <div>
+            <div className="praycontent-content-wrap">
+              <span className="praycontent-content">
+                {this.props.content.content}
+              </span>
+            </div>
+            {currentUID === this.props.content.uid && (
+              <div className="praycontent-content-btn-wrap">
+                <div
+                  className="praycontent-content-modify-btn-wrap"
+                  onClick={() => this.handleContentModify()}
+                >
+                  <span className="praycontent-content-modify-btn">
+                    수정하기
+                  </span>
+                </div>
+                <div
+                  className="praycontent-content-delete-btn-wrap"
+                  onClick={() => this.handleContentDelete()}
+                >
+                  <span className="praycontent-content-delete-btn">
+                    삭제하기
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

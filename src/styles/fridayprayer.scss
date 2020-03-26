@@ -180,11 +180,35 @@
         }
       }
       .praycontent-content-wrap {
+        padding-left: 20px;
+        padding-right: 10px;
         .praycontent-content {
           font-size: 16px;
           font-family: $spoqa-han-sans;
-          font-weight: lighter;
+          font-weight: normal;
           white-space: pre-line;
+        }
+      }
+      .praycontent-content-btn-wrap {
+        width: 100%;
+        text-align: right;
+        padding-right: 20px;
+        .praycontent-content-modify-btn-wrap {
+          margin-right: 20px;
+          display: inline-block;
+          .praycontent-content-modify-btn {
+            font-size: 15px;
+            font-family: $black-han-sans;
+            color: green;
+          }
+        }
+        .praycontent-content-delete-btn-wrap {
+          display: inline-block;
+          .praycontent-content-delete-btn {
+            font-size: 15px;
+            font-family: $black-han-sans;
+            color: red;
+          }
         }
       }
     }

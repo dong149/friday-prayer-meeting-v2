@@ -1,5 +1,6 @@
 @import "./color.scss";
 @import "./mixin.scss";
+@import "./font.scss";
 
 @include mobile {
   body {
@@ -136,6 +137,7 @@
           color: inherit;
           text-decoration: inherit;
           .menu-visible-span {
+            font-family: $black-han-sans;
             font-size: 20px;
             color: white;
           }
@@ -169,6 +171,7 @@
           color: inherit;
           text-decoration: inherit;
           .menu-visible-span {
+            font-family: $black-han-sans;
             font-size: 20px;
             color: white;
           }

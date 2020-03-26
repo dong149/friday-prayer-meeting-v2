@@ -27,48 +27,50 @@ class FeedBase extends Component {
     };
   }
   componentDidMount() {
-    this.props.firebase
-      .userChurch(this.props.firebase.doFindCurrentUID())
-      .on("value", snapshot => {
+    if (this.props.firebase) {
+      this.props.firebase
+        .userChurch(this.props.firebase.doFindCurrentUID())
+        .on("value", snapshot => {
+          if (!snapshot.val()) {
+            this.props.history.push(ROUTES.CHOOSE_CHURCH);
+          }
+        });
+      this.props.firebase
+        .userPhoto(this.props.firebase.doFindCurrentUID())
+        .once("value", snapshot => {
+          const photoURL = snapshot.val();
+          if (!photoURL) {
+            this.props.firebase
+              .user(this.props.firebase.doFindCurrentUID())
+              .update({
+                photoURL: "./defaultProfile.png"
+              });
+          }
+        });
+      this.setState({ loading: true });
+      this.props.firebase.contents().on("value", snapshot => {
         if (!snapshot.val()) {
-          this.props.history.push(ROUTES.CHOOSE_CHURCH);
+          this.setState({
+            contents: [],
+            loading: false
+          });
+          alert("비어있습니다. 작성해주세요.");
+          return;
         }
-      });
-    this.props.firebase
-      .userPhoto(this.props.firebase.doFindCurrentUID())
-      .once("value", snapshot => {
-        const photoURL = snapshot.val();
-        if (!photoURL) {
-          this.props.firebase
-            .user(this.props.firebase.doFindCurrentUID())
-            .update({
-              photoURL: "./defaultProfile.png"
-            });
-        }
-      });
-    this.setState({ loading: true });
-    this.props.firebase.contents().on("value", snapshot => {
-      if (!snapshot.val()) {
+        const contentsObject = snapshot.val();
+        const contentsList = Object.keys(contentsObject).map(key => ({
+          ...contentsObject[key]
+        }));
+
+        // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
+        _.reverse(contentsList);
+        // console.log(contentsList);
         this.setState({
-          contents: [],
+          contents: contentsList,
           loading: false
         });
-        alert("비어있습니다. 작성해주세요.");
-        return;
-      }
-      const contentsObject = snapshot.val();
-      const contentsList = Object.keys(contentsObject).map(key => ({
-        ...contentsObject[key]
-      }));
-
-      // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
-      _.reverse(contentsList);
-      // console.log(contentsList);
-      this.setState({
-        contents: contentsList,
-        loading: false
       });
-    });
+    }
   }
   componentWillUnmount() {
     this.props.firebase.contents().off();
@@ -136,12 +138,14 @@ class CommentFormBase extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ...INITIAL_STATE
+      ...INITIAL_STATE,
+      photoURL: ""
     };
   }
   // 기존에 있는 코멘트들이 보이게 하는 기능
   componentDidMount() {
     this.setState({ loading: true });
+
     this.props.firebase.comments(this.props.date).on("value", snapshot => {
       const commentsObject = snapshot.val();
       if (commentsObject) {
@@ -163,7 +167,7 @@ class CommentFormBase extends Component {
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
-  onSubmit = async event => {
+  onSubmit = () => {
     try {
       const { comment } = this.state;
       const uid = this.props.firebase.doFindCurrentUID();
@@ -180,9 +184,7 @@ class CommentFormBase extends Component {
           date: date
         })
         .then(authUser => {
-          // console.log("here");
           this.setState({ ...INITIAL_STATE });
-          // this.props.history.push(ROUTES.FEED);
         })
         .catch(error => {
           this.setState({ error });
@@ -190,7 +192,6 @@ class CommentFormBase extends Component {
     } catch (error) {
       console.log(error);
     }
-    event.preventDefault();
   };
 
   render() {
@@ -198,43 +199,89 @@ class CommentFormBase extends Component {
     const isInvalid = comment === "";
     return (
       <div>
-        <div>
-          {comments.map(comment => (
-            <div>
-              <span>{comment.name}</span>
-              <span>{comment.comment}</span>
-              <span>{comment.date}</span>
-            </div>
-          ))}
-        </div>
         <div className="comment-form-wrap">
-          <form onSubmit={this.onSubmit} className="comment-form">
+          <div className="comment-form">
             <div className="comment-input-wrap">
               <input
                 className="comment-input"
                 value={comment}
-                type="text"
+                type="textarea"
                 name="comment"
                 onChange={this.onChange}
                 placeholder="댓글을 입력하세요."
                 required={true}
               />
             </div>
-            <button
-              className="btn btn-primary"
-              type="submit"
-              disabled={isInvalid}
-            >
-              작성하기
-            </button>
+            <div className="comment-btn-wrap">
+              <div
+                className="comment-btn"
+                type="submit"
+                disabled={isInvalid}
+                onClick={() => this.onSubmit()}
+              >
+                작성하기
+              </div>
+            </div>
             {error && <p>{error.message}</p>}
-          </form>
+          </div>
+        </div>
+        <div>
+          {comments.map(comment => (
+            <FirebaseContext.Consumer>
+              {firebase => <Comment firebase={firebase} comment={comment} />}
+            </FirebaseContext.Consumer>
+          ))}
         </div>
       </div>
     );
   }
 }
-// const CommentList = ({comments})
+// Comment 의 한 항목.
+class Comment extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      imageURL: ""
+    };
+  }
+  componentDidMount() {
+    this.props.firebase
+      .userPhoto(this.props.comment.uid)
+      .once("value", snapshot => {
+        const imageURL = snapshot.val();
+        this.setState({
+          imageURL
+        });
+      });
+  }
+  render() {
+    const { imageURL } = this.state;
+    return (
+      <div className="comment-wrap">
+        <div className="comment-header">
+          <div className="comment-profile-wrap">
+            <img
+              className="comment-profile"
+              src={imageURL}
+              alt="comment-profile"
+            />
+          </div>
+          <div className="comment-name-wrap">
+            <span className="comment-name">{this.props.comment.name}</span>
+          </div>
+          <div className="comment-date-wrap">
+            <span className="comment-date">
+              {handleDate(this.props.comment.date)}
+            </span>
+          </div>
+        </div>
+        <div className="comment-comment-wrap">
+          <span className="comment-comment">{this.props.comment.comment}</span>
+        </div>
+      </div>
+    );
+  }
+}
 
 // Content 한 항목.
 class Content extends Component {
@@ -403,10 +450,20 @@ class Content extends Component {
               <div className="content-footer-top-wrap">
                 <div className="content-footer-top-like">
                   <span className="content-footer-top-like-text">
-                    좋아요 {this.props.content.like}명
+                    {this.props.content.like === 0 ? (
+                      <div>좋아요 0명</div>
+                    ) : (
+                      <div>
+                        <span style={{ color: "#1f4df4" }}>†</span>좋아요{" "}
+                        {this.props.content.like}명
+                      </div>
+                    )}
                   </span>
                 </div>
-                <div className="content-footer-top-comment">
+                <div
+                  className="content-footer-top-comment"
+                  onClick={() => this.setCommentForm(!commentForm)}
+                >
                   <span className="content-footer-top-comment-text">
                     댓글 {commentSize}개
                   </span>

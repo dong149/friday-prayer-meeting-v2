@@ -137,13 +137,9 @@ class NavigationAuth extends Component {
             // onMouseDown={this.handleMouseDown}
           >
             <span className="menu-visible-header-text">
-              후원 감사합니다:)
+              {/* 피드백 받습니다.
               <br />
-              예금주 : 류동훈
-              <br />
-              신한
-              <br />
-              110157486449
+              010-4288-3243 */}
             </span>
           </div>
           <div className="menu-visible-link-wrap">
@@ -253,9 +249,7 @@ class NavigationNonAuth extends Component {
             // onMouseDown={this.handleMouseDown}
           >
             <span className="menu-visible-header-text">
-              후원 받습니다.
-              <br />
-              예금주 : 류동훈
+              피드백 받습니다.
               <br />
               010-4288-3243
             </span>
