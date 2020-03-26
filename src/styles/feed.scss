@@ -22,9 +22,9 @@
     margin-inline-end: 0px;
   }
   .feed-header {
-    margin-top: 50px;
     .feed-header-wrap {
       width: 100%;
+      margin-top: 50px;
 
       .feed-official-wrap {
         margin: 0 auto;
@@ -59,10 +59,10 @@
       .feed-write-btn-wrap {
         margin-top: 30px;
         margin-bottom: 30px;
-        margin-bottom: 10px;
         display: block;
         text-align: center;
         border-bottom: 10px solid #eaebee;
+        height: 70px;
         .feed-write-btn {
           font-family: $black-han-sans;
           color: green;
@@ -72,9 +72,9 @@
     }
   }
   .feed {
+    display: block;
     width: 100%;
     background-color: #eaebee;
-    // height: 100rem;
     .content-wrap {
       margin: 0 0 8px;
       position: relative;
