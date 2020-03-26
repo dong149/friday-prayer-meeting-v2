@@ -155,11 +155,11 @@ class NavigationAuth extends Component {
             ) : (
               <></>
             )}
-            <div className="menu-visible-link">
+            {/* <div className="menu-visible-link">
               <Link to={ROUTES.WRITE} className="menu-visible-link-text">
                 <span className="menu-visible-span">글작성하기</span>
               </Link>
-            </div>
+            </div> */}
             <div className="menu-visible-link">
               <Link to={ROUTES.FEED} className="menu-visible-link-text">
                 <span className="menu-visible-span">뉴스피드</span>
@@ -175,11 +175,11 @@ class NavigationAuth extends Component {
                 <span className="menu-visible-span">프로필</span>
               </Link>
             </div>
-            <div className="menu-visible-link">
+            {/* <div className="menu-visible-link">
               <Link to={ROUTES.ADMIN} className="menu-visible-link-text">
                 <span className="menu-visible-span">관리자</span>
               </Link>
-            </div>
+            </div> */}
             <div className="menu-visible-link">
               <SignOutButton />
             </div>

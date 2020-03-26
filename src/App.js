@@ -23,7 +23,7 @@ const App = () => (
       <FirebaseContext.Consumer>
         {firebase => <Navigation firebase={firebase} />}
       </FirebaseContext.Consumer>
-      <hr />
+
       {/* nonAuth */}
       <Route exact path={ROUTES.LANDING} component={HomePage} />
       <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />

@@ -187,6 +187,9 @@ class WriteFormBase extends Component {
 
             {error && <p>{error.message}</p>}
           </div>
+          <div onClick={() => this.props.click()}>
+            <span>닫기</span>
+          </div>
         </form>
       );
     } else {

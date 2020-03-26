@@ -12,11 +12,13 @@ import _ from "lodash";
 import { format, formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { FirebaseContext } from "../../Firebase";
+import WriteForm from "../Write";
 const INITIAL_STATE = {
   loading: false,
   comments: [],
   comment: "",
-  error: null
+  error: null,
+  writeFormOpen: false
 };
 class FeedBase extends Component {
   constructor(props) {
@@ -76,18 +78,65 @@ class FeedBase extends Component {
     this.props.firebase.contents().off();
   }
 
+  handleWriteFormOpen = () => {
+    const { writeFormOpen } = this.state;
+    this.setState({
+      writeFormOpen: !writeFormOpen
+    });
+  };
   render() {
-    const { contents, loading } = this.state;
+    const { contents, loading, writeFormOpen } = this.state;
     return loading ? (
       <div>
         <WindMillLoading size="large" color="#5B5BDC" />
       </div>
     ) : (
-      <div className="feed">
-        <AuthUserContext.Consumer>
-          {authUser => <ContentList contents={contents} />}
-        </AuthUserContext.Consumer>
-      </div>
+      <>
+        <div className="feed-header">
+          {!writeFormOpen && (
+            <div className="feed-header-wrap">
+              <div className="feed-official-wrap">
+                <div className="official-wrap">
+                  <span className="official">공지사항</span>
+                </div>
+                <div className="official-content-wrap">
+                  <span className="official-content">
+                    1. 코로나 항상 유의하시기 바랍니다.
+                    <br />
+                    2. 이번 금요기도회 담당은 청년 6부입니다.
+                    <br />
+                    3. 이번 주 예배는 정상적으로 진행됩니다.
+                  </span>
+                </div>
+              </div>
+
+              <div
+                className="feed-write-btn-wrap"
+                onClick={() => this.handleWriteFormOpen()}
+              >
+                <span className="feed-write-btn">글 작성하기</span>
+              </div>
+            </div>
+          )}
+
+          {writeFormOpen && (
+            <FirebaseContext.Consumer>
+              {firebase => (
+                <WriteForm
+                  firebase={firebase}
+                  history={this.props.history}
+                  click={this.handleWriteFormOpen}
+                />
+              )}
+            </FirebaseContext.Consumer>
+          )}
+        </div>
+        <div className="feed">
+          <AuthUserContext.Consumer>
+            {authUser => <ContentList contents={contents} />}
+          </AuthUserContext.Consumer>
+        </div>
+      </>
     );
   }
 }
@@ -215,7 +264,6 @@ class CommentFormBase extends Component {
             <div className="comment-btn-wrap">
               <div
                 className="comment-btn"
-                type="submit"
                 disabled={isInvalid}
                 onClick={() => this.onSubmit()}
               >
