@@ -125,6 +125,43 @@ class NavigationAuth extends Component {
               />
             </div>
           </div>
+
+          <div className="desktop-menu-visible-link-wrap">
+            {church === "ilsanchangdae" ? (
+              <div className="desktop-menu-visible-link">
+                <Link
+                  to={ROUTES.FRIDAY_PRAYER}
+                  className="desktop-menu-visible-link-text"
+                >
+                  <span className="desktop-menu-visible-span">금요기도회</span>
+                </Link>
+              </div>
+            ) : (
+              <></>
+            )}
+            <div className="desktop-menu-visible-link">
+              <Link to={ROUTES.FEED} className="desktop-menu-visible-link-text">
+                <span className="desktop-menu-visible-span">뉴스피드</span>
+              </Link>
+            </div>
+            <div className="desktop-menu-visible-link">
+              <Link
+                to={ROUTES.PROFILE}
+                className="desktop-menu-visible-link-text"
+              >
+                <span className="desktop-menu-visible-span">프로필</span>
+              </Link>
+            </div>
+
+            <div className="desktop-menu-visible-link">
+              <div
+                className="desktop-menu-visible-link-text"
+                onClick={() => this.props.firebase.doSignOut()}
+              >
+                <span className="desktop-menu-visible-span">로그아웃</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div

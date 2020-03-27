@@ -131,17 +131,10 @@ class FridayPrayerBase extends Component {
               // className="fullscreen-slide"
               play={true}
               cancelOnInteraction={false} // should stop playing on user interaction
-              interval={3000}
+              interval={10000}
             >
               {contents.map(content => (
                 <div className="fullscreen-content">
-                  <div className="fullscreen-img-wrap">
-                    <img
-                      className="fullscreen-img"
-                      src={photoURL}
-                      alt="profile"
-                    />
-                  </div>
                   <div className="fullscreen-content-wrap">
                     {content.name && (
                       <div className="fullscreen-content-name-wrap">
@@ -352,24 +345,22 @@ class Content extends Component {
         this.setState({ commentSize: commentObject.length });
       }
       this.setState({ content: this.props.content });
-      this.props.firebase
-        .user(this.props.content.uid)
-        .once("value", snapshot => {
-          if (snapshot.val()) {
-            const prevName = snapshot.val().username;
-            if (prevName !== this.props.content.username) {
-              this.props.firebase
-                .contentFridayPrayer(
-                  this.props.content.church,
-                  this.props.content.date
-                )
-                .update({
-                  name: prevName
-                });
-            }
-            this.setState({ username: snapshot.val().username });
+      this.props.firebase.user(this.props.content.uid).on("value", snapshot => {
+        if (snapshot.val()) {
+          const prevName = snapshot.val().username;
+          if (prevName !== this.props.content.username) {
+            this.props.firebase
+              .contentFridayPrayer(
+                this.props.content.church,
+                this.props.content.date
+              )
+              .update({
+                name: prevName
+              });
           }
-        });
+          this.setState({ username: snapshot.val().username });
+        }
+      });
       this.props.firebase
         .likeList(
           this.props.content.date,
@@ -442,7 +433,9 @@ class Content extends Component {
               </FirebaseContext.Consumer>
             </div>
             <div className="praycontent-header-name-wrap">
-              <span className="praycontent-header-name">{username}</span>
+              <span className="praycontent-header-name">
+                {this.props.content.name}
+              </span>
             </div>
             <div className="praycontent-header-date-wrap">
               <span className="praycontent-header-date">
