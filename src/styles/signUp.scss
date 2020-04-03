@@ -1,0 +1,66 @@
+@import "./color.scss";
+@import "./mixin.scss";
+@import "./font.scss";
+@include mobile {
+  .sign-up-wrap {
+    width: 100%;
+    font-family: $spoqa-han-sans;
+    // text-align: center;
+    .sign-up-text-wrap {
+      margin-top: 50px;
+      text-align: center;
+
+      .sign-up-text {
+        font-size: 20px;
+        font-weight: normal;
+      }
+    }
+
+    .input-form-wrap {
+      width: 60%;
+      margin: 0 auto;
+      margin-top: 30px;
+      .input-form {
+        margin-top: 2px;
+        margin-bottom: 12px;
+        width: 100%;
+        background-color: #ffffff;
+        display: block;
+        border: 0;
+        font-size: 17px;
+        font-weight: normal;
+        box-shadow: 0 30px 60px 12px rgba(0, 0, 33, 0.05),
+          0 4px 24px 0 rgba(0, 0, 33, 0.05), 0 0 1px 0 rgba(0, 0, 33, 0.09);
+      }
+      .submit-btn-wrap {
+        margin-top: 60px;
+        width: 100%;
+        text-align: center;
+        .submit-btn {
+          color: #2e5fd2;
+          font-size: 25px;
+          &:hover {
+            font-weight: bold;
+          }
+        }
+      }
+      .back-btn-wrap {
+        margin-top: 20px;
+        width: 100%;
+        text-align: center;
+        .back-btn {
+          color: black;
+          font-size: 25px;
+          &:hover {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}
+@include tablet {
+}
+
+@include desktop {
+}

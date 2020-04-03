@@ -156,7 +156,7 @@ class SignInFormBase extends Component {
     return (
       <div>
         <form onSubmit={this.onSubmit} className="input-wrap">
-          <p className="input-login-text">Email</p>
+          <p className="input-login-text">이메일</p>
           <input
             className="input-login"
             type="text"
@@ -165,7 +165,7 @@ class SignInFormBase extends Component {
             onChange={this.onChange}
             required={true}
           />
-          <p className="input-login-text">Password</p>
+          <p className="input-login-text">패스워드</p>
           <input
             className="input-login"
             type="password"

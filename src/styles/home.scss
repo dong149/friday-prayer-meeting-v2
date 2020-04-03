@@ -1,6 +1,6 @@
 @import "./color.scss";
 @import "./mixin.scss";
-
+@import "./font.scss";
 @include mobile {
   .home-logo-wrap {
     text-align: center;
@@ -13,20 +13,25 @@
     margin: 0 auto;
     width: 60%;
     text-align: center;
+
     .signin-question {
+      font-family: $spoqa-han-sans;
       font-size: 15px;
     }
   }
   .input-wrap {
-    width: 60%;
+    width: 80%;
     margin: 0 auto;
     margin-top: 10%;
+
     .input-login-text {
+      font-family: $spoqa-han-sans;
       font-size: 15px;
       font-weight: 400;
       margin-bottom: 3px;
     }
     .input-login {
+      font-family: $spoqa-han-sans;
       border: none;
       background-color: $tadaGrey;
       width: 100%;
@@ -34,17 +39,38 @@
   }
   .input-submit-wrap {
     margin: 0 auto;
-    width: 60%;
+    width: 80%;
     text-align: center;
+    padding-bottom: 15px;
     .input-submit {
+      font-family: $spoqa-han-sans;
       background-color: white;
+      font-weight: normal;
       border: none;
       border-radius: 10px;
       width: 50%;
       margin-top: 20px;
       color: $black;
+      &:hover {
+        font-weight: bold;
+        color: #3f42c8;
+        cursor: pointer;
+      }
     }
   }
+  // .input-submit-wrap {
+  //   margin: 0 auto;
+  //   width: 60%;
+  //   text-align: center;
+  //   .input-submit {
+  //     background-color: white;
+  //     border: none;
+  //     border-radius: 10px;
+  //     width: 50%;
+  //     margin-top: 20px;
+  //     color: $black;
+  //   }
+  // }
   .login-btn-wrap {
     margin: 0 auto;
     width: 60%;
@@ -62,60 +88,119 @@
       }
     }
   }
-  .officialContent-wrap {
-    margin-top: 30%;
+  .google-login-inform-wrap {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    .google-login-inform {
+      font-family: $spoqa-han-sans;
+      font-weight: lighter;
+      font-size: 14px;
+    }
+  }
+
+  .footer {
+    padding-top: 100px;
+
+    padding-bottom: 50px;
+    margin: 0 auto;
+    margin-top: 50px;
     width: 100%;
-    height: 500px;
-    background-color: $indigo;
+    text-align: center;
+    font-family: $spoqa-han-sans;
+    background-color: #222222;
+    z-index: 5;
+    .footer-intro-wrap {
+      color: white;
+      margin-bottom: 100px;
+      .footer-intro {
+        font-size: 15px;
+      }
+    }
+    .footer-company-name-wrap {
+      color: white;
+      .footer-company-name {
+        font-size: 18px;
+        font-weight: bold;
+      }
+    }
+    .footer-company-description-wrap {
+      padding-top: 20px;
+      .footer-company-description {
+        font-size: 15px;
+        color: white;
+        font-weight: normal;
+      }
+    }
+    .footer-company-sns-wrap {
+      padding-top: 40px;
+      padding-bottom: 30px;
+      color: white;
+      .footer-company-sns {
+        padding-right: 20px;
+        font-size: 50px;
+        font-weight: bold;
+      }
+    }
   }
 }
 @include tablet {
   .home-logo-wrap {
     text-align: center;
     .home-logo {
-      width: 60%;
-      margin-top: 20%;
+      width: 20%;
+      margin-top: 5%;
     }
   }
   .signin-question-wrap {
     margin: 0 auto;
-    width: 60%;
+    width: 20%;
     text-align: center;
     .signin-question {
       font-size: 15px;
     }
   }
   .input-wrap {
-    width: 60%;
+    width: 20%;
     margin: 0 auto;
-    margin-top: 10%;
+    margin-top: 5%;
     .input-login-text {
       font-size: 15px;
       font-weight: 400;
-      margin-bottom: 3px;
+      margin-bottom: 10px;
     }
     .input-login {
       border: none;
       background-color: $tadaGrey;
       width: 100%;
+      height: 30px;
+      margin-bottom: 15px;
     }
   }
   .input-submit-wrap {
     margin: 0 auto;
-    width: 60%;
+    width: 50%;
     text-align: center;
+    padding-bottom: 15px;
     .input-submit {
+      font-family: $spoqa-han-sans;
       background-color: white;
+      font-weight: normal;
       border: none;
       border-radius: 10px;
       width: 50%;
       margin-top: 20px;
       color: $black;
+      &:hover {
+        font-weight: bold;
+        color: #3f42c8;
+        cursor: pointer;
+      }
     }
   }
   .login-btn-wrap {
     margin: 0 auto;
-    width: 60%;
+    width: 20%;
     margin-top: 20px;
     text-align: center;
     .google-btn-wrap {
@@ -130,11 +215,68 @@
       }
     }
   }
+  .google-login-inform-wrap {
+    width: 20%;
+    margin: 0 auto;
+    text-align: center;
+    .google-login-inform {
+      font-family: $spoqa-han-sans;
+      font-size: 15px;
+      font-weight: lighter;
+    }
+  }
+
   .officialContent-wrap {
-    margin-top: 30%;
-    width: 100%;
+    margin: 0 auto;
+    margin-top: 5%;
+    width: 20%;
     height: 500px;
     background-color: $indigo;
+  }
+
+  .footer {
+    padding-top: 100px;
+
+    padding-bottom: 150px;
+    margin: 0 auto;
+    margin-top: 50px;
+    width: 100%;
+    text-align: center;
+    font-family: $spoqa-han-sans;
+    background-color: #222222;
+    z-index: 5;
+    .footer-intro-wrap {
+      color: white;
+      margin-bottom: 40px;
+      .footer-intro {
+        font-size: 15px;
+      }
+    }
+    .footer-company-name-wrap {
+      color: white;
+      .footer-company-name {
+        font-size: 18px;
+        font-weight: bold;
+      }
+    }
+    .footer-company-description-wrap {
+      padding-top: 20px;
+      .footer-company-description {
+        font-size: 15px;
+        color: white;
+        font-weight: normal;
+      }
+    }
+    .footer-company-sns-wrap {
+      padding-top: 40px;
+      padding-bottom: 100px;
+      color: white;
+      .footer-company-sns {
+        padding-right: 20px;
+        font-size: 50px;
+        font-weight: bold;
+      }
+    }
   }
 }
 
@@ -142,49 +284,59 @@
   .home-logo-wrap {
     text-align: center;
     .home-logo {
-      width: 60%;
-      margin-top: 20%;
+      width: 20%;
+      margin-top: 5%;
     }
   }
   .signin-question-wrap {
     margin: 0 auto;
-    width: 60%;
+    width: 20%;
     text-align: center;
     .signin-question {
       font-size: 15px;
     }
   }
   .input-wrap {
-    width: 60%;
+    width: 20%;
     margin: 0 auto;
-    margin-top: 10%;
+    margin-top: 5%;
     .input-login-text {
       font-size: 15px;
       font-weight: 400;
-      margin-bottom: 3px;
+      margin-bottom: 10px;
     }
     .input-login {
       border: none;
       background-color: $tadaGrey;
       width: 100%;
+      height: 30px;
+      margin-bottom: 15px;
     }
   }
   .input-submit-wrap {
     margin: 0 auto;
-    width: 60%;
+    width: 50%;
     text-align: center;
+    padding-bottom: 15px;
     .input-submit {
+      font-family: $spoqa-han-sans;
       background-color: white;
+      font-weight: normal;
       border: none;
       border-radius: 10px;
       width: 50%;
       margin-top: 20px;
       color: $black;
+      &:hover {
+        font-weight: bold;
+        color: #3f42c8;
+        cursor: pointer;
+      }
     }
   }
   .login-btn-wrap {
     margin: 0 auto;
-    width: 60%;
+    width: 20%;
     margin-top: 20px;
     text-align: center;
     .google-btn-wrap {
@@ -199,10 +351,67 @@
       }
     }
   }
+  .google-login-inform-wrap {
+    width: 20%;
+    margin: 0 auto;
+    text-align: center;
+    .google-login-inform {
+      font-family: $spoqa-han-sans;
+      font-size: 15px;
+      font-weight: lighter;
+    }
+  }
+
   .officialContent-wrap {
-    margin-top: 30%;
-    width: 100%;
+    margin: 0 auto;
+    margin-top: 5%;
+    width: 20%;
     height: 500px;
     background-color: $indigo;
+  }
+
+  .footer {
+    padding-top: 100px;
+
+    padding-bottom: 150px;
+    margin: 0 auto;
+    margin-top: 50px;
+    width: 100%;
+    text-align: center;
+    font-family: $spoqa-han-sans;
+    background-color: #222222;
+    z-index: 5;
+    .footer-intro-wrap {
+      color: white;
+      margin-bottom: 40px;
+      .footer-intro {
+        font-size: 15px;
+      }
+    }
+    .footer-company-name-wrap {
+      color: white;
+      .footer-company-name {
+        font-size: 18px;
+        font-weight: bold;
+      }
+    }
+    .footer-company-description-wrap {
+      padding-top: 20px;
+      .footer-company-description {
+        font-size: 15px;
+        color: white;
+        font-weight: normal;
+      }
+    }
+    .footer-company-sns-wrap {
+      padding-top: 40px;
+      padding-bottom: 100px;
+      color: white;
+      .footer-company-sns {
+        padding-right: 20px;
+        font-size: 50px;
+        font-weight: bold;
+      }
+    }
   }
 }

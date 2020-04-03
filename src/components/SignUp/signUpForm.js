@@ -3,11 +3,19 @@ import { Link, withRouter } from "react-router-dom";
 
 import * as ROUTES from "../../routes";
 import { withFirebase } from "../../Firebase";
+import "../../styles/signUp.scss";
 const SignUpPage = () => (
-  <div>
-    <h1>SignUp</h1>
-    <SignUpForm />
-  </div>
+  <>
+    <div className="home-logo-wrap">
+      <img className="home-logo" src="/churchbook.png" alt="HomeLogo" />
+    </div>
+    <div className="sign-up-wrap">
+      <div className="sign-up-text-wrap">
+        <span className="sign-up-text">회원가입</span>
+      </div>
+      <SignUpForm />
+    </div>
+  </>
 );
 
 const INITIAL_STATE = {
@@ -25,7 +33,7 @@ class SignUpFormBase extends Component {
     this.state = { ...INITIAL_STATE };
   }
 
-  onSubmit = event => {
+  onSubmit = () => {
     const { username, email, passwordOne } = this.state;
 
     this.props.firebase
@@ -49,10 +57,10 @@ class SignUpFormBase extends Component {
       .catch(error => {
         this.setState({ error });
       });
-
-    event.preventDefault();
   };
-
+  onBack = () => {
+    this.props.history.push(ROUTES.HOME);
+  };
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
@@ -67,41 +75,56 @@ class SignUpFormBase extends Component {
       username === "";
 
     return (
-      <form onSubmit={this.onSubmit}>
+      <div className="input-form-wrap">
+        <span className="input-login-text">이름</span>
         <input
+          className="input-form"
           name="username"
           value={username}
           onChange={this.onChange}
           type="text"
-          placeholder="Full Name"
+          placeholder="이름 (ex.류동훈)"
         />
+        <span className="input-login-text">이메일</span>
         <input
+          className="input-form"
           name="email"
           value={email}
           onChange={this.onChange}
           type="text"
-          placeholder="Email Address"
+          placeholder="xxxx@gmail.com"
         />
+        <span className="input-login-text">패스워드</span>
         <input
+          className="input-form"
           name="passwordOne"
           value={passwordOne}
           onChange={this.onChange}
           type="password"
-          placeholder="Password"
+          placeholder="기억하기 쉽게"
         />
+        <span className="input-login-text">패스워드 확인</span>
         <input
+          className="input-form"
           name="passwordTwo"
           value={passwordTwo}
           onChange={this.onChange}
           type="password"
-          placeholder="Confirm Password"
+          placeholder="위와 같게 작성하세요"
         />
-        <button disabled={isInvalid} type="submit">
-          Sign Up
-        </button>
 
+        <div
+          className="submit-btn-wrap"
+          disabled={isInvalid}
+          onClick={() => this.onSubmit()}
+        >
+          <span className="submit-btn">가입하기</span>
+        </div>
         {error && <p>{error.message}</p>}
-      </form>
+        <div className="back-btn-wrap" onClick={() => this.onBack()}>
+          <span className="back-btn">돌아가기</span>
+        </div>
+      </div>
     );
   }
 }
