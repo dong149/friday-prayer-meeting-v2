@@ -4,7 +4,7 @@ import * as ROUTES from "../../routes";
 import {
   withAuthorization,
   AuthUserContext,
-  withAuthentication
+  withAuthentication,
 } from "../Session";
 import "../../styles/feed.scss";
 import { WindMillLoading } from "react-loadingg";
@@ -18,50 +18,50 @@ const INITIAL_STATE = {
   comments: [],
   comment: "",
   error: null,
-  writeFormOpen: false
+  writeFormOpen: false,
 };
 class FeedBase extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: false,
-      contents: []
+      contents: [],
     };
   }
   componentDidMount() {
     if (this.props.firebase) {
       this.props.firebase
         .userChurch(this.props.firebase.doFindCurrentUID())
-        .on("value", snapshot => {
+        .on("value", (snapshot) => {
           if (!snapshot.val()) {
             this.props.history.push(ROUTES.CHOOSE_CHURCH);
           }
         });
       this.props.firebase
         .userPhoto(this.props.firebase.doFindCurrentUID())
-        .once("value", snapshot => {
+        .once("value", (snapshot) => {
           const photoURL = snapshot.val();
           if (!photoURL) {
             this.props.firebase
               .user(this.props.firebase.doFindCurrentUID())
               .update({
-                photoURL: "./defaultProfile.png"
+                photoURL: "./defaultProfile.png",
               });
           }
         });
       this.setState({ loading: true });
-      this.props.firebase.contents().on("value", snapshot => {
+      this.props.firebase.contents().on("value", (snapshot) => {
         if (!snapshot.val()) {
           this.setState({
             contents: [],
-            loading: false
+            loading: false,
           });
           alert("비어있습니다. 작성해주세요.");
           return;
         }
         const contentsObject = snapshot.val();
-        const contentsList = Object.keys(contentsObject).map(key => ({
-          ...contentsObject[key]
+        const contentsList = Object.keys(contentsObject).map((key) => ({
+          ...contentsObject[key],
         }));
 
         // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
@@ -69,7 +69,7 @@ class FeedBase extends Component {
         // console.log(contentsList);
         this.setState({
           contents: contentsList,
-          loading: false
+          loading: false,
         });
       });
     }
@@ -81,7 +81,7 @@ class FeedBase extends Component {
   handleWriteFormOpen = () => {
     const { writeFormOpen } = this.state;
     this.setState({
-      writeFormOpen: !writeFormOpen
+      writeFormOpen: !writeFormOpen,
     });
   };
   render() {
@@ -121,7 +121,7 @@ class FeedBase extends Component {
 
           {writeFormOpen && (
             <FirebaseContext.Consumer>
-              {firebase => (
+              {(firebase) => (
                 <WriteForm
                   firebase={firebase}
                   history={this.props.history}
@@ -133,7 +133,7 @@ class FeedBase extends Component {
         </div>
         <div className="feed">
           <AuthUserContext.Consumer>
-            {authUser => <ContentList contents={contents} />}
+            {(authUser) => <ContentList contents={contents} />}
           </AuthUserContext.Consumer>
         </div>
       </>
@@ -141,7 +141,7 @@ class FeedBase extends Component {
   }
 }
 // 언제 게시되었는지를 알려주는 함수입니다.
-export const handleDate = date => {
+export const handleDate = (date) => {
   let dyear = parseInt(date.substring(0, 4));
   let dmonth = parseInt(date.substring(4, 6)) - 1;
   let dday = parseInt(date.substring(6, 8));
@@ -171,11 +171,11 @@ export const handleDate = date => {
 
 // Content 리스트
 const ContentList = ({ contents }) => {
-  const res = contents.map(content => {
+  const res = contents.map((content) => {
     console.log(content);
     return (
       <FirebaseContext>
-        {firebase => <Content content={content} firebase={firebase} />}
+        {(firebase) => <Content content={content} firebase={firebase} />}
       </FirebaseContext>
     );
   });
@@ -188,18 +188,18 @@ class CommentFormBase extends Component {
     super(props);
     this.state = {
       ...INITIAL_STATE,
-      photoURL: ""
+      photoURL: "",
     };
   }
   // 기존에 있는 코멘트들이 보이게 하는 기능
   componentDidMount() {
     this.setState({ loading: true });
 
-    this.props.firebase.comments(this.props.date).on("value", snapshot => {
+    this.props.firebase.comments(this.props.date).on("value", (snapshot) => {
       const commentsObject = snapshot.val();
       if (commentsObject) {
-        const commentsList = Object.keys(commentsObject).map(key => ({
-          ...commentsObject[key]
+        const commentsList = Object.keys(commentsObject).map((key) => ({
+          ...commentsObject[key],
         }));
 
         // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
@@ -207,13 +207,13 @@ class CommentFormBase extends Component {
         console.log(commentsList);
         this.setState({
           comments: commentsList,
-          loading: false
+          loading: false,
         });
       }
     });
   }
 
-  onChange = event => {
+  onChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };
   onSubmit = () => {
@@ -230,12 +230,12 @@ class CommentFormBase extends Component {
           uid: uid,
           comment,
           name: name,
-          date: date
+          date: date,
         })
-        .then(authUser => {
+        .then((authUser) => {
           this.setState({ ...INITIAL_STATE });
         })
-        .catch(error => {
+        .catch((error) => {
           this.setState({ error });
         });
     } catch (error) {
@@ -274,9 +274,9 @@ class CommentFormBase extends Component {
           </div>
         </div>
         <div>
-          {comments.map(comment => (
+          {comments.map((comment) => (
             <FirebaseContext.Consumer>
-              {firebase => <Comment firebase={firebase} comment={comment} />}
+              {(firebase) => <Comment firebase={firebase} comment={comment} />}
             </FirebaseContext.Consumer>
           ))}
         </div>
@@ -289,16 +289,16 @@ class Comment extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      imageURL: ""
+      imageURL: "",
     };
   }
   componentDidMount() {
     this.props.firebase
       .userPhoto(this.props.comment.uid)
-      .once("value", snapshot => {
+      .once("value", (snapshot) => {
         const imageURL = snapshot.val();
         this.setState({
-          imageURL
+          imageURL,
         });
       });
   }
@@ -340,7 +340,7 @@ class Content extends Component {
       commentForm: false,
       commentSize: 0,
       liked: false,
-      imgModalOpen: false
+      imgModalOpen: false,
     };
   }
   componentDidMount() {
@@ -352,30 +352,32 @@ class Content extends Component {
 
     this.props.firebase
       .likeList(this.props.content.date, this.props.firebase.doFindCurrentUID())
-      .on("value", snapshot => {
+      .on("value", (snapshot) => {
         // console.log(snapshot && snapshot.exists());
         if (snapshot.val()) {
           this.setState({
-            liked: true
+            liked: true,
           });
         } else {
           this.setState({
-            liked: false
+            liked: false,
           });
         }
       });
-    this.props.firebase.user(this.props.content.uid).once("value", snapshot => {
-      if (snapshot.val()) {
-        const prevName = snapshot.val().username;
-        if (prevName !== this.props.content.username) {
-          this.props.firebase.content(this.props.content.date).update({
-            name: prevName
-          });
+    this.props.firebase
+      .user(this.props.content.uid)
+      .once("value", (snapshot) => {
+        if (snapshot.val()) {
+          const prevName = snapshot.val().username;
+          if (prevName !== this.props.content.username) {
+            this.props.firebase.content(this.props.content.date).update({
+              name: prevName,
+            });
+          }
         }
-      }
-    });
+      });
   }
-  setCommentForm = commentForm => {
+  setCommentForm = (commentForm) => {
     this.setState({ commentForm: commentForm });
   };
   setLike = () => {
@@ -383,7 +385,7 @@ class Content extends Component {
     this.props.firebase
       .content(this.props.content.date)
       .update({
-        like: newLike
+        like: newLike,
       })
       .then(() => {
         this.props.firebase
@@ -393,19 +395,19 @@ class Content extends Component {
           )
           .update({
             // 나중에 감정표현 집어넣으려면 여기서 종류 넣어서 만들면 됨.
-            uid: this.props.firebase.doFindCurrentUID()
+            uid: this.props.firebase.doFindCurrentUID(),
           });
       });
   };
   handleImgModal = () => {
     this.setState({
-      imgModalOpen: true
+      imgModalOpen: true,
     });
   };
   closeImgModal = () => {
     console.log("closeModal");
     this.setState({
-      imgModalOpen: false
+      imgModalOpen: false,
     });
   };
   // customStyles = {
@@ -422,18 +424,13 @@ class Content extends Component {
             <div className="content-profile-wrap-wrap">
               <div className="content-profile-wrap">
                 <FirebaseContext.Consumer>
-                  {firebase => (
+                  {(firebase) => (
                     <ContentProfile
                       firebase={firebase}
                       uid={this.props.content.uid}
                     />
                   )}
                 </FirebaseContext.Consumer>
-                {/* <img
-                className="content-profile"
-                src="./ironman.jpg"
-                alt="iron-man"
-              /> */}
               </div>
             </div>
             <div className="content-title-wrap-wrap-wrap">
@@ -545,7 +542,7 @@ class Content extends Component {
             {/* 댓글 창 */}
             {commentForm && (
               <FirebaseContext.Consumer>
-                {firebase => (
+                {(firebase) => (
                   <CommentFormBase
                     date={this.props.content.date}
                     firebase={firebase}
@@ -566,10 +563,10 @@ class ContentProfile extends Component {
     this.state = { imageURL: "" };
   }
   componentDidMount() {
-    this.props.firebase.userPhoto(this.props.uid).once("value", snapshot => {
+    this.props.firebase.userPhoto(this.props.uid).once("value", (snapshot) => {
       const imageURL = snapshot.val();
       this.setState({
-        imageURL
+        imageURL,
       });
     });
   }
@@ -583,7 +580,7 @@ class ContentProfile extends Component {
   }
 }
 
-const authCondition = authUser => !!authUser;
+const authCondition = (authUser) => !!authUser;
 
 withAuthentication(ContentProfile);
 const Feed = withAuthorization(authCondition)(FeedBase);

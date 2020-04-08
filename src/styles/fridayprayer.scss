@@ -74,6 +74,18 @@
     width: 100%;
     background-color: #ffffff;
 
+    // 금요기도회 날짜
+    .friday-date-wrap {
+      width: 80%;
+      margin: 0 auto;
+      text-align: center;
+      .friday-date {
+        font-family: $spoqa-han-sans;
+        font-size: 35px;
+        font-weight: lighter;
+        // color: #2e5fd2;
+      }
+    }
     // 금요기도회 로고 이미지
     .friday-prayer-img-wrap {
       margin: 0 auto;
@@ -122,6 +134,10 @@
       .pray-content-wrap {
         width: 100%;
         text-align: center;
+        .form-control {
+          font-family: $spoqa-han-sans;
+          font-size: 14px;
+        }
       }
       .pray-content-btn-wrap {
         width: 100%;
@@ -210,6 +226,31 @@
             font-family: $black-han-sans;
             color: red;
           }
+        }
+      }
+    }
+    .pagination-wrap {
+      width: 100%;
+      margin-top: 50px;
+      margin-bottom: 50px;
+      .before-wrap {
+        text-align: center;
+        width: 50%;
+        display: inline-block;
+        .before {
+          font-family: $spoqa-han-sans;
+          font-size: 20px;
+          font-weight: normal;
+        }
+      }
+      .next-wrap {
+        text-align: center;
+        width: 50%;
+        display: inline-block;
+        .next {
+          font-family: $spoqa-han-sans;
+          font-size: 20px;
+          font-weight: normal;
         }
       }
     }

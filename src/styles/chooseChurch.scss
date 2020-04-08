@@ -40,7 +40,7 @@
     top: 140px;
     left: 40px;
     right: 40px;
-    bottom: 230px;
+    bottom: 160px;
     background-color: #ffffff;
     text-align: center;
   }
@@ -74,9 +74,9 @@
       }
       .modal-code-input {
         width: 100%;
-        border: 0;
-        box-shadow: 0 30px 60px 12px rgba(0, 0, 33, 0.05),
-          0 4px 24px 0 rgba(0, 0, 33, 0.05), 0 0 1px 0 rgba(0, 0, 33, 0.09);
+        border: 1px solid #2e5fd2;
+        // box-shadow: 0 30px 60px 12px rgba(0, 0, 33, 0.05),
+        //   0 4px 24px 0 rgba(0, 0, 33, 0.05), 0 0 1px 0 rgba(0, 0, 33, 0.09);
         display: block;
         margin-bottom: 10px;
         font-size: 40px;
@@ -89,6 +89,9 @@
         font-weight: normal;
         font-size: 40px;
         color: #2e5fd2;
+        &:hover {
+          color: #027a75;
+        }
       }
     }
     .modal-close-wrap {

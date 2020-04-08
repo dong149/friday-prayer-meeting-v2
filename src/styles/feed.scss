@@ -89,6 +89,7 @@
       .content-body-wrap {
         // *** contents header part ***
         .content-header {
+          font-family: $spoqa-han-sans;
           font-size: 13px;
           line-height: 17px;
           margin: 0 0 12px;
@@ -205,12 +206,14 @@
               .content-footer-top-like {
                 display: inline-block;
                 .content-footer-top-like-text {
+                  font-family: $spoqa-han-sans;
                 }
               }
               .content-footer-top-comment {
                 display: inline-block;
                 float: right;
                 .content-footer-top-comment-text {
+                  font-family: $spoqa-han-sans;
                 }
               }
             }
@@ -228,8 +231,9 @@
               text-align: center;
 
               .content-footer-bottom-like-text {
-                font-weight: bold;
-                font-size: 15px;
+                font-family: $spoqa-han-sans;
+                font-weight: normal;
+                font-size: 12px;
               }
             }
             .content-footer-bottom-comment-wrap {
@@ -241,8 +245,9 @@
               text-align: center;
 
               .content-footer-bottom-comment-text {
-                font-weight: bold;
-                font-size: 15px;
+                font-family: $spoqa-han-sans;
+                font-weight: normal;
+                font-size: 12px;
               }
             }
           }

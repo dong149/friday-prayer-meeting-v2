@@ -23,7 +23,7 @@ const INITIAL_STATE = {
   email: "",
   passwordOne: "",
   passwordTwo: "",
-  error: null
+  error: null,
 };
 
 class SignUpFormBase extends Component {
@@ -38,30 +38,30 @@ class SignUpFormBase extends Component {
 
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
-      .then(authUser => {
+      .then((authUser) => {
         authUser.user.updateProfile({
           displayName: username,
-          photoURL: "./defaultProfile.png"
+          photoURL: "./defaultProfile.png",
         });
         // Create a user in your Firebase realtime database
         return this.props.firebase.user(authUser.user.uid).set({
           username,
           email,
-          photoURL: "./defaultProfile.png"
+          photoURL: "./defaultProfile.png",
         });
       })
-      .then(authUser => {
+      .then((authUser) => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.CHOOSE_CHURCH);
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({ error });
       });
   };
   onBack = () => {
     this.props.history.push(ROUTES.HOME);
   };
-  onChange = event => {
+  onChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };
 
@@ -101,7 +101,7 @@ class SignUpFormBase extends Component {
           value={passwordOne}
           onChange={this.onChange}
           type="password"
-          placeholder="기억하기 쉽게"
+          placeholder="6글자 이상"
         />
         <span className="input-login-text">패스워드 확인</span>
         <input

@@ -24,7 +24,7 @@ const INITIAL_STATE = {
   imageFile: null,
   like: 0, // 좋아요 수
   comments: [], //댓글
-  error: null
+  error: null,
 };
 
 class WriteFormBase extends Component {
@@ -44,7 +44,7 @@ class WriteFormBase extends Component {
     //   name: name
     // });
   }
-  onSubmit = async event => {
+  onSubmit = async (event) => {
     try {
       this.setState({ loading: true });
       const { content, image, like, comments } = this.state;
@@ -56,17 +56,17 @@ class WriteFormBase extends Component {
 
       if (image) {
         const storageRef = this.props.firebase.image(image.name);
-        storageRef.put(image).then(result => {
+        storageRef.put(image).then((result) => {
           this.props.firebase
             .images()
             .child(image.name)
             .getDownloadURL()
-            .then(firebaseURL => {
+            .then((firebaseURL) => {
               this.setState({ imageURL: firebaseURL });
               console.log(firebaseURL);
               URL = firebaseURL;
             })
-            .then(result => {
+            .then((result) => {
               const date = format(new Date(), "yyyyMMddHHmmss");
               this.props.firebase
                 .content(date)
@@ -77,14 +77,14 @@ class WriteFormBase extends Component {
                   date: date,
                   imageURL: URL,
                   like,
-                  comments: []
+                  comments: [],
                 })
-                .then(authUser => {
+                .then((authUser) => {
                   console.log("here");
                   this.setState({ ...INITIAL_STATE });
                   this.props.history.push(ROUTES.FEED);
                 })
-                .catch(error => {
+                .catch((error) => {
                   this.setState({ error });
                 });
             });
@@ -109,32 +109,31 @@ class WriteFormBase extends Component {
             date: date,
             like,
             comments: [],
-            imageURL: URL
+            imageURL: URL,
           })
-          .then(authUser => {
+          .then((authUser) => {
             // console.log("here");
             this.setState({ ...INITIAL_STATE });
             this.props.history.push(ROUTES.FEED);
           })
-          .catch(error => {
+          .catch((error) => {
             this.setState({ error });
           });
       }
     } catch (e) {
       console.error(e);
     }
-    event.preventDefault();
   };
 
-  onChange = event => {
+  onChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };
-  onImageChange = event => {
+  onImageChange = (event) => {
     if (event.target.files[0]) {
       const image = event.target.files[0];
       this.setState({
         image,
-        imageFile: URL.createObjectURL(event.target.files[0])
+        imageFile: URL.createObjectURL(event.target.files[0]),
       });
     }
   };
@@ -147,7 +146,9 @@ class WriteFormBase extends Component {
     if (!loading) {
       return (
         <form onSubmit={this.onSubmit} className="input-wrap">
-          <p className="input-login-text">내용</p>
+          {/* <div className="input-content-text-wrap">
+            <span className="input-content-text">내용</span>
+          </div> */}
           <textarea
             className="form-control"
             type="textarea"
@@ -156,6 +157,7 @@ class WriteFormBase extends Component {
             onChange={this.onChange}
             required={true}
             rows="10"
+            placeholder="작성해주세요."
           />
           <input
             className="input-file"
@@ -176,19 +178,24 @@ class WriteFormBase extends Component {
               />
             </div>
           )}
-          <div className="input-submit-wrap">
-            <button
-              className="btn btn-primary"
-              disabled={isInvalid}
-              type="submit"
-            >
-              작성하기
-            </button>
+          <div className="btn-wrap">
+            <div className="input-btn-wrap">
+              <span
+                className="input-btn"
+                disabled={isInvalid}
+                onClick={() => this.onSubmit()}
+              >
+                작성하기
+              </span>
 
-            {error && <p>{error.message}</p>}
-          </div>
-          <div onClick={() => this.props.click()}>
-            <span>닫기</span>
+              {error && <p>{error.message}</p>}
+            </div>
+            <div
+              className="input-close-btn-wrap"
+              onClick={() => this.props.click()}
+            >
+              <span className="input-close-btn">닫기</span>
+            </div>
           </div>
         </form>
       );
@@ -197,7 +204,7 @@ class WriteFormBase extends Component {
     }
   }
 }
-const authCondition = authUser => !!authUser;
+const authCondition = (authUser) => !!authUser;
 const WriteForm = withAuthorization(authCondition)(WriteFormBase);
 
 export default WriteForm;

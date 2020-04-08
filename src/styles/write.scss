@@ -1,26 +1,61 @@
 @import "./color.scss";
 @import "./mixin.scss";
+@import "./font.scss";
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/bootstrap.scss";
 @include mobile {
-  .form-control {
-    font-size: 40px;
-    width: 100%;
-  }
-  .input-file-preview-wrap {
-    overflow: hidden;
-    .input-file-preview {
-      border: 0;
-      vertical-align: top;
-      height: 100%;
-      min-height: 100%;
-      min-height: 0;
-      margin-top: 0px;
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
-      // padding-bottom: 100%;
+  .input-wrap {
+    width: 80%;
+    font-family: $spoqa-han-sans;
+    // .input-content-text-wrap {
+    //   width: 100%;
+    //   text-align: center;
+    //   padding-bottom: 20px;
+    //   .input-content-text {
+    //     font-size: 20px;
+    //   }
+    // }
+    .form-control {
+      font-size: 20px;
       width: 100%;
-      display: inline-block;
+    }
+    .input-file-preview-wrap {
+      overflow: hidden;
+      .input-file-preview {
+        border: 0;
+        vertical-align: top;
+        height: 100%;
+        min-height: 100%;
+        min-height: 0;
+        margin-top: 0px;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        // padding-bottom: 100%;
+        width: 100%;
+        display: inline-block;
+      }
+    }
+    .btn-wrap {
+      width: 100%;
+      padding-top: 20px;
+      .input-btn-wrap {
+        display: inline-block;
+        text-align: center;
+        width: 50%;
+        .input-btn {
+          font-size: 20px;
+          color: #2e5fd2;
+        }
+      }
+      .input-close-btn-wrap {
+        display: inline-block;
+        text-align: center;
+        width: 50%;
+        .input-close-btn {
+          font-size: 20px;
+          color: #db3445;
+        }
+      }
     }
   }
 }

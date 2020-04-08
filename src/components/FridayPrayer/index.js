@@ -4,12 +4,12 @@ import * as ROUTES from "../../routes";
 import {
   withAuthorization,
   AuthUserContext,
-  withAuthentication
+  withAuthentication,
 } from "../Session";
 import "../../styles/fridayprayer.scss";
 import { WindMillLoading } from "react-loadingg";
 import _ from "lodash";
-import { format, formatDistanceToNow } from "date-fns";
+import { format, formatDistanceToNow, add } from "date-fns";
 import { ko } from "date-fns/locale";
 import { FirebaseContext } from "../../Firebase";
 import Fullscreen from "react-full-screen";
@@ -22,7 +22,7 @@ const INITIAL_STATE = {
   loading: false,
   comments: [],
   comment: "",
-  error: null
+  error: null,
 };
 const AutoplaySlider = withAutoplay(AwesomeSlider);
 class FridayPrayerBase extends Component {
@@ -33,27 +33,62 @@ class FridayPrayerBase extends Component {
       contents: [],
       isFull: false,
       prayFormOpen: false,
-      photoURL: ""
+      photoURL: "",
+      fridayDate: "",
+      isBottom: false,
+      showItem: 4,
+      rawDate: "",
+      contentOpen: false,
+      controlTimeOpen: false,
+      time: 5,
+      interval: 5000,
     };
   }
 
+  // onScroll = () => {
+  //   // 맨 아래에 도착했을 경우
+  //   if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+  //     console.log("bottom");
+  //     this.setState({ isBottom: true });
+  //   }
+  // };
+  componentWillUnmount() {
+    this.props.firebase.contents().off();
+  }
   componentDidMount() {
+    // window.addEventListener("scroll", this.onScroll);
+
+    const todayDay = new Date().getDay();
+    // let fridayDate = new Date().getDate();
+    let fridayDate;
+    if (todayDay === 6) {
+      fridayDate = add(new Date(), { days: 6 });
+    } else {
+      fridayDate = add(new Date(), { days: 5 - todayDay });
+    }
+    console.log(fridayDate);
+    let rawDate = fridayDate;
+    let resDate = format(fridayDate, "M월 d일");
+    this.setState({
+      fridayDate: resDate,
+      rawDate: rawDate,
+    });
     this.props.firebase
       .userChurch(this.props.firebase.doFindCurrentUID())
-      .on("value", snapshot => {
+      .on("value", (snapshot) => {
         if (!snapshot.val()) {
           this.props.history.push(ROUTES.CHOOSE_CHURCH);
         }
       });
     this.props.firebase
       .userPhoto(this.props.firebase.doFindCurrentUID())
-      .once("value", snapshot => {
+      .once("value", (snapshot) => {
         const photoURL = snapshot.val();
         if (!photoURL) {
           this.props.firebase
             .user(this.props.firebase.doFindCurrentUID())
             .update({
-              photoURL: "./defaultProfile.png"
+              photoURL: "./defaultProfile.png",
             });
         }
         this.setState({ photoURL: photoURL });
@@ -62,24 +97,24 @@ class FridayPrayerBase extends Component {
     this.setState({ loading: true });
     this.props.firebase
       .userChurch(this.props.firebase.doFindCurrentUID())
-      .once("value", snapshot => {
+      .once("value", (snapshot) => {
         church = snapshot.val();
       })
       .then(() => {
         this.props.firebase
           .contentFridayPrayers(church)
-          .on("value", snapshot => {
+          .on("value", (snapshot) => {
             if (!snapshot.val()) {
               this.setState({
                 contents: [],
-                loading: false
+                loading: false,
               });
               alert("비어있습니다. 작성해주세요.");
               return;
             }
             const contentsObject = snapshot.val();
-            const contentsList = Object.keys(contentsObject).map(key => ({
-              ...contentsObject[key]
+            const contentsList = Object.keys(contentsObject).map((key) => ({
+              ...contentsObject[key],
             }));
 
             // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
@@ -87,31 +122,140 @@ class FridayPrayerBase extends Component {
             // console.log(contentsList);
             this.setState({
               contents: contentsList,
-              loading: false
+              loading: false,
             });
           });
       });
   }
-  componentWillUnmount() {
-    this.props.firebase.contents().off();
-  }
+
   goFull = () => {
     this.setState({ isFull: true });
   };
   handleprayFormOpen = () => {
     const { prayFormOpen } = this.state;
     this.setState({
-      prayFormOpen: !prayFormOpen
+      prayFormOpen: !prayFormOpen,
+    });
+  };
+  // Content 리스트
+  ContentList = (contents, history) => {
+    const { showItem, isBottom, rawDate, contentOpen } = this.state;
+
+    // if (isBottom) {
+    //   this.setState({ showItem: showItem + 4, isBottom: false });
+    // }
+
+    const res = contents
+      .filter((content) => {
+        const { rawDate } = this.state;
+        const year = content.date.slice(0, 4);
+        const month = content.date.slice(4, 6);
+        const day = content.date.slice(6, 8);
+        const contentDay = new Date(year, month - 1, day).getDay();
+        const contentDate = new Date(year, month - 1, day);
+        let contentFridayDate;
+
+        // fridayDate 에 해당 content 의 금요일이 뜨게끔 해야한다.
+        if (contentDay === 6) {
+          contentFridayDate = add(contentDate, { days: 6 });
+        } else {
+          contentFridayDate = add(contentDate, { days: 5 - contentDay });
+        }
+        const aDate = format(rawDate, "yyyyMMdd");
+        const bDate = format(contentFridayDate, "yyyyMMdd");
+        // console.log(contentFridayDate);
+        // console.log(rawDate);
+        if (aDate === bDate) {
+          return true;
+        }
+        return false;
+      })
+      .map((content, index) => {
+        // console.log(content, index);
+        return (
+          <FirebaseContext.Consumer key={index}>
+            {(firebase) => (
+              <Content
+                content={content}
+                firebase={firebase}
+                history={history}
+                contentOpen={contentOpen}
+              />
+            )}
+          </FirebaseContext.Consumer>
+        );
+      });
+    return res;
+  };
+  // 최근의 컨텐츠를 보여줍니다. 날짜를 일주일 뒤로 밀어야됨.
+  beforeContent = () => {
+    const { rawDate } = this.state;
+    const beforeDate = add(rawDate, { days: 7 });
+    const newFridayDate = format(beforeDate, "M월 d일");
+    this.setState({
+      rawDate: beforeDate,
+      fridayDate: newFridayDate,
+    });
+  };
+  // 지난 컨텐츠를 보여줍니다. 날짜를 일주일 앞으로 당겨야함.
+  nextContent = () => {
+    const { rawDate } = this.state;
+    const nextDate = add(rawDate, { days: -7 });
+    const newFridayDate = format(nextDate, "M월 d일");
+    this.setState({
+      rawDate: nextDate,
+      fridayDate: newFridayDate,
+    });
+  };
+  openContentOnce = () => {
+    const { contentOpen } = this.state;
+    this.setState({
+      contentOpen: !contentOpen,
+    });
+  };
+
+  handleControlTime = () => {
+    const { controlTimeOpen } = this.state;
+    this.setState({
+      controlTimeOpen: !controlTimeOpen,
+    });
+  };
+  onTimeChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+  onTimeSubmit = () => {
+    const { time } = this.state;
+    // time 에다가 1000을 곱해주어야한다.
+    const interval = parseInt(time) * 1000;
+    console.log(interval);
+    this.setState({
+      interval: interval,
     });
   };
   render() {
-    const { contents, loading, prayFormOpen, photoURL } = this.state;
+    const {
+      contents,
+      loading,
+      prayFormOpen,
+      photoURL,
+      fridayDate,
+      isBottom,
+      rawDate,
+      contentOpen,
+      controlTimeOpen,
+      time,
+      interval,
+    } = this.state;
+    console.log(interval);
     return loading ? (
       <div>
         <WindMillLoading size="large" color="#5B5BDC" />
       </div>
     ) : (
       <div className="feed">
+        <div className="friday-date-wrap">
+          <span className="friday-date">-{fridayDate}-</span>
+        </div>
         <div className="friday-prayer-img-wrap">
           <img
             className="friday-prayer-img"
@@ -123,7 +267,7 @@ class FridayPrayerBase extends Component {
           <Fullscreen
             className="fullscreen"
             enabled={this.state.isFull}
-            onChange={isFull => this.setState({ isFull })}
+            onChange={(isFull) => this.setState({ isFull })}
           >
             <AutoplaySlider
               className="auto-play-slider"
@@ -131,37 +275,63 @@ class FridayPrayerBase extends Component {
               // className="fullscreen-slide"
               play={true}
               cancelOnInteraction={false} // should stop playing on user interaction
-              interval={10000}
+              interval={interval}
             >
-              {contents.map(content => (
-                <div className="fullscreen-content">
-                  <div className="fullscreen-content-wrap">
-                    {content.name && (
-                      <div className="fullscreen-content-name-wrap">
-                        <div
-                          className="fullscreen-content-name"
-                          // style={{ fontSize: "50px", color: "white" }}
-                        >
-                          {content.name}
+              {contents
+                .filter((content) => {
+                  const year = content.date.slice(0, 4);
+                  const month = content.date.slice(4, 6);
+                  const day = content.date.slice(6, 8);
+                  const contentDay = new Date(year, month - 1, day).getDay();
+                  const contentDate = new Date(year, month - 1, day);
+                  let contentFridayDate;
+
+                  // fridayDate 에 해당 content 의 금요일이 뜨게끔 해야한다.
+                  if (contentDay === 6) {
+                    contentFridayDate = add(contentDate, { days: 6 });
+                  } else {
+                    contentFridayDate = add(contentDate, {
+                      days: 5 - contentDay,
+                    });
+                  }
+                  const aDate = format(rawDate, "yyyyMMdd");
+                  const bDate = format(contentFridayDate, "yyyyMMdd");
+                  // console.log(contentFridayDate);
+                  // console.log(rawDate);
+                  if (aDate === bDate) {
+                    return true;
+                  }
+                  return false;
+                })
+                .map((content, index) => (
+                  <div key={index} className="fullscreen-content">
+                    <div className="fullscreen-content-wrap">
+                      {content.name && (
+                        <div className="fullscreen-content-name-wrap">
+                          <div
+                            className="fullscreen-content-name"
+                            // style={{ fontSize: "50px", color: "white" }}
+                          >
+                            {content.name}
+                          </div>
                         </div>
-                      </div>
-                    )}
-                    {content.content.length > 20 ? (
-                      <div className="fullscreen-content-content-wrap-long">
-                        <div className="fullscreen-content-content-long">
-                          {content.content}
+                      )}
+                      {content.content.length > 20 ? (
+                        <div className="fullscreen-content-content-wrap-long">
+                          <div className="fullscreen-content-content-long">
+                            {content.content}
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      <div className="fullscreen-content-content-wrap">
-                        <div className="fullscreen-content-content">
-                          {content.content}
+                      ) : (
+                        <div className="fullscreen-content-content-wrap">
+                          <div className="fullscreen-content-content">
+                            {content.content}
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </AutoplaySlider>
           </Fullscreen>
         </div>
@@ -181,11 +351,50 @@ class FridayPrayerBase extends Component {
           history={this.props.history}
           prayFormOpen={prayFormOpen}
         />
-        <AuthUserContext.Consumer>
-          {authUser => (
-            <ContentList contents={contents} history={this.props.history} />
+        {this.ContentList(contents, this.props.history)}
+        <div className="pagination-wrap">
+          <div className="before-wrap" onClick={() => this.beforeContent()}>
+            <span className="before">최근 주</span>
+          </div>
+          <div className="next-wrap" onClick={() => this.nextContent()}>
+            <span className="next">지난 주</span>
+          </div>
+        </div>
+        <div
+          className="openContent-wrap"
+          onClick={() => this.openContentOnce()}
+        >
+          {contentOpen ? (
+            <span className="openContent">한번에 닫기</span>
+          ) : (
+            <span className="openContent">한번에 보기</span>
           )}
-        </AuthUserContext.Consumer>
+        </div>
+        {controlTimeOpen ? (
+          <div>
+            <input
+              type="text"
+              name="time"
+              onChange={this.onTimeChange}
+              placeholder="5"
+            />
+            <div>
+              <div onClick={() => this.onTimeSubmit()}>
+                <span>적용하기</span>
+              </div>
+              <div onClick={() => this.handleControlTime()}>
+                <span>닫기</span>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div
+            className="controlTime-wrap"
+            onClick={() => this.handleControlTime()}
+          >
+            <span className="controlTime">시간 조절</span>
+          </div>
+        )}
       </div>
     );
   }
@@ -196,13 +405,13 @@ const INITIAL_STATE_INPUT = {
   loading: false,
   name: "",
   uid: "",
-  prayFormOpen: false
+  prayFormOpen: false,
 };
 class FridayInputForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ...INITIAL_STATE_INPUT
+      ...INITIAL_STATE_INPUT,
     };
   }
   onSubmit = async () => {
@@ -219,7 +428,7 @@ class FridayInputForm extends Component {
       let church;
       this.props.firebase
         .userChurch(uid)
-        .once("value", snapshot => {
+        .once("value", (snapshot) => {
           church = snapshot.val();
         })
         .then(() => {
@@ -231,21 +440,21 @@ class FridayInputForm extends Component {
             date: date,
             content: prayContent,
             like: 0,
-            comments: []
+            comments: [],
           });
         })
         .then(() => {
           alert("성공적으로 제출되었습니다");
           this.props.history.push(ROUTES.FRIDAY_PRAYER);
           this.setState({
-            ...INITIAL_STATE_INPUT
+            ...INITIAL_STATE_INPUT,
           });
         });
     } catch (error) {
       console.log(error);
     }
   };
-  onChange = event => {
+  onChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };
   render() {
@@ -262,7 +471,7 @@ class FridayInputForm extends Component {
                 value={prayContent}
                 onChange={this.onChange}
                 rows="5"
-                placeholder="기도제목을 번호로 나눠서 작성해주세요.&#13;&#10;ex)&#13;&#10;1.가족 건강하도록. .&#13;&#10;2.코로나가 하루빨리 해결되도록.&#13;&#10;3.지혜와 체력주시도록."
+                placeholder="기도제목을 번호로 나눠서 작성해주세요."
               ></textarea>
             </div>
             <div className="pray-content-btn-wrap">
@@ -281,7 +490,7 @@ class FridayInputForm extends Component {
 }
 
 // 언제 게시되었는지를 알려주는 함수입니다.
-export const handleDate = date => {
+export const handleDate = (date) => {
   let dyear = parseInt(date.substring(0, 4));
   let dmonth = parseInt(date.substring(4, 6)) - 1;
   let dday = parseInt(date.substring(6, 8));
@@ -309,20 +518,6 @@ export const handleDate = date => {
   return result;
 };
 
-// Content 리스트
-const ContentList = ({ contents, history }) => {
-  const res = contents.map(content => {
-    console.log(content);
-    return (
-      <FirebaseContext>
-        {firebase => (
-          <Content content={content} firebase={firebase} history={history} />
-        )}
-      </FirebaseContext>
-    );
-  });
-  return res;
-};
 // Content 한 항목.
 class Content extends Component {
   constructor(props) {
@@ -333,48 +528,30 @@ class Content extends Component {
       commentSize: 0,
       liked: false,
       imgModalOpen: false,
-      contentOpen: false,
+      contentOpenState: false,
       username: "",
-      currentUID: ""
+      currentUID: "",
     };
   }
   componentDidMount() {
     if (this.props.firebase) {
-      if (this.props.content.comments) {
-        const commentObject = Object.keys(this.props.content.comments);
-        this.setState({ commentSize: commentObject.length });
-      }
       this.setState({ content: this.props.content });
-      this.props.firebase.user(this.props.content.uid).on("value", snapshot => {
-        if (snapshot.val()) {
-          const prevName = snapshot.val().username;
-          if (prevName !== this.props.content.username) {
-            this.props.firebase
-              .contentFridayPrayer(
-                this.props.content.church,
-                this.props.content.date
-              )
-              .update({
-                name: prevName
-              });
-          }
-          this.setState({ username: snapshot.val().username });
-        }
-      });
       this.props.firebase
-        .likeList(
-          this.props.content.date,
-          this.props.firebase.doFindCurrentUID()
-        )
-        .on("value", snapshot => {
+        .user(this.props.content.uid)
+        .on("value", (snapshot) => {
           if (snapshot.val()) {
-            this.setState({
-              liked: true
-            });
-          } else {
-            this.setState({
-              liked: false
-            });
+            const prevName = snapshot.val().username;
+            if (prevName !== this.props.content.username) {
+              this.props.firebase
+                .contentFridayPrayer(
+                  this.props.content.church,
+                  this.props.content.date
+                )
+                .update({
+                  name: prevName,
+                });
+            }
+            this.setState({ username: snapshot.val().username });
           }
         });
       this.setState({ currentUID: this.props.firebase.doFindCurrentUID() });
@@ -383,20 +560,20 @@ class Content extends Component {
 
   handleImgModal = () => {
     this.setState({
-      imgModalOpen: true
+      imgModalOpen: true,
     });
   };
   closeImgModal = () => {
     console.log("closeModal");
     this.setState({
-      imgModalOpen: false
+      imgModalOpen: false,
     });
   };
 
   handleContentOpen = () => {
-    const { contentOpen } = this.state;
+    const { contentOpenState } = this.state;
     this.setState({
-      contentOpen: !contentOpen
+      contentOpenState: !contentOpenState,
     });
   };
 
@@ -417,14 +594,14 @@ class Content extends Component {
   };
 
   render() {
-    const { contentOpen, username, currentUID } = this.state;
+    const { contentOpenState, username, currentUID } = this.state;
     return (
       <div className="praycontent" onClick={() => this.handleContentOpen()}>
         <div className="praycontent-wrap">
           <div className="praycontent-header-wrap">
             <div className="praycontent-header-profile-wrap">
               <FirebaseContext.Consumer>
-                {firebase => (
+                {(firebase) => (
                   <ContentProfile
                     firebase={firebase}
                     uid={this.props.content.uid}
@@ -444,14 +621,14 @@ class Content extends Component {
             </div>
           </div>
         </div>
-        {contentOpen && (
+        {(this.props.contentOpen || contentOpenState) && (
           <div>
             <div className="praycontent-content-wrap">
               <span className="praycontent-content">
                 {this.props.content.content}
               </span>
             </div>
-            {currentUID === this.props.content.uid && (
+            {currentUID === this.props.content.wuid && (
               <div className="praycontent-content-btn-wrap">
                 <div
                   className="praycontent-content-modify-btn-wrap"
@@ -483,10 +660,10 @@ class ContentProfile extends Component {
     this.state = { imageURL: "" };
   }
   componentDidMount() {
-    this.props.firebase.userPhoto(this.props.uid).once("value", snapshot => {
+    this.props.firebase.userPhoto(this.props.uid).once("value", (snapshot) => {
       const imageURL = snapshot.val();
       this.setState({
-        imageURL
+        imageURL,
       });
     });
   }
@@ -504,7 +681,7 @@ class ContentProfile extends Component {
   }
 }
 
-const authCondition = authUser => !!authUser;
+const authCondition = (authUser) => !!authUser;
 const FridayPrayer = withAuthorization(authCondition)(FridayPrayerBase);
 // const CommentForm = withAuthorization(authCondition)(CommentFormBase);
 // withAuthentication(CommentFormBase);
