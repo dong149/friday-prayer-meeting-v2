@@ -69,6 +69,12 @@
       }
     }
   }
+  // .loader-wrap {
+  //   display: block;
+  //   margin: 0 auto;
+  //   border-color: red;
+  //   text-align: center;
+  // }
   .feed {
     margin-top: 50px;
     width: 100%;
@@ -251,6 +257,76 @@
           font-family: $spoqa-han-sans;
           font-size: 20px;
           font-weight: normal;
+        }
+      }
+    }
+
+    //  한 번에 열기 와 시간 조절 기능
+    .feature-wrap {
+      width: 100%;
+      margin-bottom: 50px;
+      .openContent-wrap {
+        width: 50%;
+        display: inline-block;
+        text-align: center;
+        .openContent {
+          width: 100%;
+          font-family: $black-han-sans;
+          font-size: 30px;
+        }
+      }
+      .timeClose-btn-wrap {
+        width: 50%;
+        display: inline-block;
+        text-align: center;
+        .timeClose-btn {
+          width: 100%;
+          font-family: $black-han-sans;
+          font-size: 30px;
+          color: red;
+        }
+      }
+      .timeInput-wrap {
+        margin-top: 50px;
+        margin-bottom: 30px;
+        width: 100%;
+        display: block;
+        text-align: center;
+        font-family: $black-han-sans;
+        .timeInput {
+          width: 50%;
+          display: inline-block;
+          font-size: 40px;
+          border: 1px solid #222222;
+        }
+        .timeInput-text {
+          padding-left: 20px;
+          display: inline-block;
+          font-size: 40px;
+        }
+        .timeSubmit-btn-wrap-wrap {
+          width: 50%;
+          display: inline-block;
+          .timeSubmit-btn-wrap {
+            width: 100%;
+            padding-top: 30px;
+            .timeSubmit-btn {
+              font-family: $black-han-sans;
+              font-size: 30px;
+              &:hover {
+                color: grey;
+              }
+            }
+          }
+        }
+      }
+      .controlTime-wrap {
+        width: 50%;
+        display: inline-block;
+        text-align: center;
+        .controlTime {
+          font-size: 30px;
+          font-family: $black-han-sans;
         }
       }
     }

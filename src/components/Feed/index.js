@@ -7,7 +7,7 @@ import {
   withAuthentication,
 } from "../Session";
 import "../../styles/feed.scss";
-import { WindMillLoading } from "react-loadingg";
+import { WindMillLoading, SemipolarLoading } from "react-loadingg";
 import _ from "lodash";
 import { format, formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
@@ -88,7 +88,7 @@ class FeedBase extends Component {
     const { contents, loading, writeFormOpen } = this.state;
     return loading ? (
       <div>
-        <WindMillLoading size="large" color="#5B5BDC" />
+        <SemipolarLoading size="large" color="#5B5BDC" />
       </div>
     ) : (
       <>

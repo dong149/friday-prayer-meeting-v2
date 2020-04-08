@@ -7,7 +7,7 @@ import {
   withAuthentication,
 } from "../Session";
 import "../../styles/fridayprayer.scss";
-import { WindMillLoading } from "react-loadingg";
+import { WindMillLoading, SemipolarLoading } from "react-loadingg";
 import _ from "lodash";
 import { format, formatDistanceToNow, add } from "date-fns";
 import { ko } from "date-fns/locale";
@@ -16,6 +16,8 @@ import Fullscreen from "react-full-screen";
 import AwesomeSlider from "react-awesome-slider";
 import AwesomeSliderStyles from "react-awesome-slider/src/styles";
 import withAutoplay from "react-awesome-slider/dist/autoplay";
+import BounceLoader from "react-spinners/BounceLoader";
+import { css } from "@emotion/core";
 // import "react-awesome-slider/dist/styles.css";
 
 const INITIAL_STATE = {
@@ -231,6 +233,7 @@ class FridayPrayerBase extends Component {
     this.setState({
       interval: interval,
     });
+    alert(`${time}초로 적용되었습니다.`);
   };
   render() {
     const {
@@ -247,10 +250,9 @@ class FridayPrayerBase extends Component {
       interval,
     } = this.state;
     console.log(interval);
+
     return loading ? (
-      <div>
-        <WindMillLoading size="large" color="#5B5BDC" />
-      </div>
+      <SemipolarLoading size="large" color="#5B5BDC" />
     ) : (
       <div className="feed">
         <div className="friday-date-wrap">
@@ -346,6 +348,53 @@ class FridayPrayerBase extends Component {
             <span className="fullscreen-btn">전체화면</span>
           </div>
         </div>
+        <div className="feature-wrap">
+          <div
+            className="openContent-wrap"
+            onClick={() => this.openContentOnce()}
+          >
+            {contentOpen ? (
+              <span className="openContent">한번에 닫기</span>
+            ) : (
+              <span className="openContent">한번에 보기</span>
+            )}
+          </div>
+          {controlTimeOpen ? (
+            <>
+              <div
+                className="timeClose-btn-wrap"
+                onClick={() => this.handleControlTime()}
+              >
+                <span className="timeClose-btn">닫기</span>
+              </div>
+              <div className="timeInput-wrap">
+                <input
+                  type="text"
+                  name="time"
+                  onChange={this.onTimeChange}
+                  placeholder="5"
+                  className="timeInput"
+                />
+                <span className="timeInput-text">초</span>
+                <div className="timeSubmit-btn-wrap-wrap">
+                  <div
+                    className="timeSubmit-btn-wrap"
+                    onClick={() => this.onTimeSubmit()}
+                  >
+                    <span className="timeSubmit-btn">적용하기</span>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div
+              className="controlTime-wrap"
+              onClick={() => this.handleControlTime()}
+            >
+              <span className="controlTime">시간 조절</span>
+            </div>
+          )}
+        </div>
         <FridayInputForm
           firebase={this.props.firebase}
           history={this.props.history}
@@ -360,41 +409,6 @@ class FridayPrayerBase extends Component {
             <span className="next">지난 주</span>
           </div>
         </div>
-        <div
-          className="openContent-wrap"
-          onClick={() => this.openContentOnce()}
-        >
-          {contentOpen ? (
-            <span className="openContent">한번에 닫기</span>
-          ) : (
-            <span className="openContent">한번에 보기</span>
-          )}
-        </div>
-        {controlTimeOpen ? (
-          <div>
-            <input
-              type="text"
-              name="time"
-              onChange={this.onTimeChange}
-              placeholder="5"
-            />
-            <div>
-              <div onClick={() => this.onTimeSubmit()}>
-                <span>적용하기</span>
-              </div>
-              <div onClick={() => this.handleControlTime()}>
-                <span>닫기</span>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div
-            className="controlTime-wrap"
-            onClick={() => this.handleControlTime()}
-          >
-            <span className="controlTime">시간 조절</span>
-          </div>
-        )}
       </div>
     );
   }
