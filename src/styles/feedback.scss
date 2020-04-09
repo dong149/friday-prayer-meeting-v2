@@ -1,0 +1,51 @@
+@import "./color.scss";
+@import "./mixin.scss";
+@import "./font.scss";
+
+//  https://m.facebook.com/ 여기 참고해서 css 완료하기.
+
+@include mobile {
+  .feedback-form {
+    width: 100%;
+    text-align: center;
+    .feedback-text-wrap {
+      width: 100%;
+      text-align: center;
+      margin-top: 40px;
+
+      .feedback-text {
+        font-family: $black-han-sans;
+        font-size: 54px;
+      }
+    }
+    .feedback-input-wrap {
+      display: block;
+      width: 100%;
+      margin: 0 auto;
+      margin-top: 20px;
+      .feedback-input {
+        border: 1px solid rgba(0, 0, 0, 0.8);
+        width: 100%;
+        font-family: $spoqa-han-sans;
+        font-size: 20px;
+      }
+    }
+    .feedback-btn-wrap {
+      display: block;
+      margin-top: 40px;
+      .feedback-btn {
+        font-family: $black-han-sans;
+        font-size: 40px;
+        color: #1f4df4;
+        &:hover {
+          color: grey;
+        }
+      }
+    }
+  }
+}
+@include tablet {
+}
+
+@include desktop {
+}

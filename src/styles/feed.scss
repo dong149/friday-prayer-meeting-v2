@@ -48,6 +48,7 @@
           text-align: left;
           padding-left: 30px;
           padding-right: 30px;
+          padding-bottom: 30px;
           .official-content {
             white-space: pre-line;
             font-family: $spoqa-han-sans;
@@ -149,6 +150,20 @@
                   }
                 }
               }
+            }
+          }
+        }
+        .content-delete-btn-wrap {
+          display: inline-block;
+
+          .content-delete-btn {
+            font-family: $spoqa-han-sans;
+            font-size: 14px;
+            color: red;
+
+            &:hover {
+              cursor: pointer;
+              color: green;
             }
           }
         }
@@ -309,6 +324,7 @@
           .comment-form-wrap {
             margin-top: 20px;
             margin-left: 20px;
+            padding-bottom: 20px;
             .comment-form {
               .comment-input-wrap {
                 display: inline-block;
@@ -327,9 +343,10 @@
                 padding-left: 10px;
                 width: 25%;
                 text-align: center;
+
                 .comment-btn {
-                  font-family: $black-han-sans;
-                  font-size: 20px;
+                  font-family: $spoqa-han-sans;
+                  font-size: 15px;
                   color: #1f4df4;
                 }
               }
@@ -597,6 +614,53 @@
     margin-block-end: 1em;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
+  }
+  .feed-header {
+    width: 100%;
+    display: block;
+    text-align: center;
+    .feed-header-wrap {
+      width: 50%;
+      margin: 0 auto;
+      margin-top: 100px;
+
+      .feed-official-wrap {
+        margin: 0 auto;
+        box-shadow: 0 30px 60px 12px rgba(0, 0, 33, 0.05),
+          0 4px 24px 0 rgba(0, 0, 33, 0.05), 0 0 1px 0 rgba(0, 0, 33, 0.09);
+        .official-wrap {
+          padding-top: 50px;
+          .official {
+            font-family: $black-han-sans;
+            font-size: 80px;
+          }
+        }
+        .official-content-wrap {
+          margin-left: 10%;
+          padding-bottom: 60px;
+          text-align: left;
+
+          .official-content {
+            font-family: $spoqa-han-sans;
+            font-size: 30px;
+            line-height: 60px;
+          }
+        }
+      }
+      .feed-write-btn-wrap {
+        margin-top: 50px;
+        margin-bottom: 30px;
+        display: block;
+        text-align: center;
+        // border-bottom: 10px solid #eaebee;
+        height: 70px;
+        .feed-write-btn {
+          font-family: $black-han-sans;
+          color: green;
+          font-size: 50px;
+        }
+      }
+    }
   }
   .feed {
     width: 100%;

@@ -38,19 +38,98 @@
           font-weight: bold;
         }
       }
-      .fullscreen-content-content-wrap-long {
+
+      // fullscreen 시 길이에 따라 다르게 보여주려는 것임.
+      // .fullscreen-content-content-wrap-long {
+      //   width: 100%;
+      //   padding-left: 10%;
+      //   padding-right: 10%;
+      //   text-align: left;
+      //   margin-top: 30px;
+      //   .fullscreen-content-content-long {
+      //     white-space: pre-line;
+      //     font-family: $spoqa-han-sans;
+      //     font-weight: normal;
+      //     font-size: 13px;
+      //     // font-size: 1rem;
+      //     color: white;
+      //     line-height: 1.3rem;
+      //   }
+      // }
+      .fullscreen-content-content-300-wrap {
         width: 100%;
-        padding-left: 10%;
-        padding-right: 10%;
+        padding-left: 23%;
+        padding-right: 20%;
         text-align: left;
-        margin-top: 30px;
-        .fullscreen-content-content-long {
+        margin-top: 0px;
+        .fullscreen-content-content-300 {
           white-space: pre-line;
           font-family: $spoqa-han-sans;
           font-weight: normal;
-          font-size: 13px;
+          font-size: 6px;
+          line-height: 12px;
           color: white;
-          line-height: 1.3rem;
+        }
+      }
+
+      .fullscreen-content-content-200-wrap {
+        width: 100%;
+        padding-left: 24%;
+        padding-right: 20%;
+        text-align: left;
+        margin-top: 20px;
+        .fullscreen-content-content-200 {
+          white-space: pre-line;
+          font-family: $spoqa-han-sans;
+          font-weight: normal;
+          font-size: 8px;
+          line-height: 14px;
+          color: white;
+        }
+      }
+      .fullscreen-content-content-100-wrap {
+        width: 100%;
+        padding-left: 27%;
+        padding-right: 20%;
+        text-align: left;
+        margin-top: 23px;
+        .fullscreen-content-content-100 {
+          white-space: pre-line;
+          font-family: $spoqa-han-sans;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 20px;
+          color: white;
+        }
+      }
+      .fullscreen-content-content-50-wrap {
+        width: 100%;
+        padding-left: 21%;
+        padding-right: 10%;
+        text-align: left;
+        margin-top: 30px;
+        .fullscreen-content-content-50 {
+          white-space: pre-line;
+          font-family: $spoqa-han-sans;
+          font-weight: normal;
+          font-size: 18px;
+          line-height: 30px;
+          color: white;
+        }
+      }
+      .fullscreen-content-content-20-wrap {
+        width: 100%;
+        padding-left: 27%;
+        padding-right: 10%;
+        text-align: left;
+        margin-top: 40px;
+        .fullscreen-content-content-20 {
+          white-space: pre-line;
+          font-family: $spoqa-han-sans;
+          font-weight: normal;
+          font-size: 25px;
+          line-height: 35px;
+          color: white;
         }
       }
       .fullscreen-content-content-wrap {
@@ -58,24 +137,20 @@
         padding-left: 10%;
         padding-right: 10%;
         text-align: center;
-        margin-top: 30px;
+        margin-top: 50px;
         .fullscreen-content-content {
           white-space: pre-line;
           font-family: $spoqa-han-sans;
           font-weight: normal;
-          font-size: 24px;
+          font-size: 30px;
+          line-height: 40px;
           color: white;
         }
       }
     }
   }
-  // .loader-wrap {
-  //   display: block;
-  //   margin: 0 auto;
-  //   border-color: red;
-  //   text-align: center;
-  // }
-  .feed {
+
+  .friday-feed {
     margin-top: 50px;
     width: 100%;
     background-color: #ffffff;
@@ -220,7 +295,7 @@
           margin-right: 20px;
           display: inline-block;
           .praycontent-content-modify-btn {
-            font-size: 15px;
+            font-size: 18px;
             font-family: $black-han-sans;
             color: green;
           }
@@ -228,7 +303,7 @@
         .praycontent-content-delete-btn-wrap {
           display: inline-block;
           .praycontent-content-delete-btn {
-            font-size: 15px;
+            font-size: 18px;
             font-family: $black-han-sans;
             color: red;
           }
@@ -244,7 +319,7 @@
         width: 50%;
         display: inline-block;
         .before {
-          font-family: $spoqa-han-sans;
+          font-family: $black-han-sans;
           font-size: 20px;
           font-weight: normal;
         }
@@ -254,7 +329,7 @@
         width: 50%;
         display: inline-block;
         .next {
-          font-family: $spoqa-han-sans;
+          font-family: $black-han-sans;
           font-size: 20px;
           font-weight: normal;
         }
@@ -406,6 +481,18 @@
     margin-top: 50px;
     width: 100%;
     background-color: #ffffff;
+    // 금요기도회 날짜
+    .friday-date-wrap {
+      width: 80%;
+      margin: 0 auto;
+      text-align: center;
+      .friday-date {
+        font-family: $spoqa-han-sans;
+        font-size: 35px;
+        font-weight: lighter;
+        // color: #2e5fd2;
+      }
+    }
 
     // 금요기도회 로고 이미지
     .friday-prayer-img-wrap {
@@ -546,6 +633,75 @@
             font-family: $black-han-sans;
             color: red;
           }
+        }
+      }
+    }
+    //  한 번에 열기 와 시간 조절 기능
+    .feature-wrap {
+      width: 100%;
+      margin-bottom: 50px;
+      .openContent-wrap {
+        width: 50%;
+        display: inline-block;
+        text-align: center;
+        .openContent {
+          width: 100%;
+          font-family: $black-han-sans;
+          font-size: 30px;
+        }
+      }
+      .timeClose-btn-wrap {
+        width: 50%;
+        display: inline-block;
+        text-align: center;
+        .timeClose-btn {
+          width: 100%;
+          font-family: $black-han-sans;
+          font-size: 30px;
+          color: red;
+        }
+      }
+      .timeInput-wrap {
+        margin-top: 50px;
+        margin-bottom: 30px;
+        width: 100%;
+        display: block;
+        text-align: center;
+        font-family: $black-han-sans;
+        .timeInput {
+          width: 50%;
+          display: inline-block;
+          font-size: 40px;
+          border: 1px solid #222222;
+        }
+        .timeInput-text {
+          padding-left: 20px;
+          display: inline-block;
+          font-size: 40px;
+        }
+        .timeSubmit-btn-wrap-wrap {
+          width: 50%;
+          display: inline-block;
+          .timeSubmit-btn-wrap {
+            width: 100%;
+            padding-top: 30px;
+            .timeSubmit-btn {
+              font-family: $black-han-sans;
+              font-size: 30px;
+              &:hover {
+                color: grey;
+              }
+            }
+          }
+        }
+      }
+      .controlTime-wrap {
+        width: 50%;
+        display: inline-block;
+        text-align: center;
+        .controlTime {
+          font-size: 30px;
+          font-family: $black-han-sans;
         }
       }
     }
@@ -590,33 +746,95 @@
           font-weight: bold;
         }
       }
-      .fullscreen-content-content-wrap-long {
+
+      .fullscreen-content-content-300-wrap {
         width: 100%;
-        padding-left: 25%;
-        padding-right: 25%;
+        padding-left: 27%;
+        padding-right: 20%;
         text-align: left;
-        margin-top: 90px;
-        .fullscreen-content-content-long {
+        margin-top: 80px;
+        .fullscreen-content-content-300 {
+          white-space: pre-line;
+          font-family: $spoqa-han-sans;
+          font-weight: normal;
+          font-size: 30px;
+          line-height: 40px;
+          color: white;
+        }
+      }
+
+      .fullscreen-content-content-200-wrap {
+        width: 100%;
+        padding-left: 27%;
+        padding-right: 20%;
+        text-align: left;
+        margin-top: 80px;
+        .fullscreen-content-content-200 {
           white-space: pre-line;
           font-family: $spoqa-han-sans;
           font-weight: normal;
           font-size: 35px;
-          color: white;
           line-height: 60px;
+          color: white;
+        }
+      }
+      .fullscreen-content-content-100-wrap {
+        width: 100%;
+        padding-left: 27%;
+        padding-right: 20%;
+        text-align: left;
+        margin-top: 90px;
+        .fullscreen-content-content-100 {
+          white-space: pre-line;
+          font-family: $spoqa-han-sans;
+          font-weight: normal;
+          font-size: 38px;
+          line-height: 70px;
+          color: white;
+        }
+      }
+      .fullscreen-content-content-50-wrap {
+        width: 100%;
+        padding-left: 27%;
+        padding-right: 10%;
+        text-align: left;
+        margin-top: 30px;
+        .fullscreen-content-content-50 {
+          white-space: pre-line;
+          font-family: $spoqa-han-sans;
+          font-weight: normal;
+          font-size: 50px;
+          color: white;
+          line-height: 100px;
+        }
+      }
+      .fullscreen-content-content-20-wrap {
+        width: 100%;
+        padding-left: 33%;
+        padding-right: 10%;
+        text-align: left;
+        margin-top: 80px;
+        .fullscreen-content-content-20 {
+          white-space: pre-line;
+          font-family: $spoqa-han-sans;
+          font-weight: normal;
+          font-size: 60px;
+          line-height: 120px;
+          color: white;
         }
       }
       .fullscreen-content-content-wrap {
         width: 100%;
-        padding-left: 30%;
-        padding-right: 30%;
+        padding-left: 10%;
+        padding-right: 10%;
         text-align: center;
-        margin: 0 auto;
-        margin-top: 90px;
+        margin-top: 160px;
         .fullscreen-content-content {
           white-space: pre-line;
           font-family: $spoqa-han-sans;
           font-weight: normal;
-          font-size: 70px;
+          font-size: 80px;
+          line-height: 150px;
           color: white;
         }
       }
@@ -627,10 +845,23 @@
     width: 100%;
     background-color: #ffffff;
 
+    // 금요기도회 날짜
+    .friday-date-wrap {
+      width: 80%;
+      margin: 0 auto;
+      text-align: center;
+      .friday-date {
+        font-family: $spoqa-han-sans;
+        font-size: 90px;
+        font-weight: lighter;
+        // color: #2e5fd2;
+      }
+    }
+
     // 금요기도회 로고 이미지
     .friday-prayer-img-wrap {
       margin: 0 auto;
-      margin-top: 100px;
+      margin-top: 10px;
       padding-bottom: 50px;
 
       text-align: center;
@@ -638,7 +869,7 @@
       background-color: white;
       margin-bottom: 30px;
       .friday-prayer-img {
-        width: 20%;
+        width: 40%;
         background-size: 100% 100%;
       }
     }
@@ -657,6 +888,9 @@
           font-family: $black-han-sans;
           font-size: 30px;
           color: #1f4df4;
+          &:hover {
+            cursor: pointer;
+          }
         }
       }
       .fullscreen-btn-wrap {
@@ -668,6 +902,92 @@
         .fullscreen-btn {
           font-family: $black-han-sans;
           font-size: 30px;
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    //  한 번에 열기 와 시간 조절 기능
+    .feature-wrap {
+      width: 100%;
+      margin-bottom: 50px;
+      .openContent-wrap {
+        width: 50%;
+        display: inline-block;
+        text-align: center;
+        .openContent {
+          width: 100%;
+          font-family: $black-han-sans;
+          font-size: 30px;
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+      .timeClose-btn-wrap {
+        width: 50%;
+        display: inline-block;
+        text-align: center;
+        .timeClose-btn {
+          width: 100%;
+          font-family: $black-han-sans;
+          font-size: 30px;
+          color: red;
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+      .timeInput-wrap {
+        margin-top: 50px;
+        margin-bottom: 30px;
+        width: 100%;
+        display: block;
+        text-align: center;
+        font-family: $black-han-sans;
+        .timeInput {
+          width: 50%;
+          display: inline-block;
+          font-size: 40px;
+          border: 1px solid #222222;
+        }
+        .timeInput-text {
+          padding-left: 20px;
+          display: inline-block;
+          font-size: 40px;
+          &:hover {
+            cursor: pointer;
+          }
+        }
+        .timeSubmit-btn-wrap-wrap {
+          width: 50%;
+          display: inline-block;
+          .timeSubmit-btn-wrap {
+            width: 100%;
+            padding-top: 30px;
+            .timeSubmit-btn {
+              font-family: $black-han-sans;
+              font-size: 30px;
+              &:hover {
+                color: grey;
+                cursor: pointer;
+              }
+            }
+          }
+        }
+      }
+      .controlTime-wrap {
+        width: 50%;
+        display: inline-block;
+        text-align: center;
+        .controlTime {
+          font-size: 30px;
+          font-family: $black-han-sans;
+          &:hover {
+            cursor: pointer;
+          }
         }
       }
     }
@@ -757,6 +1077,9 @@
             font-size: 15px;
             font-family: $black-han-sans;
             color: green;
+            &:hover {
+              cursor: pointer;
+            }
           }
         }
         .praycontent-content-delete-btn-wrap {
@@ -765,6 +1088,40 @@
             font-size: 15px;
             font-family: $black-han-sans;
             color: red;
+            &:hover {
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+    .pagination-wrap {
+      width: 100%;
+      margin-top: 50px;
+      margin-bottom: 50px;
+      .before-wrap {
+        text-align: center;
+        width: 50%;
+        display: inline-block;
+        .before {
+          font-family: $black-han-sans;
+          font-size: 20px;
+          font-weight: normal;
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+      .next-wrap {
+        text-align: center;
+        width: 50%;
+        display: inline-block;
+        .next {
+          font-family: $black-han-sans;
+          font-size: 20px;
+          font-weight: normal;
+          &:hover {
+            cursor: pointer;
           }
         }
       }

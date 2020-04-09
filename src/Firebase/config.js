@@ -11,7 +11,7 @@ const config = {
   storageBucket: "friday-prayer-meeting.appspot.com",
   messagingSenderId: "816612453109",
   appId: "1:816612453109:web:0208ccd1c4e850b360b3bc",
-  measurementId: "G-E30CTJ2ZRB"
+  measurementId: "G-E30CTJ2ZRB",
 };
 
 // const Firebase = app.initializeApp(config);
@@ -31,8 +31,9 @@ class Firebase {
   doSignInWithEmailAndPassword = (email, password) =>
     this.auth.signInWithEmailAndPassword(email, password);
   doSignOut = () => this.auth.signOut();
-  doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
-  doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
+  doPasswordReset = (email) => this.auth.sendPasswordResetEmail(email);
+  doPasswordUpdate = (password) =>
+    this.auth.currentUser.updatePassword(password);
   doFindCurrentUID = () => this.auth.currentUser.uid;
   doFindCurrentUserName = () => this.auth.currentUser.displayName;
   doFindCurrentUserPhotoURL = () => this.auth.currentUser.photoURL;
@@ -41,29 +42,29 @@ class Firebase {
   doSignInWithGoogle = () => this.auth.signInWithPopup(this.googleProvider);
   doSignInWithFacebook = () => this.auth.signInWithPopup(this.facebookProvider);
 
-  doUpdateUserProfile = URL =>
+  doUpdateUserProfile = (URL) =>
     this.auth.currentUser.updateProfile({ photoURL: URL });
 
-  doUpdateUserDisplayName = name =>
+  doUpdateUserDisplayName = (name) =>
     this.auth.currentUser.updateProfile({ displayName: name });
   // *** User API ***
-  user = uid => this.db.ref(`users/${uid}`);
+  user = (uid) => this.db.ref(`users/${uid}`);
   users = () => this.db.ref("users");
-  userPhoto = uid => this.db.ref(`users/${uid}/photoURL`);
-  userChurch = uid => this.db.ref(`users/${uid}/church`);
+  userPhoto = (uid) => this.db.ref(`users/${uid}/photoURL`);
+  userChurch = (uid) => this.db.ref(`users/${uid}/church`);
 
   // *** Contents API ***
-  content = date => this.db.ref(`contents/${date}`);
-  contents = () => this.db.ref(`contents`);
+  content = (date, church) => this.db.ref(`${church}/contents/feed/${date}`);
+  contents = (church) => this.db.ref(`${church}/contents/feed`);
 
   // IlsanChangDae FridayContent
   contentFridayPrayer = (church, date) =>
     this.db.ref(`${church}/contents/fridayprayer/${date}`);
-  contentFridayPrayers = church =>
+  contentFridayPrayers = (church) =>
     this.db.ref(`${church}/contents/fridayprayer`);
 
   // *** Images API ***
-  image = name => this.storage.ref(`images/${name}`);
+  image = (name) => this.storage.ref(`images/${name}`);
   images = () => this.storage.ref(`images`);
 
   // *** TIME ***
@@ -72,10 +73,14 @@ class Firebase {
   // *** COMMENT ***
   comment = (date, commentDate) =>
     this.db.ref(`contents/${date}/comments/${commentDate}`);
-  comments = date => this.db.ref(`contents/${date}/comments`);
+  comments = (date) => this.db.ref(`contents/${date}/comments`);
 
   // *** Like ***
   likeList = (date, uid) => this.db.ref(`contents/${date}/likelist/${uid}`);
+
+  // *** feedback ***
+  feedback = (date) => this.db.ref(`feedbacks/${date}`);
+  feedbacks = () => this.db.ref(`feedbacks`);
 }
 
 export default Firebase;

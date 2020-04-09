@@ -16,12 +16,13 @@ import Feed from "./components/Feed";
 import FridayPrayer from "./components/FridayPrayer";
 import "./styles/main.scss";
 import ChooseChurchPage from "./components/ChooseChurch";
+import FeedbackPage from "./components/Feedback";
 import { FirebaseContext } from "./Firebase";
 const App = () => (
   <Router>
     <div>
       <FirebaseContext.Consumer>
-        {firebase => <Navigation firebase={firebase} />}
+        {(firebase) => <Navigation firebase={firebase} />}
       </FirebaseContext.Consumer>
 
       {/* nonAuth */}
@@ -37,7 +38,7 @@ const App = () => (
       <Route exact path={ROUTES.WRITE} component={WriteForm} />
       <Route exact path={ROUTES.FEED} component={Feed} />
       <Route exact path={ROUTES.CHOOSE_CHURCH} component={ChooseChurchPage} />
-
+      <Route exact path={ROUTES.FEEDBACK} component={FeedbackPage} />
       {/* 창대교회 금요기도회 기능 */}
       <Route exact path={ROUTES.FRIDAY_PRAYER} component={FridayPrayer} />
     </div>

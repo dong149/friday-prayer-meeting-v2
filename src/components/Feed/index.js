@@ -9,7 +9,7 @@ import {
 import "../../styles/feed.scss";
 import { WindMillLoading, SemipolarLoading } from "react-loadingg";
 import _ from "lodash";
-import { format, formatDistanceToNow } from "date-fns";
+import { format, formatDistanceToNow, isThisISOWeek } from "date-fns";
 import { ko } from "date-fns/locale";
 import { FirebaseContext } from "../../Firebase";
 import WriteForm from "../Write";
@@ -101,11 +101,17 @@ class FeedBase extends Component {
                 </div>
                 <div className="official-content-wrap">
                   <span className="official-content">
-                    1. 코로나 항상 유의하시기 바랍니다.
+                    1. 피드백은 언제나 환영입니다. 피드백 기능을 적극 활용
+                    부탁드립니다.
                     <br />
-                    2. 이번 금요기도회 담당은 청년 6부입니다.
+                    2. 기존 서비스는 다음주 목요일에 종료됩니다.
                     <br />
-                    3. 이번 주 예배는 정상적으로 진행됩니다.
+                    3. 뉴스 피드는 각자의 나눔 공간입니다.
+                    <br />
+                    4. 아직 웹이나 태블릿에서는 이상하게 보일 수 있습니다.
+                    시간이 여유로울 때마다 조금씩 기능을 완성할 예정입니다.
+                    <br />
+                    5. 모두들 건강 조심하세요:)
                   </span>
                 </div>
               </div>
@@ -341,6 +347,7 @@ class Content extends Component {
       commentSize: 0,
       liked: false,
       imgModalOpen: false,
+      currentUID: "",
     };
   }
   componentDidMount() {
@@ -370,12 +377,15 @@ class Content extends Component {
         if (snapshot.val()) {
           const prevName = snapshot.val().username;
           if (prevName !== this.props.content.username) {
-            this.props.firebase.content(this.props.content.date).update({
-              name: prevName,
-            });
+            this.props.firebase
+              .content(this.props.content.date, this.props.content.church)
+              .update({
+                name: prevName,
+              });
           }
         }
       });
+    this.setState({ currentUID: this.props.firebase.doFindCurrentUID() });
   }
   setCommentForm = (commentForm) => {
     this.setState({ commentForm: commentForm });
@@ -383,7 +393,7 @@ class Content extends Component {
   setLike = () => {
     const newLike = this.props.content.like + 1;
     this.props.firebase
-      .content(this.props.content.date)
+      .content(this.props.content.date, this.props.content.church)
       .update({
         like: newLike,
       })
@@ -410,13 +420,24 @@ class Content extends Component {
       imgModalOpen: false,
     });
   };
-  // customStyles = {
-  //   content: {
-  //     width: 80
-  //   }
-  // };
+  handleContentDelete = () => {
+    if (window.confirm("삭제하시겠습니까?")) {
+      this.props.firebase
+        .content(this.props.content.date)
+        .remove()
+        .then(() => {
+          alert("성공적으로 삭제되었습니다.");
+        });
+    }
+  };
   render() {
-    const { commentForm, commentSize, liked, imgModalOpen } = this.state;
+    const {
+      commentForm,
+      commentSize,
+      liked,
+      imgModalOpen,
+      currentUID,
+    } = this.state;
     return (
       <div className="content-wrap" key={this.props.content.date}>
         <div className="content-body-wrap">
@@ -447,6 +468,14 @@ class Content extends Component {
                 </div>
               </div>
             </div>
+            {currentUID === this.props.content.uid && (
+              <div
+                className="content-delete-btn-wrap"
+                onClick={() => this.handleContentDelete()}
+              >
+                <span className="content-delete-btn">삭제하기</span>
+              </div>
+            )}
           </div>
           <div className="content-content-wrap">
             <span>

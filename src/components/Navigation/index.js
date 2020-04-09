@@ -16,7 +16,7 @@ class Navigation extends Component {
     return (
       <div>
         <AuthUserContext.Consumer>
-          {authUser =>
+          {(authUser) =>
             authUser ? <NavigationAuth firebase={this.props.firebase} /> : <></>
           }
         </AuthUserContext.Consumer>
@@ -33,7 +33,7 @@ class NavigationAuth extends Component {
       churchImg: "",
       church: "",
       prevScrollpos: window.pageYOffset,
-      navbarVisible: "show"
+      navbarVisible: "show",
     };
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.toggleMenu = this.toggleMenu.bind(this);
@@ -41,11 +41,11 @@ class NavigationAuth extends Component {
   componentDidMount() {
     this.props.firebase
       .userChurch(this.props.firebase.doFindCurrentUID())
-      .on("value", snapshot => {
+      .on("value", (snapshot) => {
         if (snapshot.val()) {
           this.setState({
             churchImg: `./${snapshot.val()}.png`,
-            church: snapshot.val()
+            church: snapshot.val(),
           });
         }
       });
@@ -62,11 +62,11 @@ class NavigationAuth extends Component {
   toggleMenu() {
     if (this.state.visible === "hide") {
       this.setState({
-        visible: "show"
+        visible: "show",
       });
     } else {
       this.setState({
-        visible: "hide"
+        visible: "hide",
       });
     }
   }
@@ -86,12 +86,12 @@ class NavigationAuth extends Component {
     if (visible === "hide") {
       this.setState({
         prevScrollpos: currentScrollPos,
-        navbarVisible: "hide"
+        navbarVisible: "hide",
       });
     } else {
       this.setState({
         prevScrollpos: currentScrollPos,
-        navbarVisible: "show"
+        navbarVisible: "show",
       });
     }
   };
@@ -100,7 +100,6 @@ class NavigationAuth extends Component {
 
     return (
       <div>
-        {/* <div className="test">아아아</div> */}
         <div id="navigation" className={navbarVisible}>
           <div className="navigation-logo-wrap">
             <Link to={ROUTES.FEED}>
@@ -150,6 +149,14 @@ class NavigationAuth extends Component {
                 className="desktop-menu-visible-link-text"
               >
                 <span className="desktop-menu-visible-span">프로필</span>
+              </Link>
+            </div>
+            <div className="desktop-menu-visible-link">
+              <Link
+                to={ROUTES.FEEDBACK}
+                className="desktop-menu-visible-link-text"
+              >
+                <span className="desktop-menu-visible-span">피드백 보내기</span>
               </Link>
             </div>
 
@@ -212,6 +219,11 @@ class NavigationAuth extends Component {
                 <span className="menu-visible-span">프로필</span>
               </Link>
             </div>
+            <div className="menu-visible-link">
+              <Link to={ROUTES.FEEDBACK} className="menu-visible-link-text">
+                <span className="menu-visible-span">피드백 보내기</span>
+              </Link>
+            </div>
             {/* <div className="menu-visible-link">
               <Link to={ROUTES.ADMIN} className="menu-visible-link-text">
                 <span className="menu-visible-span">관리자</span>
@@ -230,7 +242,7 @@ class NavigationNonAuth extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: "hide"
+      visible: "hide",
     };
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.toggleMenu = this.toggleMenu.bind(this);
@@ -244,11 +256,11 @@ class NavigationNonAuth extends Component {
   toggleMenu() {
     if (this.state.visible === "hide") {
       this.setState({
-        visible: "show"
+        visible: "show",
       });
     } else {
       this.setState({
-        visible: "hide"
+        visible: "hide",
       });
     }
   }

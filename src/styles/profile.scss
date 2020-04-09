@@ -14,7 +14,27 @@
   }
 }
 @include tablet {
+  .input-wrap {
+    margin-top: 150px;
+    width: 80%;
+    .profile-image-wrap {
+      .profile-image {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
 }
 
 @include desktop {
+  .input-wrap {
+    margin-top: 150px;
+    width: 80%;
+    .profile-image-wrap {
+      .profile-image {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
 }

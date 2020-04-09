@@ -25,6 +25,7 @@ const INITIAL_STATE = {
   like: 0, // 좋아요 수
   comments: [], //댓글
   error: null,
+  church: "",
 };
 
 class WriteFormBase extends Component {
@@ -37,7 +38,11 @@ class WriteFormBase extends Component {
     // 현재 접속중인 유저의 uid를 가져옵니다.
     // const uid = this.props.firebase.doFindCurrentUID();
     const name = this.props.firebase.doFindCurrentUserName();
-    console.log(name);
+    const uid = this.props.firebase.doFindCurrentUID();
+    this.props.firebase.userChurch(uid).on("value", (snapshot) => {
+      this.setState({ church: snapshot.val() });
+    });
+
     // // State의 uid에 저장해줍니다.
     // this.setState({
     //   uid: uid,
@@ -47,10 +52,9 @@ class WriteFormBase extends Component {
   onSubmit = async (event) => {
     try {
       this.setState({ loading: true });
-      const { content, image, like, comments } = this.state;
+      const { content, image, like, comments, church } = this.state;
       const uid = this.props.firebase.doFindCurrentUID();
       const name = this.props.firebase.doFindCurrentUserName();
-      // const time = "";
       this.setState({ uid: uid, name: name });
       let URL = "";
 
@@ -69,7 +73,7 @@ class WriteFormBase extends Component {
             .then((result) => {
               const date = format(new Date(), "yyyyMMddHHmmss");
               this.props.firebase
-                .content(date)
+                .content(date, church)
                 .set({
                   uid: uid,
                   content,
@@ -78,6 +82,7 @@ class WriteFormBase extends Component {
                   imageURL: URL,
                   like,
                   comments: [],
+                  church: church,
                 })
                 .then((authUser) => {
                   console.log("here");
@@ -90,18 +95,9 @@ class WriteFormBase extends Component {
             });
         });
       } else {
-        // const d = new Date();
-        // const currentDate =
-        //   d.getFullYear().toString() +
-        //   (d.getMonth() + 1).toString() +
-        //   d.getDate().toString() +
-        //   d.getHours().toString() +
-        //   d.getMinutes().toString() +
-        //   d.getSeconds().toString();
-        // this.setState({ date: currentDate });
         const date = format(new Date(), "yyyyMMddHHmmss");
         this.props.firebase
-          .content(date)
+          .content(date, church)
           .set({
             uid: uid,
             content,
@@ -110,6 +106,7 @@ class WriteFormBase extends Component {
             like,
             comments: [],
             imageURL: URL,
+            church: church,
           })
           .then((authUser) => {
             // console.log("here");

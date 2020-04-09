@@ -251,10 +251,59 @@ class FridayPrayerBase extends Component {
     } = this.state;
     console.log(interval);
 
+    let fullscreenItem = (content) => {
+      if (content.content.length > 300) {
+        return (
+          <div className="fullscreen-content-content-300-wrap">
+            <div className="fullscreen-content-content-300">
+              {content.content}
+            </div>
+          </div>
+        );
+      } else if (content.content.length > 200) {
+        return (
+          <div className="fullscreen-content-content-200-wrap">
+            <div className="fullscreen-content-content-200">
+              {content.content}
+            </div>
+          </div>
+        );
+      } else if (content.content.length > 100) {
+        return (
+          <div className="fullscreen-content-content-100-wrap">
+            <div className="fullscreen-content-content-100">
+              {content.content}
+            </div>
+          </div>
+        );
+      } else if (content.content.length > 50) {
+        return (
+          <div className="fullscreen-content-content-50-wrap">
+            <div className="fullscreen-content-content-50">
+              {content.content}
+            </div>
+          </div>
+        );
+      } else if (content.content.length > 20) {
+        return (
+          <div className="fullscreen-content-content-20-wrap">
+            <div className="fullscreen-content-content-20">
+              {content.content}
+            </div>
+          </div>
+        );
+      } else {
+        return (
+          <div className="fullscreen-content-content-wrap">
+            <div className="fullscreen-content-content">{content.content}</div>
+          </div>
+        );
+      }
+    };
     return loading ? (
       <SemipolarLoading size="large" color="#5B5BDC" />
     ) : (
-      <div className="feed">
+      <div className="friday-feed">
         <div className="friday-date-wrap">
           <span className="friday-date">-{fridayDate}-</span>
         </div>
@@ -276,6 +325,7 @@ class FridayPrayerBase extends Component {
               // cssModule={}
               // className="fullscreen-slide"
               play={true}
+              // startupScreen={}
               cancelOnInteraction={false} // should stop playing on user interaction
               interval={interval}
             >
@@ -318,7 +368,8 @@ class FridayPrayerBase extends Component {
                           </div>
                         </div>
                       )}
-                      {content.content.length > 20 ? (
+                      {fullscreenItem(content)}
+                      {/* {content.content.length > 20 ? (
                         <div className="fullscreen-content-content-wrap-long">
                           <div className="fullscreen-content-content-long">
                             {content.content}
@@ -330,7 +381,7 @@ class FridayPrayerBase extends Component {
                             {content.content}
                           </div>
                         </div>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 ))}
@@ -592,10 +643,7 @@ class Content extends Component {
   };
 
   handleContentModify = () => {
-    // this.props.firebase.contentFridayPrayer(this.props.content.church,this.props.content.date)
-    // .update({
-    // })
-    //구현해야함.
+    alert("개발중입니다. 삭제하고 다시 작성해주세요.");
   };
   handleContentDelete = () => {
     this.props.firebase
@@ -609,6 +657,7 @@ class Content extends Component {
 
   render() {
     const { contentOpenState, username, currentUID } = this.state;
+
     return (
       <div className="praycontent" onClick={() => this.handleContentOpen()}>
         <div className="praycontent-wrap">
@@ -642,7 +691,7 @@ class Content extends Component {
                 {this.props.content.content}
               </span>
             </div>
-            {currentUID === this.props.content.wuid && (
+            {currentUID === this.props.content.uid && (
               <div className="praycontent-content-btn-wrap">
                 <div
                   className="praycontent-content-modify-btn-wrap"
@@ -656,9 +705,7 @@ class Content extends Component {
                   className="praycontent-content-delete-btn-wrap"
                   onClick={() => this.handleContentDelete()}
                 >
-                  <span className="praycontent-content-delete-btn">
-                    삭제하기
-                  </span>
+                  <span className="praycontent-content-delete-btn">기</span>
                 </div>
               </div>
             )}
