@@ -37,6 +37,107 @@
 
   .Modal {
     position: absolute;
+    top: 120px;
+    left: 30px;
+    right: 30px;
+    bottom: 140px;
+    background-color: #ffffff;
+    text-align: center;
+  }
+  .Overlay {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .modal-wrap {
+    width: 90%;
+    margin: 0 auto;
+
+    .modal-code-wrap {
+      font-family: $spoqa-han-sans;
+      margin-top: 70px;
+
+      .modal-code-text {
+        display: block;
+        font-size: 50px;
+        margin-bottom: 80px;
+        font-weight: bold;
+      }
+      .modal-code-description {
+        font-weight: lighter;
+        font-size: 13px;
+      }
+      .modal-code-input {
+        width: 100%;
+        border: 1px solid #2e5fd2;
+        // box-shadow: 0 30px 60px 12px rgba(0, 0, 33, 0.05),
+        //   0 4px 24px 0 rgba(0, 0, 33, 0.05), 0 0 1px 0 rgba(0, 0, 33, 0.09);
+        display: block;
+        margin-bottom: 10px;
+        font-size: 40px;
+      }
+    }
+    .modal-submit-btn-wrap {
+      font-family: $black-han-sans;
+      margin-bottom: 50px;
+      .modal-submit-btn {
+        font-weight: normal;
+        font-size: 40px;
+        color: #2e5fd2;
+        &:hover {
+          color: #027a75;
+        }
+      }
+    }
+    .modal-close-wrap {
+      margin-top: 50px;
+      .modal-close {
+        font-family: $spoqa-han-sans;
+      }
+    }
+  }
+}
+@include tablet {
+  .choose-church-intro-wrap {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 30%;
+    margin-bottom: 25px;
+    text-align: center;
+    .choose-church-intro {
+      font-size: 25px;
+    }
+  }
+  .church-profile-wrap {
+    margin: 0 auto;
+    width: 60%;
+    text-align: center;
+    .church-profile-image {
+      width: 100%;
+    }
+    .church-profile-name-wrap {
+      margin-top: 10px;
+      text-align: center;
+      .church-profile-name {
+        font-size: 25px;
+        font-weight: bold;
+      }
+    }
+    .church-profile-address-wrap {
+      text-align: center;
+      .church-profile-address {
+        font-size: 13px;
+      }
+    }
+  }
+
+  .Modal {
+    position: absolute;
     top: 140px;
     left: 40px;
     right: 40px;
@@ -102,8 +203,105 @@
     }
   }
 }
-@include tablet {
-}
 
 @include desktop {
+  .choose-church-intro-wrap {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 30%;
+    margin-bottom: 25px;
+    text-align: center;
+    .choose-church-intro {
+      font-size: 25px;
+    }
+  }
+  .church-profile-wrap {
+    margin: 0 auto;
+    width: 60%;
+    text-align: center;
+    .church-profile-image {
+      width: 100%;
+    }
+    .church-profile-name-wrap {
+      margin-top: 10px;
+      text-align: center;
+      .church-profile-name {
+        font-size: 25px;
+        font-weight: bold;
+      }
+    }
+    .church-profile-address-wrap {
+      text-align: center;
+      .church-profile-address {
+        font-size: 13px;
+      }
+    }
+  }
+
+  .Modal {
+    position: absolute;
+    top: 140px;
+    left: 40px;
+    right: 40px;
+    bottom: 160px;
+    background-color: #ffffff;
+    text-align: center;
+  }
+  .Overlay {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .modal-wrap {
+    width: 90%;
+    margin: 0 auto;
+
+    .modal-code-wrap {
+      font-family: $spoqa-han-sans;
+      margin-top: 70px;
+
+      .modal-code-text {
+        display: block;
+        font-size: 50px;
+        margin-bottom: 80px;
+        font-weight: bold;
+      }
+      .modal-code-description {
+        font-weight: lighter;
+        font-size: 13px;
+      }
+      .modal-code-input {
+        width: 100%;
+        border: 1px solid #2e5fd2;
+        // box-shadow: 0 30px 60px 12px rgba(0, 0, 33, 0.05),
+        //   0 4px 24px 0 rgba(0, 0, 33, 0.05), 0 0 1px 0 rgba(0, 0, 33, 0.09);
+        display: block;
+        margin-bottom: 10px;
+        font-size: 40px;
+      }
+    }
+    .modal-submit-btn-wrap {
+      font-family: $black-han-sans;
+      margin-bottom: 50px;
+      .modal-submit-btn {
+        font-weight: normal;
+        font-size: 40px;
+        color: #2e5fd2;
+        &:hover {
+          color: #027a75;
+        }
+      }
+    }
+    .modal-close-wrap {
+      margin-top: 50px;
+      .modal-close {
+        font-family: $spoqa-han-sans;
+      }
+    }
+  }
 }

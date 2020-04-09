@@ -5,7 +5,6 @@ import SignOutButton from "../SignOut";
 import { AuthUserContext, withAuthorization } from "../Session";
 import "../../styles/navigation.scss";
 import { withFirebase } from "../../Firebase";
-import classnames from "classnames";
 class Navigation extends Component {
   constructor(props) {
     super(props);

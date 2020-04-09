@@ -19,6 +19,7 @@ const INITIAL_STATE = {
   comment: "",
   error: null,
   writeFormOpen: false,
+  church: "",
 };
 class FeedBase extends Component {
   constructor(props) {
@@ -29,14 +30,44 @@ class FeedBase extends Component {
     };
   }
   componentDidMount() {
-    if (this.props.firebase) {
+    // let church="";
+    if (this.props.firebase.doFindCurrentUID()) {
       this.props.firebase
         .userChurch(this.props.firebase.doFindCurrentUID())
-        .on("value", (snapshot) => {
+        .once("value", (snapshot) => {
           if (!snapshot.val()) {
             this.props.history.push(ROUTES.CHOOSE_CHURCH);
+          } else {
+            this.setState({ church: snapshot.val() });
           }
+        })
+        .then(() => {
+          this.props.firebase
+            .contents(this.state.church)
+            .on("value", (snapshot) => {
+              if (!snapshot.val()) {
+                this.setState({
+                  contents: [],
+                  loading: false,
+                });
+                alert("비어있습니다. 작성해주세요.");
+                return;
+              }
+              const contentsObject = snapshot.val();
+              const contentsList = Object.keys(contentsObject).map((key) => ({
+                ...contentsObject[key],
+              }));
+
+              // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
+              _.reverse(contentsList);
+              // console.log(contentsList);
+              this.setState({
+                contents: contentsList,
+                loading: false,
+              });
+            });
         });
+      this.setState({ loading: true });
       this.props.firebase
         .userPhoto(this.props.firebase.doFindCurrentUID())
         .once("value", (snapshot) => {
@@ -49,29 +80,31 @@ class FeedBase extends Component {
               });
           }
         });
-      this.setState({ loading: true });
-      this.props.firebase.contents().on("value", (snapshot) => {
-        if (!snapshot.val()) {
-          this.setState({
-            contents: [],
-            loading: false,
-          });
-          alert("비어있습니다. 작성해주세요.");
-          return;
-        }
-        const contentsObject = snapshot.val();
-        const contentsList = Object.keys(contentsObject).map((key) => ({
-          ...contentsObject[key],
-        }));
 
-        // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
-        _.reverse(contentsList);
-        // console.log(contentsList);
-        this.setState({
-          contents: contentsList,
-          loading: false,
-        });
-      });
+      // this.props.firebase
+      //   .contents(this.state.church)
+      //   .on("value", (snapshot) => {
+      //     if (!snapshot.val()) {
+      //       this.setState({
+      //         contents: [],
+      //         loading: false,
+      //       });
+      //       alert("비어있습니다. 작성해주세요.");
+      //       return;
+      //     }
+      //     const contentsObject = snapshot.val();
+      //     const contentsList = Object.keys(contentsObject).map((key) => ({
+      //       ...contentsObject[key],
+      //     }));
+
+      //     // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
+      //     _.reverse(contentsList);
+      //     // console.log(contentsList);
+      //     this.setState({
+      //       contents: contentsList,
+      //       loading: false,
+      //     });
+      //   });
     }
   }
   componentWillUnmount() {

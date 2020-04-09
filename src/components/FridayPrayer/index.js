@@ -705,7 +705,9 @@ class Content extends Component {
                   className="praycontent-content-delete-btn-wrap"
                   onClick={() => this.handleContentDelete()}
                 >
-                  <span className="praycontent-content-delete-btn">기</span>
+                  <span className="praycontent-content-delete-btn">
+                    삭제하기
+                  </span>
                 </div>
               </div>
             )}
