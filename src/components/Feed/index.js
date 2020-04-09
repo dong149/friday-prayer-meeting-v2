@@ -134,17 +134,15 @@ class FeedBase extends Component {
                 </div>
                 <div className="official-content-wrap">
                   <span className="official-content">
-                    1. 피드백은 언제나 환영입니다. 피드백 기능을 적극 활용
-                    부탁드립니다.
+                    1. 아직 테스트용이라, 많이 부족합니다.
                     <br />
-                    2. 기존 서비스는 다음주 목요일에 종료됩니다.
+                    2. 기존 사이트는 다음주 목요일에 서버가 종료될 예정입니다.
                     <br />
-                    3. 뉴스 피드는 각자의 나눔 공간입니다.
+                    3. 리뉴얼한 이유는 기존의 사이트가 확장성이 떨어짐이 큰
+                    이유입니다.
                     <br />
-                    4. 아직 웹이나 태블릿에서는 이상하게 보일 수 있습니다.
-                    시간이 여유로울 때마다 조금씩 기능을 완성할 예정입니다.
-                    <br />
-                    5. 모두들 건강 조심하세요:)
+                    4. 시간이 많지 않아, 가끔씩 업데이트 하면서 좋은 기능들을
+                    추가해나갈 예정입니다.
                   </span>
                 </div>
               </div>
@@ -234,22 +232,24 @@ class CommentFormBase extends Component {
   componentDidMount() {
     this.setState({ loading: true });
 
-    this.props.firebase.comments(this.props.date).on("value", (snapshot) => {
-      const commentsObject = snapshot.val();
-      if (commentsObject) {
-        const commentsList = Object.keys(commentsObject).map((key) => ({
-          ...commentsObject[key],
-        }));
+    this.props.firebase
+      .comments(this.props.church, this.props.date)
+      .on("value", (snapshot) => {
+        const commentsObject = snapshot.val();
+        if (commentsObject) {
+          const commentsList = Object.keys(commentsObject).map((key) => ({
+            ...commentsObject[key],
+          }));
 
-        // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
-        _.reverse(commentsList);
-        console.log(commentsList);
-        this.setState({
-          comments: commentsList,
-          loading: false,
-        });
-      }
-    });
+          // lodash 라이브러리를 사용하여, 기존에 존재하는 contentsList를 Reverse한다.
+          _.reverse(commentsList);
+          console.log(commentsList);
+          this.setState({
+            comments: commentsList,
+            loading: false,
+          });
+        }
+      });
   }
 
   onChange = (event) => {
@@ -264,7 +264,7 @@ class CommentFormBase extends Component {
 
       const date = format(new Date(), "yyyyMMddHHmmss");
       this.props.firebase
-        .comment(this.props.date, date)
+        .comment(this.props.church, this.props.date, date)
         .set({
           uid: uid,
           comment,
@@ -272,6 +272,7 @@ class CommentFormBase extends Component {
           date: date,
         })
         .then((authUser) => {
+          alert("성공적으로 작성되었습니다.");
           this.setState({ ...INITIAL_STATE });
         })
         .catch((error) => {
@@ -313,8 +314,8 @@ class CommentFormBase extends Component {
           </div>
         </div>
         <div>
-          {comments.map((comment) => (
-            <FirebaseContext.Consumer>
+          {comments.map((comment, index) => (
+            <FirebaseContext.Consumer key={index}>
               {(firebase) => <Comment firebase={firebase} comment={comment} />}
             </FirebaseContext.Consumer>
           ))}
@@ -607,6 +608,7 @@ class Content extends Component {
                 {(firebase) => (
                   <CommentFormBase
                     date={this.props.content.date}
+                    church={this.props.content.church}
                     firebase={firebase}
                   />
                 )}

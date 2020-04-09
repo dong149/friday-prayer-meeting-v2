@@ -40,7 +40,7 @@
     top: 120px;
     left: 30px;
     right: 30px;
-    bottom: 140px;
+    bottom: 300px;
     background-color: #ffffff;
     text-align: center;
   }
@@ -60,12 +60,12 @@
 
     .modal-code-wrap {
       font-family: $spoqa-han-sans;
-      margin-top: 70px;
+      margin-top: 40px;
 
       .modal-code-text {
         display: block;
         font-size: 50px;
-        margin-bottom: 80px;
+        margin-bottom: 20px;
         font-weight: bold;
       }
       .modal-code-description {
@@ -79,12 +79,12 @@
         //   0 4px 24px 0 rgba(0, 0, 33, 0.05), 0 0 1px 0 rgba(0, 0, 33, 0.09);
         display: block;
         margin-bottom: 10px;
-        font-size: 40px;
+        font-size: 20px;
       }
     }
     .modal-submit-btn-wrap {
       font-family: $black-han-sans;
-      margin-bottom: 50px;
+      padding-top: 30px;
       .modal-submit-btn {
         font-weight: normal;
         font-size: 40px;

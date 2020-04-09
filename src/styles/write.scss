@@ -7,14 +7,7 @@
   .input-wrap {
     width: 80%;
     font-family: $spoqa-han-sans;
-    // .input-content-text-wrap {
-    //   width: 100%;
-    //   text-align: center;
-    //   padding-bottom: 20px;
-    //   .input-content-text {
-    //     font-size: 20px;
-    //   }
-    // }
+    margin-top: 40px;
     .form-control {
       font-size: 20px;
       width: 100%;
@@ -37,7 +30,8 @@
     }
     .btn-wrap {
       width: 100%;
-      padding-top: 20px;
+      padding-top: 10px;
+      padding-bottom: 50px;
       .input-btn-wrap {
         display: inline-block;
         text-align: center;

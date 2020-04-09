@@ -12,6 +12,7 @@ import { withRouter } from "react-router-dom";
 import { withAuthorization } from "../Session";
 import "../../styles/write.scss";
 import { format } from "date-fns";
+import { WindMillLoading, SemipolarLoading } from "react-loadingg";
 const INITIAL_STATE = {
   loading: false,
   uid: "",
@@ -51,7 +52,6 @@ class WriteFormBase extends Component {
   }
   onSubmit = async (event) => {
     try {
-      this.setState({ loading: true });
       const { content, image, like, comments, church } = this.state;
       const uid = this.props.firebase.doFindCurrentUID();
       const name = this.props.firebase.doFindCurrentUserName();
@@ -85,7 +85,7 @@ class WriteFormBase extends Component {
                   church: church,
                 })
                 .then((authUser) => {
-                  console.log("here");
+                  alert("성공적으로 작성되었습니다.");
                   this.setState({ ...INITIAL_STATE });
                   this.props.history.push(ROUTES.FEED);
                 })
@@ -109,7 +109,7 @@ class WriteFormBase extends Component {
             church: church,
           })
           .then((authUser) => {
-            // console.log("here");
+            alert("성공적으로 작성되었습니다.");
             this.setState({ ...INITIAL_STATE });
             this.props.history.push(ROUTES.FEED);
           })
@@ -120,6 +120,7 @@ class WriteFormBase extends Component {
     } catch (e) {
       console.error(e);
     }
+    this.setState({ loading: true });
   };
 
   onChange = (event) => {
@@ -197,7 +198,11 @@ class WriteFormBase extends Component {
         </form>
       );
     } else {
-      return <span>로딩중...</span>;
+      return (
+        <div>
+          <SemipolarLoading size="large" color="#5B5BDC" />
+        </div>
+      );
     }
   }
 }
