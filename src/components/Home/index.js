@@ -45,7 +45,7 @@ const HomePage = () => (
               <span className="footer-company-description">
                 피드백 및 문의 donghoon149@gmail.com
                 <br />
-                Copyright 2019. Dong Hoon Ryu all rights reserved.
+                Copyright 2020. Dong Hoon Ryu all rights reserved.
               </span>
             </div>
           </div>

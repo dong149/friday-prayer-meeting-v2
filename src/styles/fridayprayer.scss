@@ -445,39 +445,101 @@
           font-weight: bold;
         }
       }
-      .fullscreen-content-content-wrap-long {
+
+      .fullscreen-content-content-300-wrap {
         width: 100%;
-        padding-left: 25%;
-        padding-right: 25%;
+        padding-left: 27%;
+        padding-right: 20%;
         text-align: left;
-        margin-top: 90px;
-        .fullscreen-content-content-long {
+        margin-top: 80px;
+        .fullscreen-content-content-300 {
+          white-space: pre-line;
+          font-family: $spoqa-han-sans;
+          font-weight: normal;
+          font-size: 30px;
+          line-height: 40px;
+          color: white;
+        }
+      }
+
+      .fullscreen-content-content-200-wrap {
+        width: 100%;
+        padding-left: 27%;
+        padding-right: 20%;
+        text-align: left;
+        margin-top: 80px;
+        .fullscreen-content-content-200 {
           white-space: pre-line;
           font-family: $spoqa-han-sans;
           font-weight: normal;
           font-size: 35px;
-          color: white;
           line-height: 60px;
+          color: white;
+        }
+      }
+      .fullscreen-content-content-100-wrap {
+        width: 100%;
+        padding-left: 27%;
+        padding-right: 20%;
+        text-align: left;
+        margin-top: 90px;
+        .fullscreen-content-content-100 {
+          white-space: pre-line;
+          font-family: $spoqa-han-sans;
+          font-weight: normal;
+          font-size: 38px;
+          line-height: 70px;
+          color: white;
+        }
+      }
+      .fullscreen-content-content-50-wrap {
+        width: 100%;
+        padding-left: 27%;
+        padding-right: 10%;
+        text-align: left;
+        margin-top: 30px;
+        .fullscreen-content-content-50 {
+          white-space: pre-line;
+          font-family: $spoqa-han-sans;
+          font-weight: normal;
+          font-size: 50px;
+          color: white;
+          line-height: 100px;
+        }
+      }
+      .fullscreen-content-content-20-wrap {
+        width: 100%;
+        padding-left: 33%;
+        padding-right: 10%;
+        text-align: left;
+        margin-top: 80px;
+        .fullscreen-content-content-20 {
+          white-space: pre-line;
+          font-family: $spoqa-han-sans;
+          font-weight: normal;
+          font-size: 60px;
+          line-height: 120px;
+          color: white;
         }
       }
       .fullscreen-content-content-wrap {
         width: 100%;
-        padding-left: 30%;
-        padding-right: 30%;
+        padding-left: 10%;
+        padding-right: 10%;
         text-align: center;
-        margin: 0 auto;
-        margin-top: 90px;
+        margin-top: 160px;
         .fullscreen-content-content {
           white-space: pre-line;
           font-family: $spoqa-han-sans;
           font-weight: normal;
-          font-size: 70px;
+          font-size: 80px;
+          line-height: 150px;
           color: white;
         }
       }
     }
   }
-  .feed {
+  .friday-feed {
     margin-top: 50px;
     width: 100%;
     background-color: #ffffff;
@@ -707,7 +769,6 @@
     }
   }
 }
-
 @include desktop {
   .fullscreen {
     margin: 0 auto;
@@ -810,7 +871,7 @@
       }
       .fullscreen-content-content-20-wrap {
         width: 100%;
-        padding-left: 33%;
+        padding-left: 20%;
         padding-right: 10%;
         text-align: left;
         margin-top: 80px;
@@ -840,11 +901,10 @@
       }
     }
   }
-  .feed {
+  .friday-feed {
     margin-top: 50px;
     width: 100%;
     background-color: #ffffff;
-
     // 금요기도회 날짜
     .friday-date-wrap {
       width: 80%;
@@ -852,7 +912,7 @@
       text-align: center;
       .friday-date {
         font-family: $spoqa-han-sans;
-        font-size: 90px;
+        font-size: 110px;
         font-weight: lighter;
         // color: #2e5fd2;
       }
@@ -886,7 +946,7 @@
         text-align: center;
         .write-btn {
           font-family: $black-han-sans;
-          font-size: 30px;
+          font-size: 40px;
           color: #1f4df4;
           &:hover {
             cursor: pointer;
@@ -901,7 +961,7 @@
         margin-bottom: 40px;
         .fullscreen-btn {
           font-family: $black-han-sans;
-          font-size: 30px;
+          font-size: 40px;
           &:hover {
             cursor: pointer;
           }
@@ -920,7 +980,7 @@
         .openContent {
           width: 100%;
           font-family: $black-han-sans;
-          font-size: 30px;
+          font-size: 40px;
           &:hover {
             cursor: pointer;
           }
@@ -933,7 +993,7 @@
         .timeClose-btn {
           width: 100%;
           font-family: $black-han-sans;
-          font-size: 30px;
+          font-size: 40px;
           color: red;
           &:hover {
             cursor: pointer;
@@ -983,7 +1043,7 @@
         display: inline-block;
         text-align: center;
         .controlTime {
-          font-size: 30px;
+          font-size: 40px;
           font-family: $black-han-sans;
           &:hover {
             cursor: pointer;
@@ -1074,7 +1134,7 @@
           margin-right: 20px;
           display: inline-block;
           .praycontent-content-modify-btn {
-            font-size: 15px;
+            font-size: 25px;
             font-family: $black-han-sans;
             color: green;
             &:hover {
@@ -1085,7 +1145,7 @@
         .praycontent-content-delete-btn-wrap {
           display: inline-block;
           .praycontent-content-delete-btn {
-            font-size: 15px;
+            font-size: 25px;
             font-family: $black-han-sans;
             color: red;
             &:hover {
@@ -1105,7 +1165,7 @@
         display: inline-block;
         .before {
           font-family: $black-han-sans;
-          font-size: 20px;
+          font-size: 40px;
           font-weight: normal;
           &:hover {
             cursor: pointer;
@@ -1118,7 +1178,7 @@
         display: inline-block;
         .next {
           font-family: $black-han-sans;
-          font-size: 20px;
+          font-size: 40px;
           font-weight: normal;
           &:hover {
             cursor: pointer;
