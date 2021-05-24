@@ -1,66 +1,37 @@
 # 금요기도회 서비스 ( friday-prayer-meeting )
 
-과거 2019년 초에 JSP로 구현했었던, '금요기도회' Ver2.0 프로젝트입니다.
-다른 일들이 많아져 일단은 중지했지만, 추후에 다시 개발할 예정입니다.
 
-## Ver 1.0
-
-<img src = "./friday_meetingv1.png" width="40%">
-
-http://dong149.cafe24.com/ChangDae.jsp
-
-2019년 1월부터 현재까지 계속해서 사용되고 있는 서비스입니다.
-개발 지식이 전무하던 때에, 무작정 부딪히면서 개발했던 서비스입니다.
-어설프지만 처음 개발했었고, 처음으로 유저가 생긴 서비스이며, 지금까지도 잘사용되고 있는 서비스이기에 남다른 애착이 있는 서비스입니다.
-
-도메인도 따로 연결하지 않았고, Pagination도 없는 정말 날 것 그대로의 서비스이지만 개발의 궁극 목표가 무엇인지 고민하게 만들어주었고 서비스 개발에 흥미를 가져다 준 프로젝트입니다.
-
-- java, jsp, mysql
-- hosting : cafe24
+|로그인|홈 화면|뉴스피드|ppt|
+|:----:|:----:|:----:|:-----:|
+|![main_video](https://github.com/dong149/image_resources/blob/master/oenson/friday_v2_login.gif)|![main_video](https://github.com/dong149/image_resources/blob/master/oenson/friday_v2_main.gif)|![main_video](https://github.com/dong149/image_resources/blob/master/oenson/friday_v2_feed.gif)|![main_video](https://github.com/dong149/image_resources/blob/master/oenson/friday_v2_ppt.gif)|
+|구글 로그인 기능을 제공합니다|금주 금요기도회 기도제목을 확인합니다|피드를 올려 서로 소식을 공유합니다|전체화면을 통해 **ppt**를 만들 필요가 없게 합니다|
 
 
+## Description
+🙏 교회에서의 불편함을 해결한다! 금요기도회 사이트
 
+### v1
+교회에는 아직까지도 많은 부분이 오프라인으로 진행되어 지고 있습니다. 저는 저희 교회에서 행해지던 금요기도회에서 기도제목을 정리하고 모아서 기도를 할 때 일일이 수기로 작성한 것을 모아서 ppt에 옮겨 적고 그것을 나눠가져서 기도하는 과정에서 불필요한 시간과 노동이 많이 필요해지는 것에 주목했습니다.
 
+### v2
+코로나로 인해 서로 소통할 수 없는 것을 고려하여, 뉴스피드 기능을 추가하였습니다.
 
-## Problem
-
-교회에는 아직까지도 많은 부분이 오프라인으로 진행되어 지고 있습니다. 
-저는 저희 교회에서 행해지던 금요기도회에서 기도제목을 정리하고 모아서 기도를 할 때 일일이 수기로 작성한 것을 모아서 ppt에 옮겨 적고 그것을 나눠가져서 기도하는 과정에서 불필요한 시간과 노동이 많이 필요해지는 것에 주목했습니다.
-
- 
+***과거 2019년 초에 JSP로 구현했었던, '금요기도회'를 리뉴얼하는 프로젝트입니다.
+진행 중에, 사정이 있어 미루게 되었습니다. 추후에 시간이 될 때 바로 진행하고 싶습니다.
+***
 
 ## Feature
+- 로그인 기능 ( 구글 로그인 가능 )
+- ppt 기능
+- 뉴스피드 기능
 
-### 기도제목 CRUD 게시판
+## 💁‍♂️ 배운점
+- React와 Firebase로 구현을 했지만, 개발 당시에 부족했던 실력 탓에 체계적으로 프로젝트를 구성하지 못했습니다. 프로젝트를 시작 단계에서부터 체계적으로 설계를 해야겠다는 것을 뼈저리게 느겼습니다. 
+- 서비스를 개발할 때, 큰 그림을 그리며 설계는 하되, 가장 핵심 기능을 온전히 개발하여 Base를 잘다져놓은 다음에 다른 기능들을 차례대로 붙여나가는 게 중요하다는 것을 알게 되었습니다. 특히, 소수의 인원으로 프로젝트를 진행할 때는 개인이나 팀의 진행 속도가 현저히 떨어지는 것을 방지하기 위해서는 방금 언급한 방법이 굉장히 중요할 것 같습니다.
 
-<img src = "./friday_meeting_crud.png" width="40%">
+## 🔨 Dev stack
+- React
+- Firebase
 
-가장 기본이 되는 기능입니다. 글들을 작성, 수정, 삭제가 가능하게 구성하였습니다.
-
-### 기도 제목 모아보기 기능
-
-<img src = "./friday_meeting_get_all.png" width="40%">
-
-<img src = "./friday_meeting_get_all2.png" width="40%">
-
-모든 사람들이 날짜를 기준으로 기도 제목을 모두 모아 확인할 수 있게 하였습니다.
-가장 많이 사용되는 기능이고, 이 서비스를 만든 가장 핵심 이유라 할 수 있습니다.
-
-
-
-## Ver 2.0
-
-https://friday-prayer-meeting.firebaseapp.com/
-
-따로 PPT를 만들지 않을 수 있도록 기도제목들이 바로 슬라이드쇼처럼 보일 수 있는 것을 핵심 기능이라 생각하고 개발하였습니다.
-
-다른 교회도 모두 사용가능하게끔, 교회등록과 로그인 기능을 구현하였습니다.
-
-
-<img src = "./friday_meeting_v2_main.png" width="40%">
-
-<img src = "./friday_meeting_v2_slide.png" width="40%">
-
-2021년 안에 시간이 될 때, 추가로 개발할 예정입니다.
 
 - firebase, react
